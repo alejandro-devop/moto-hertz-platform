@@ -1,0 +1,41 @@
+# Multi-stage build for production
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+
+COPY package*.json ./
+COPY tsconfig.json ./
+
+RUN npm ci && npm cache clean --force
+
+COPY src ./src
+
+RUN npm run build
+
+# Production stage
+FROM node:18-alpine
+
+WORKDIR /app
+
+RUN apk add --no-cache dumb-init postgresql-client
+
+COPY package*.json ./
+
+RUN npm ci --only=production && npm cache clean --force
+RUN npm install tsx
+
+COPY --from=builder /app/dist ./dist
+COPY migrations ./migrations
+COPY scripts/migrate.ts ./scripts/migrate.ts
+COPY scripts/docker-entrypoint.sh ./scripts/docker-entrypoint.sh
+
+RUN chmod +x ./scripts/docker-entrypoint.sh
+
+RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001
+USER nodejs
+
+EXPOSE 8080
+
+ENTRYPOINT ["dumb-init", "--", "./scripts/docker-entrypoint.sh"]
+
+CMD ["node", "dist/server.js"]

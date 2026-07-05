@@ -1,0 +1,23 @@
+node_modules
+npm-debug.log
+dist
+.git
+.gitignore
+README.md
+.env
+.env.*
+docker-compose.yml
+Dockerfile
+Dockerfile.dev
+.dockerignore
+coverage
+.vscode
+.idea
+*.md
+tests
+docs
+
+# Include only necessary scripts for migrations
+scripts
+!scripts/migrate.ts
+!scripts/docker-entrypoint.sh
