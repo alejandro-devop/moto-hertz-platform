@@ -1,9 +1,9 @@
 {
   "project": "yamaha-oriente-platform",
-  "current_phase": 1,
+  "current_phase": 2,
   "phases": [
     { "id": 0, "name": "Fundación del monorepo", "doc": "docs/phases/00-fundacion-monorepo.md", "status": "completed" },
-    { "id": 1, "name": "Migración de web", "doc": "docs/phases/01-migracion-web.md", "status": "pending" },
+    { "id": 1, "name": "Migración de web", "doc": "docs/phases/01-migracion-web.md", "status": "completed" },
     { "id": 2, "name": "Migración de backend", "doc": "docs/phases/02-migracion-backend.md", "status": "pending" },
     { "id": 3, "name": "Brainstorming cms-admin", "doc": "docs/phases/03-brainstorming-cms.md", "status": "pending" },
     { "id": 4, "name": "Scaffold cms-admin", "doc": "docs/phases/04-scaffold-cms.md", "status": "pending" },
@@ -17,6 +17,11 @@
       "phase": 0,
       "completed_at": "2026-07-05T00:00:00Z",
       "notes": "Monorepo pnpm inicializado con carpetas de primer nivel (web/, backend/, cms-admin/) sin packages/ intermedio, confirmado por el usuario. Cada paquete mantiene su propio linter (Biome en web, ESLint/Prettier en backend, cms-admin a definir). pnpm-workspace.yaml, package.json raíz, .gitignore y READMEs creados. Primer commit 'chore: scaffold monorepo' realizado."
+    },
+    {
+      "phase": 1,
+      "completed_at": "2026-07-05T00:00:00Z",
+      "notes": "web/ poblado desde yamaha-motohertz (renombrado a yamaha-oriente-web), excluyendo assets de banner-gallery y separator.jpg propios de Motohertz. Branding textual reemplazado por Yamaha Oriente. La capa de datos de Contentful fue mockeada (decisión del usuario, distinta a la recomendación original del doc): src/services/contentful.ts ahora devuelve src/data/home-mock.json en vez de llamar a la API real, misma interfaz HomePageData, documentado como temporal hasta Fase 5 (integración con backend/cms-admin propios). pnpm --filter web dev y build verificados sin errores; lint tiene ~165 errores preexistentes de la plantilla original (no introducidos en esta fase). Usuario confirmó la base visual como punto de partida aceptable."
     }
   ]
 }
