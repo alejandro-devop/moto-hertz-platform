@@ -1,0 +1,16 @@
+{
+  "project": "yamaha-oriente-platform",
+  "current_phase": 0,
+  "phases": [
+    { "id": 0, "name": "Fundación del monorepo", "doc": "docs/phases/00-fundacion-monorepo.md", "status": "in_progress" },
+    { "id": 1, "name": "Migración de web", "doc": "docs/phases/01-migracion-web.md", "status": "pending" },
+    { "id": 2, "name": "Migración de backend", "doc": "docs/phases/02-migracion-backend.md", "status": "pending" },
+    { "id": 3, "name": "Brainstorming cms-admin", "doc": "docs/phases/03-brainstorming-cms.md", "status": "pending" },
+    { "id": 4, "name": "Scaffold cms-admin", "doc": "docs/phases/04-scaffold-cms.md", "status": "pending" },
+    { "id": 5, "name": "Integración end-to-end", "doc": "docs/phases/05-integracion-e2e.md", "status": "pending" },
+    { "id": 6, "name": "Entorno de desarrollo local unificado", "doc": "docs/phases/06-dev-local-unificado.md", "status": "pending" },
+    { "id": 7, "name": "Despliegue a producción", "doc": "docs/phases/07-despliegue-produccion.md", "status": "pending" },
+    { "id": 8, "name": "QA y documentación final", "doc": "docs/phases/08-qa-y-cierre.md", "status": "pending" }
+  ],
+  "log": []
+}
