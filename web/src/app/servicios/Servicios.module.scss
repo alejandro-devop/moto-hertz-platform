@@ -1,0 +1,569 @@
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/variables" as *;
+
+.serviciosPage {
+  min-height: 100vh;
+  padding-top: 0;
+}
+
+.hero {
+  background: linear-gradient(135deg, #0c1e3f 0%, #1a3a6b 100%);
+  color: white;
+  padding: 3rem 1.5rem;
+  text-align: center;
+
+  @include breakpoint(md) {
+    padding: 5rem 2rem;
+  }
+
+  @include breakpoint(lg) {
+    padding: 6rem 2rem;
+  }
+}
+
+.heroContent {
+  max-width: 1200px;
+  margin: 0 auto;
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    letter-spacing: -0.5px;
+
+    @include breakpoint(md) {
+      font-size: 3rem;
+    }
+
+    @include breakpoint(lg) {
+      font-size: 3.5rem;
+    }
+  }
+
+  p {
+    font-size: 1rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+
+    @include breakpoint(md) {
+      font-size: 1.125rem;
+    }
+  }
+}
+
+.featured {
+  background: #f9f9f9;
+  padding: 3rem 1.5rem;
+
+  @include breakpoint(md) {
+    padding: 4rem 2rem;
+  }
+}
+
+.featuredContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+
+  h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: #333;
+    text-align: center;
+
+    @include breakpoint(md) {
+      font-size: 2rem;
+    }
+  }
+}
+
+.featuredGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+
+  @include breakpoint(md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include breakpoint(lg) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.filters {
+  background: #fff;
+  padding: 2rem 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+
+  @include breakpoint(md) {
+    padding: 2.5rem 2rem;
+  }
+}
+
+.filterContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  text-align: center;
+
+  h2 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #333;
+
+    @include breakpoint(md) {
+      font-size: 1.25rem;
+    }
+  }
+}
+
+.filterButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  padding-bottom: 0.5rem;
+
+  button {
+    flex: 0 0 auto;
+    min-width: fit-content;
+    padding: 0.625rem 1.5rem;
+    border: 2px solid #e0e0e0;
+    background: white;
+    color: #555;
+    border-radius: 50px;
+    font-weight: 500;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+
+    @include breakpoint(md) {
+      padding: 0.75rem 1.75rem;
+      font-size: 1rem;
+    }
+
+    &:hover {
+      border-color: #d10e10;
+      color: #d10e10;
+      transform: translateY(-2px);
+    }
+
+    &.active {
+      background: #d10e10;
+      color: white;
+      border-color: #d10e10;
+    }
+  }
+}
+
+.servicesGrid {
+  padding: 3rem 1.5rem;
+  background: white;
+
+  @include breakpoint(md) {
+    padding: 4rem 2rem;
+  }
+}
+
+.gridContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+
+  @include breakpoint(md) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+  }
+
+  @include breakpoint(lg) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+  }
+}
+
+.serviceCard {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateY(30px);
+  position: relative;
+  padding: 2rem;
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+    animation: fadeInUp 0.6s ease forwards;
+  }
+
+  &:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-8px);
+  }
+}
+
+.featuredBadge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: #d10e10;
+  color: white;
+  padding: 0.375rem 0.875rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  z-index: 2;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  margin-top: 2.5rem;
+}
+
+.icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+  line-height: 1;
+
+  @include breakpoint(md) {
+    font-size: 3rem;
+  }
+}
+
+.headerContent {
+  flex: 1;
+
+  h3 {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 0.375rem;
+    line-height: 1.3;
+
+    @include breakpoint(md) {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+.category {
+  display: inline-block;
+  font-size: 0.875rem;
+  color: #d10e10;
+  font-weight: 600;
+  background: rgba(209, 14, 16, 0.1);
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+}
+
+.shortDescription {
+  font-size: 0.9375rem;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.pricing {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.priceInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.from {
+  font-size: 0.75rem;
+  color: #777;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.amount {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #d10e10;
+  line-height: 1;
+}
+
+.frequency {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.duration {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e0e0e0;
+
+  .label {
+    color: #777;
+  }
+
+  .value {
+    color: #333;
+    font-weight: 600;
+  }
+}
+
+.toggleButton {
+  width: 100%;
+  padding: 0.875rem;
+  background: #d10e10;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #a00c0e;
+    transform: translateY(-2px);
+  }
+}
+
+.fullDescription {
+  font-size: 0.9375rem;
+  color: #555;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+.detailSection {
+  margin-bottom: 1.5rem;
+
+  h4 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 0.75rem;
+  }
+}
+
+.featureList,
+.benefitList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+
+  li {
+    font-size: 0.9375rem;
+    color: #555;
+    padding-left: 1.5rem;
+    position: relative;
+    line-height: 1.5;
+
+    &::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #d10e10;
+      font-weight: 700;
+      font-size: 1.125rem;
+    }
+  }
+}
+
+.contactButton {
+  width: 100%;
+  padding: 0.875rem;
+  background: #1a3a6b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+
+  &:hover {
+    background: #0c1e3f;
+    transform: translateY(-2px);
+  }
+}
+
+.noResults {
+  text-align: center;
+  padding: 4rem 1.5rem;
+  color: #777;
+  font-size: 1.125rem;
+}
+
+// Modal styles
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  overflow-y: auto;
+  animation: fadeIn 0.3s ease;
+}
+
+.modalContent {
+  background: white;
+  border-radius: 16px;
+  max-width: 700px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: slideUp 0.3s ease;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.closeButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: #f5f5f5;
+  color: #333;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+
+  &:hover {
+    background: #d10e10;
+    color: white;
+    transform: rotate(90deg);
+  }
+}
+
+.modalHeader {
+  padding: 2rem;
+  padding-right: 4rem;
+  border-bottom: 2px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.modalIcon {
+  font-size: 2.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+
+  @include breakpoint(md) {
+    font-size: 4rem;
+  }
+}
+
+.modalHeader h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+
+  @include breakpoint(md) {
+    font-size: 2rem;
+  }
+}
+
+.modalCategory {
+  display: inline-block;
+  font-size: 0.875rem;
+  color: #d10e10;
+  font-weight: 600;
+  background: rgba(209, 14, 16, 0.1);
+  padding: 0.375rem 0.875rem;
+  border-radius: 50px;
+}
+
+.modalBody {
+  padding: 2rem;
+}
+
+.modalPricing {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: #f9f9f9;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  border: 2px solid #e0e0e0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 1000px;
+  }
+}

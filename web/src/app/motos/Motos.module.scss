@@ -1,0 +1,387 @@
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/variables" as *;
+
+.motosPage {
+  min-height: 100vh;
+  padding-top: 0;
+}
+
+.hero {
+  background: linear-gradient(135deg, #0c1e3f 0%, #1a3a6b 100%);
+  color: white;
+  padding: 3rem 1.5rem;
+  text-align: center;
+
+  @include breakpoint(md) {
+    padding: 5rem 2rem;
+  }
+
+  @include breakpoint(lg) {
+    padding: 6rem 2rem;
+  }
+}
+
+.heroContent {
+  max-width: 1200px;
+  margin: 0 auto;
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    letter-spacing: -0.5px;
+
+    @include breakpoint(md) {
+      font-size: 3rem;
+    }
+
+    @include breakpoint(lg) {
+      font-size: 3.5rem;
+    }
+  }
+
+  p {
+    font-size: 1rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+
+    @include breakpoint(md) {
+      font-size: 1.125rem;
+    }
+  }
+}
+
+.filters {
+  background: #f5f5f5;
+  padding: 2rem 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+
+  @include breakpoint(md) {
+    padding: 2.5rem 2rem;
+  }
+}
+
+.filterContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #333;
+
+    @include breakpoint(md) {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+.filterButtons {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.75rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 0.5rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #d10e10 #f5f5f5;
+
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f5f5f5;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #d10e10;
+    border-radius: 3px;
+  }
+
+  @include breakpoint(md) {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    padding-bottom: 0;
+  }
+
+  button {
+    padding: 0.625rem 1.25rem;
+    background: white;
+    border: 2px solid #ddd;
+    border-radius: 25px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+
+    @include breakpoint(md) {
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+    }
+
+    &:hover {
+      border-color: #d10e10;
+      color: #d10e10;
+      transform: translateY(-2px);
+    }
+
+    &.active {
+      background: linear-gradient(45deg, #d10e10, #ff3030);
+      border-color: #d10e10;
+      color: white;
+      box-shadow: 0 4px 15px rgba(209, 14, 16, 0.3);
+    }
+  }
+}
+
+.motorcyclesGrid {
+  padding: 3rem 1.5rem;
+  background: white;
+
+  @include breakpoint(md) {
+    padding: 4rem 2rem;
+  }
+}
+
+.gridContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+
+  @include breakpoint(sm) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  @include breakpoint(lg) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+}
+
+.motorcycleCard {
+  position: relative;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateY(30px) scale(0.95);
+  animation-fill-mode: forwards;
+
+  &.visible {
+    animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  &:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.featuredBadge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: #ff6b00;
+  color: white;
+  padding: 0.375rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  z-index: 10;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.imageContainer {
+  width: 100%;
+  height: 220px;
+  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  @include breakpoint(md) {
+    height: 250px;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover img {
+    transform: scale(1.1);
+  }
+}
+
+.cardContent {
+  padding: 1.5rem;
+}
+
+.cardHeader {
+  margin-bottom: 1rem;
+
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0c1e3f;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.category {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: #ffe8e8;
+  color: #d10e10;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.engineInfo {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.engineSpec {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  .label {
+    font-size: 0.75rem;
+    color: #666;
+    font-weight: 500;
+  }
+
+  .value {
+    font-size: 0.875rem;
+    color: #333;
+    font-weight: 700;
+  }
+}
+
+.features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.feature {
+  padding: 0.375rem 0.75rem;
+  background: #f5f5f5;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.cardFooter {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  @include breakpoint(md) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+
+  .currency {
+    font-size: 0.875rem;
+    color: #666;
+    font-weight: 500;
+  }
+
+  .amount {
+    font-size: 1.5rem;
+    color: #d10e10;
+    font-weight: 700;
+  }
+}
+
+.detailsButton {
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(45deg, #d10e10, #ff3030);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  box-shadow: 0 4px 15px rgba(209, 14, 16, 0.3);
+  width: 100%;
+
+  @include breakpoint(md) {
+    width: auto;
+  }
+
+  &:hover {
+    background: linear-gradient(45deg, #ff3030, #d10e10);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(209, 14, 16, 0.4);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(209, 14, 16, 0.3);
+  }
+}
+
+.noResults {
+  text-align: center;
+  padding: 4rem 1.5rem;
+  color: #666;
+
+  p {
+    font-size: 1.125rem;
+  }
+}

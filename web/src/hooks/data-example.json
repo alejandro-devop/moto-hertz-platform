@@ -1,0 +1,1388 @@
+{
+  "sys": {
+    "type": "Array"
+  },
+  "total": 1,
+  "skip": 0,
+  "limit": 100,
+  "items": [
+    {
+      "metadata": {
+        "tags": [],
+        "concepts": []
+      },
+      "sys": {
+        "space": {
+          "sys": {
+            "type": "Link",
+            "linkType": "Space",
+            "id": "w2inzsvnq03e"
+          }
+        },
+        "id": "3tL73yMyxMR3M8I0x6mgm4",
+        "type": "Entry",
+        "createdAt": "2025-10-31T02:53:15.426Z",
+        "updatedAt": "2025-11-04T23:59:10.232Z",
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        },
+        "publishedVersion": 14,
+        "revision": 3,
+        "contentType": {
+          "sys": {
+            "type": "Link",
+            "linkType": "ContentType",
+            "id": "homePage"
+          }
+        },
+        "locale": "en-US"
+      },
+      "fields": {
+        "entryId": "HomePage",
+        "title": "Yamaha Oriente",
+        "slug": "home",
+        "layout": [
+          {
+            "sys": {
+              "type": "Link",
+              "linkType": "Entry",
+              "id": "6iCl8GcKWp0mL70cPJCYNw"
+            }
+          },
+          {
+            "sys": {
+              "type": "Link",
+              "linkType": "Entry",
+              "id": "5HHRTCHeWC3Z7VmqVP7mjN"
+            }
+          },
+          {
+            "sys": {
+              "type": "Link",
+              "linkType": "Entry",
+              "id": "1jjATnHCc9jBZe7knar3kS"
+            }
+          },
+          {
+            "sys": {
+              "type": "Link",
+              "linkType": "Entry",
+              "id": "3i8WavjaKwBCW36CeODUni"
+            }
+          },
+          {
+            "sys": {
+              "type": "Link",
+              "linkType": "Entry",
+              "id": "7AuSTIiQWJbKf0RXIPcaSj"
+            }
+          },
+          {
+            "sys": {
+              "type": "Link",
+              "linkType": "Entry",
+              "id": "25SzLxk5oS5J3jhwW79mIU"
+            }
+          },
+          {
+            "sys": {
+              "type": "Link",
+              "linkType": "Entry",
+              "id": "2MUwjmAPnTCm4K5bRLUnjA"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "includes": {
+    "Entry": [
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "13KTUv0BeINLug2z5zc8lU",
+          "type": "Entry",
+          "createdAt": "2025-11-05T01:40:06.112Z",
+          "updatedAt": "2025-11-05T01:40:06.112Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 2,
+          "revision": 1,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "image"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "entryId": "Home > Galletry Slide > Img 4",
+          "url": "https://storage.googleapis.com/yamaha_oriente_bucket/banner-4.webp"
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "1jjATnHCc9jBZe7knar3kS",
+          "type": "Entry",
+          "createdAt": "2025-11-04T23:53:02.964Z",
+          "updatedAt": "2025-11-04T23:53:02.964Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 2,
+          "revision": 1,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "layout1Column"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "layout1Column": "Home > Services Tiles"
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "1wfSNsQGIvmNMLdozH1oXM",
+          "type": "Entry",
+          "createdAt": "2025-11-05T01:44:29.877Z",
+          "updatedAt": "2025-11-05T01:44:29.877Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 3,
+          "revision": 1,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "gallerySlide"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "entryId": "Home > Banner Gallery > Slide 7",
+          "image": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Entry",
+              "id": "25bxDF5fl7vs6OKkaAlm31"
+            }
+          },
+          "title": "Yamaha Oriente",
+          "caption": "Descubre la nueva generación de motocicletas Yamaha. Potencia, diseño y tecnología en perfecta armonía.",
+          "ctaButton": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Entry",
+              "id": "4PhRWhVnYojHQ5ogYxTASM"
+            }
+          }
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "25SzLxk5oS5J3jhwW79mIU",
+          "type": "Entry",
+          "createdAt": "2025-11-04T23:57:22.006Z",
+          "updatedAt": "2025-11-04T23:57:22.006Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 3,
+          "revision": 1,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "layout1Column"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "layout1Column": "Home > News Container"
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "25bxDF5fl7vs6OKkaAlm31",
+          "type": "Entry",
+          "createdAt": "2025-11-05T01:40:40.992Z",
+          "updatedAt": "2025-11-05T01:40:40.992Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 2,
+          "revision": 1,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "image"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "entryId": "Home > Galletry Slide > Img 7",
+          "url": "https://storage.googleapis.com/yamaha_oriente_bucket/banner-7.webp"
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "25yORrr0I4RMVCpF5ilYNe",
+          "type": "Entry",
+          "createdAt": "2025-11-05T01:40:30.641Z",
+          "updatedAt": "2025-11-05T01:40:30.641Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 2,
+          "revision": 1,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "image"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "entryId": "Home > Galletry Slide > Img 6",
+          "url": "https://storage.googleapis.com/yamaha_oriente_bucket/banner-6.webp"
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "2B6R4G1IRRvJ14sz39Gi15",
+          "type": "Entry",
+          "createdAt": "2025-11-05T01:39:43.447Z",
+          "updatedAt": "2025-11-05T01:39:43.447Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 2,
+          "revision": 1,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "image"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "entryId": "Home > Galletry Slide > Img 2",
+          "url": "https://storage.googleapis.com/yamaha_oriente_bucket/banner-2.webp"
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "2MUwjmAPnTCm4K5bRLUnjA",
+          "type": "Entry",
+          "createdAt": "2025-11-04T23:58:54.850Z",
+          "updatedAt": "2025-11-04T23:58:54.850Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 2,
+          "revision": 1,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "layout1Column"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "layout1Column": "Home > News CTA container"
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "39NDgvva3EGEl5ssKsLpWy",
+          "type": "Entry",
+          "createdAt": "2025-11-05T01:44:52.952Z",
+          "updatedAt": "2025-11-05T01:44:52.952Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 3,
+          "revision": 1,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "gallerySlide"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "entryId": "Home > Banner Gallery > Slide 8",
+          "image": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Entry",
+              "id": "3B2XZeZYLkVaCoUspW3XJt"
+            }
+          },
+          "title": "Yamaha Oriente",
+          "caption": "Descubre la nueva generación de motocicletas Yamaha. Potencia, diseño y tecnología en perfecta armonía.",
+          "ctaButton": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Entry",
+              "id": "4PhRWhVnYojHQ5ogYxTASM"
+            }
+          }
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "3B2XZeZYLkVaCoUspW3XJt",
+          "type": "Entry",
+          "createdAt": "2025-11-05T01:40:50.859Z",
+          "updatedAt": "2025-11-05T01:40:50.859Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 2,
+          "revision": 1,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "image"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "entryId": "Home > Galletry Slide > Img 8",
+          "url": "https://storage.googleapis.com/yamaha_oriente_bucket/banner-8.webp"
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "3R4T5dl8AgPQmKw7dsLLI4",
+          "type": "Entry",
+          "createdAt": "2025-11-05T01:44:15.703Z",
+          "updatedAt": "2025-11-05T01:44:15.703Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 3,
+          "revision": 1,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "gallerySlide"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "entryId": "Home > Banner Gallery > Slide 6",
+          "image": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Entry",
+              "id": "25yORrr0I4RMVCpF5ilYNe"
+            }
+          },
+          "title": "Yamaha Oriente",
+          "caption": "Descubre la nueva generación de motocicletas Yamaha. Potencia, diseño y tecnología en perfecta armonía.",
+          "ctaButton": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Entry",
+              "id": "4PhRWhVnYojHQ5ogYxTASM"
+            }
+          }
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "3i8WavjaKwBCW36CeODUni",
+          "type": "Entry",
+          "createdAt": "2025-11-04T23:53:59.787Z",
+          "updatedAt": "2025-11-04T23:53:59.787Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 2,
+          "revision": 1,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "layoutFullWidth"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "entryId": "Home > Second Banner"
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "4CGbywJ4UNk9tart6iPFVv",
+          "type": "Entry",
+          "createdAt": "2025-11-05T01:45:19.625Z",
+          "updatedAt": "2025-11-05T01:45:19.625Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 2,
+          "revision": 1,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "gallerySlide"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "entryId": "Home > Banner Gallery > Slide 9",
+          "image": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Entry",
+              "id": "I0ONt443qYCJoJ8ciZZJJ"
+            }
+          },
+          "title": "Yamaha Oriente",
+          "caption": "Descubre la nueva generación de motocicletas Yamaha. Potencia, diseño y tecnología en perfecta armonía.",
+          "ctaButton": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Entry",
+              "id": "4PhRWhVnYojHQ5ogYxTASM"
+            }
+          }
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "4IYyLgvy8GukvAiY5QTaST",
+          "type": "Entry",
+          "createdAt": "2025-11-05T01:43:43.736Z",
+          "updatedAt": "2025-11-05T01:43:43.736Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 3,
+          "revision": 1,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "gallerySlide"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "entryId": "Home > Banner Gallery > Slide 4",
+          "image": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Entry",
+              "id": "13KTUv0BeINLug2z5zc8lU"
+            }
+          },
+          "title": "Yamaha Oriente",
+          "caption": "Descubre la nueva generación de motocicletas Yamaha. Potencia, diseño y tecnología en perfecta armonía.",
+          "ctaButton": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Entry",
+              "id": "4PhRWhVnYojHQ5ogYxTASM"
+            }
+          }
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "4PhRWhVnYojHQ5ogYxTASM",
+          "type": "Entry",
+          "createdAt": "2025-11-05T01:34:32.765Z",
+          "updatedAt": "2025-11-05T01:34:32.765Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 4,
+          "revision": 1,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "ctaButton"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "entryId": "Banner CTA Button",
+          "text": "Explorar modelos ",
+          "url": "/"
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "5HHRTCHeWC3Z7VmqVP7mjN",
+          "type": "Entry",
+          "createdAt": "2025-11-04T23:50:42.546Z",
+          "updatedAt": "2025-11-04T23:50:42.546Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 3,
+          "revision": 1,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "layout1Column"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "layout1Column": "Home > Services Caption"
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "5pMJ9iJtEywCJ7hVxYvxkn",
+          "type": "Entry",
+          "createdAt": "2025-11-05T01:33:01.972Z",
+          "updatedAt": "2025-11-05T01:33:01.972Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 6,
+          "revision": 1,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "image"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "entryId": "Home > Galletry Slide > Img 1",
+          "url": "https://storage.googleapis.com/yamaha_oriente_bucket/banner-1.webp"
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "5xY1UzzDnzw0Rhm1mVkTEk",
+          "type": "Entry",
+          "createdAt": "2025-11-05T01:35:08.422Z",
+          "updatedAt": "2025-11-05T01:45:44.802Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 5,
+          "revision": 2,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "bannerGallery"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "entryId": "Home > Banner Gallery",
+          "slides": [
+            {
+              "sys": {
+                "type": "Link",
+                "linkType": "Entry",
+                "id": "fBcpXhJDxQFNkxWU8Gi0P"
+              }
+            },
+            {
+              "sys": {
+                "type": "Link",
+                "linkType": "Entry",
+                "id": "692cxGmQm6xB9ilTRU4KUx"
+              }
+            },
+            {
+              "sys": {
+                "type": "Link",
+                "linkType": "Entry",
+                "id": "hX8osimfrr7PJQymsHCfG"
+              }
+            },
+            {
+              "sys": {
+                "type": "Link",
+                "linkType": "Entry",
+                "id": "4IYyLgvy8GukvAiY5QTaST"
+              }
+            },
+            {
+              "sys": {
+                "type": "Link",
+                "linkType": "Entry",
+                "id": "6LW9pjvmne8bkCf6GSZZ9L"
+              }
+            },
+            {
+              "sys": {
+                "type": "Link",
+                "linkType": "Entry",
+                "id": "3R4T5dl8AgPQmKw7dsLLI4"
+              }
+            },
+            {
+              "sys": {
+                "type": "Link",
+                "linkType": "Entry",
+                "id": "1wfSNsQGIvmNMLdozH1oXM"
+              }
+            },
+            {
+              "sys": {
+                "type": "Link",
+                "linkType": "Entry",
+                "id": "39NDgvva3EGEl5ssKsLpWy"
+              }
+            },
+            {
+              "sys": {
+                "type": "Link",
+                "linkType": "Entry",
+                "id": "4CGbywJ4UNk9tart6iPFVv"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "692cxGmQm6xB9ilTRU4KUx",
+          "type": "Entry",
+          "createdAt": "2025-11-05T01:43:03.245Z",
+          "updatedAt": "2025-11-05T01:43:03.245Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 3,
+          "revision": 1,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "gallerySlide"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "entryId": "Home > Banner Gallery > Slide 2",
+          "image": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Entry",
+              "id": "2B6R4G1IRRvJ14sz39Gi15"
+            }
+          },
+          "title": "Yamaha Oriente",
+          "caption": "Descubre la nueva generación de motocicletas Yamaha. Potencia, diseño y tecnología en perfecta armonía.",
+          "ctaButton": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Entry",
+              "id": "4PhRWhVnYojHQ5ogYxTASM"
+            }
+          }
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "6LW9pjvmne8bkCf6GSZZ9L",
+          "type": "Entry",
+          "createdAt": "2025-11-05T01:43:55.207Z",
+          "updatedAt": "2025-11-05T01:43:55.207Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 3,
+          "revision": 1,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "gallerySlide"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "entryId": "Home > Banner Gallery > Slide 5",
+          "image": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Entry",
+              "id": "7kp451QnfajxzlZJFlap3b"
+            }
+          },
+          "title": "Yamaha Oriente",
+          "caption": "Descubre la nueva generación de motocicletas Yamaha. Potencia, diseño y tecnología en perfecta armonía.",
+          "ctaButton": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Entry",
+              "id": "4PhRWhVnYojHQ5ogYxTASM"
+            }
+          }
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "6iCl8GcKWp0mL70cPJCYNw",
+          "type": "Entry",
+          "createdAt": "2025-11-04T23:48:58.642Z",
+          "updatedAt": "2025-11-11T00:20:23.397Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 7,
+          "revision": 2,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "layoutFullWidth"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "entryId": "Home > Banner Container",
+          "components": [
+            {
+              "sys": {
+                "type": "Link",
+                "linkType": "Entry",
+                "id": "5xY1UzzDnzw0Rhm1mVkTEk"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "7AuSTIiQWJbKf0RXIPcaSj",
+          "type": "Entry",
+          "createdAt": "2025-11-04T23:54:45.716Z",
+          "updatedAt": "2025-11-04T23:54:45.716Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 2,
+          "revision": 1,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "layout1Column"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "layout1Column": "Home > News Caption"
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "7kp451QnfajxzlZJFlap3b",
+          "type": "Entry",
+          "createdAt": "2025-11-05T01:40:17.867Z",
+          "updatedAt": "2025-11-05T01:40:17.867Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 2,
+          "revision": 1,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "image"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "entryId": "Home > Galletry Slide > Img 5",
+          "url": "https://storage.googleapis.com/yamaha_oriente_bucket/banner-5.webp"
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "8k3dNCEz3wGBtkUFagNuT",
+          "type": "Entry",
+          "createdAt": "2025-11-05T01:39:53.959Z",
+          "updatedAt": "2025-11-05T01:39:53.959Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 2,
+          "revision": 1,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "image"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "entryId": "Home > Galletry Slide > Img 3",
+          "url": "https://storage.googleapis.com/yamaha_oriente_bucket/banner-3.webp"
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "I0ONt443qYCJoJ8ciZZJJ",
+          "type": "Entry",
+          "createdAt": "2025-11-05T01:41:02.662Z",
+          "updatedAt": "2025-11-05T01:41:02.662Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 2,
+          "revision": 1,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "image"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "entryId": "Home > Galletry Slide > Img 9",
+          "url": "https://storage.googleapis.com/yamaha_oriente_bucket/banner-9.webp"
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "fBcpXhJDxQFNkxWU8Gi0P",
+          "type": "Entry",
+          "createdAt": "2025-11-05T01:35:03.097Z",
+          "updatedAt": "2025-11-05T01:35:03.097Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 8,
+          "revision": 1,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "gallerySlide"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "entryId": "Home > Banner Gallery > Slide 1",
+          "image": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Entry",
+              "id": "5pMJ9iJtEywCJ7hVxYvxkn"
+            }
+          },
+          "title": "Yamaha Oriente",
+          "caption": "Descubre la nueva generación de motocicletas Yamaha. Potencia, diseño y tecnología en perfecta armonía.",
+          "ctaButton": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Entry",
+              "id": "4PhRWhVnYojHQ5ogYxTASM"
+            }
+          }
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "hX8osimfrr7PJQymsHCfG",
+          "type": "Entry",
+          "createdAt": "2025-11-05T01:43:28.733Z",
+          "updatedAt": "2025-11-05T01:43:28.733Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 3,
+          "revision": 1,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "gallerySlide"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "entryId": "Home > Banner Gallery > Slide 3",
+          "image": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Entry",
+              "id": "8k3dNCEz3wGBtkUFagNuT"
+            }
+          },
+          "title": "Yamaha Oriente",
+          "caption": "Descubre la nueva generación de motocicletas Yamaha. Potencia, diseño y tecnología en perfecta armonía.",
+          "ctaButton": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Entry",
+              "id": "4PhRWhVnYojHQ5ogYxTASM"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

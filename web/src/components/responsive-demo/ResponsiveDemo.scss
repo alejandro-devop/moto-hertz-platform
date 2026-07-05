@@ -1,0 +1,223 @@
+// =============================================================================
+// RESPONSIVE DEMO - Example styles using the breakpoint system
+// =============================================================================
+
+@use "../../styles/abstracts" as *;
+
+.responsive-demo {
+  padding: 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 8px;
+  color: white;
+  margin: 2rem 0;
+
+  @include sm {
+    padding: 1.5rem;
+    border-radius: 12px;
+  }
+
+  @include md {
+    padding: 2rem;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  @include lg {
+    padding: 2.5rem;
+    border-radius: 20px;
+  }
+
+  @include xl {
+    padding: 3rem;
+    max-width: 1400px;
+    margin: 2rem auto;
+  }
+}
+
+.demo-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+
+  @include sm {
+    font-size: 1.75rem;
+  }
+
+  @include md {
+    font-size: 2rem;
+    margin-bottom: 0;
+    flex: 1;
+  }
+
+  @include lg {
+    font-size: 2.25rem;
+  }
+
+  @include xl {
+    font-size: 2.5rem;
+  }
+}
+
+.demo-content {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  opacity: 0.9;
+
+  @include sm {
+    font-size: 1rem;
+  }
+
+  @include md {
+    flex: 2;
+    font-size: 1.1rem;
+  }
+
+  @include lg {
+    font-size: 1.2rem;
+  }
+}
+
+.breakpoint-indicator {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  margin-top: 1rem;
+
+  &::before {
+    content: "XS (0px+)";
+  }
+
+  @include sm {
+    &::before {
+      content: "SM (640px+)";
+    }
+  }
+
+  @include md {
+    &::before {
+      content: "MD (768px+)";
+    }
+  }
+
+  @include lg {
+    &::before {
+      content: "LG (1024px+)";
+    }
+  }
+
+  @include xl {
+    &::before {
+      content: "XL (1280px+)";
+    }
+  }
+
+  @include xxl {
+    &::before {
+      content: "2XL (1536px+)";
+    }
+  }
+}
+
+.grid-demo {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin: 2rem 0;
+
+  @include sm {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include md {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  @include lg {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+
+  @include xl {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+.grid-item {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  @include sm {
+    padding: 1.25rem;
+  }
+
+  @include md {
+    padding: 1.5rem;
+  }
+}
+
+// Demonstration of specific ranges
+.mobile-only-demo {
+  @include mobile-only {
+    background: #ff6b6b;
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    color: white;
+    text-align: center;
+
+    &::before {
+      content: "📱 Only visible on mobile (up to 639px)";
+      display: block;
+      font-weight: bold;
+    }
+  }
+}
+
+.tablet-only-demo {
+  @include tablet-only {
+    background: #4ecdc4;
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    color: white;
+    text-align: center;
+
+    &::before {
+      content: "📟 Only visible on tablets (640px - 1023px)";
+      display: block;
+      font-weight: bold;
+    }
+  }
+}
+
+.desktop-only-demo {
+  @include desktop-only {
+    background: #45b7d1;
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    color: white;
+    text-align: center;
+
+    &::before {
+      content: "🖥️ Only visible on desktop (1024px+)";
+      display: block;
+      font-weight: bold;
+    }
+  }
+}

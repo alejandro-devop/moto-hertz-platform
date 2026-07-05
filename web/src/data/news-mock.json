@@ -1,0 +1,180 @@
+{
+  "news": [
+    {
+      "id": "yamaha-mt-10-2024",
+      "slug": "yamaha-mt-10-2024-lanzamiento",
+      "title": "Yamaha presenta la nueva MT-10 2024",
+      "excerpt": "La icónica naked japonesa llega con mejoras en electrónica y un diseño más agresivo para conquistar las calles.",
+      "content": "Yamaha Motor Corporation ha revelado oficialmente la nueva generación de la MT-10 para el año 2024. Esta actualización trae consigo importantes mejoras en los sistemas electrónicos, un diseño renovado y características que prometen elevar la experiencia de conducción a un nuevo nivel.",
+      "author": {
+        "name": "Carlos Rodríguez",
+        "avatar": "/assets/authors/carlos.jpg"
+      },
+      "category": "Lanzamientos",
+      "publishedAt": "2024-11-10T10:00:00Z",
+      "updatedAt": "2024-11-10T10:00:00Z",
+      "featured": true,
+      "tags": ["MT-10", "Naked", "Lanzamiento", "2024"],
+      "image": {
+        "main": "https://images.unsplash.com/photo-1558980664-769d59546b3d?w=1200",
+        "thumbnail": "https://images.unsplash.com/photo-1558980664-769d59546b3d?w=400",
+        "alt": "Yamaha MT-10 2024"
+      },
+      "readTime": "5 min"
+    },
+    {
+      "id": "mantenimiento-invierno",
+      "slug": "consejos-mantenimiento-moto-invierno",
+      "title": "Consejos para el mantenimiento de tu moto en invierno",
+      "excerpt": "Conoce las mejores prácticas para mantener tu motocicleta en óptimas condiciones durante la temporada de frío.",
+      "content": "El invierno presenta desafíos únicos para los motociclistas. La humedad, las bajas temperaturas y las condiciones climáticas adversas pueden afectar el rendimiento de tu moto. En este artículo te compartimos los mejores consejos para mantener tu motocicleta en perfectas condiciones durante esta temporada.",
+      "author": {
+        "name": "María González",
+        "avatar": "/assets/authors/maria.jpg"
+      },
+      "category": "Mantenimiento",
+      "publishedAt": "2024-11-08T14:30:00Z",
+      "updatedAt": "2024-11-08T14:30:00Z",
+      "featured": true,
+      "tags": ["Mantenimiento", "Invierno", "Consejos", "Cuidados"],
+      "image": {
+        "main": "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=1200",
+        "thumbnail": "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=400",
+        "alt": "Mantenimiento de motocicleta"
+      },
+      "readTime": "7 min"
+    },
+    {
+      "id": "r7-circuito",
+      "slug": "yamaha-r7-experiencia-circuito",
+      "title": "Yamaha R7: Una experiencia inolvidable en circuito",
+      "excerpt": "Probamos la deportiva de Yamaha en el autódromo y te contamos todos los detalles de su comportamiento en pista.",
+      "content": "Tuvimos la oportunidad de llevar la Yamaha R7 al límite en un circuito cerrado. Esta deportiva de 689cc demostró ser una herramienta perfecta tanto para pilotos principiantes como para aquellos con experiencia que buscan diversión pura en pista.",
+      "author": {
+        "name": "Jorge Martínez",
+        "avatar": "/assets/authors/jorge.jpg"
+      },
+      "category": "Reviews",
+      "publishedAt": "2024-11-05T09:15:00Z",
+      "updatedAt": "2024-11-05T09:15:00Z",
+      "featured": false,
+      "tags": ["R7", "Review", "Circuito", "Deportiva"],
+      "image": {
+        "main": "https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=1200",
+        "thumbnail": "https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=400",
+        "alt": "Yamaha R7 en circuito"
+      },
+      "readTime": "6 min"
+    },
+    {
+      "id": "tecnologia-yamaha-2025",
+      "slug": "tecnologia-yamaha-innovaciones-2025",
+      "title": "Las innovaciones tecnológicas de Yamaha para 2025",
+      "excerpt": "Descubre las nuevas tecnologías que Yamaha implementará en sus motocicletas el próximo año.",
+      "content": "Yamaha ha anunciado una serie de innovaciones tecnológicas que llegarán a sus modelos 2025. Desde sistemas de asistencia avanzados hasta mejoras en conectividad, la marca japonesa continúa liderando la innovación en la industria.",
+      "author": {
+        "name": "Ana Pérez",
+        "avatar": "/assets/authors/ana.jpg"
+      },
+      "category": "Tecnología",
+      "publishedAt": "2024-11-03T11:00:00Z",
+      "updatedAt": "2024-11-03T11:00:00Z",
+      "featured": false,
+      "tags": ["Tecnología", "Innovación", "2025", "Electrónica"],
+      "image": {
+        "main": "https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=1200",
+        "thumbnail": "https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=400",
+        "alt": "Tecnología en motocicletas"
+      },
+      "readTime": "8 min"
+    },
+    {
+      "id": "evento-yamaha-bogota",
+      "slug": "evento-yamaha-bogota-noviembre",
+      "title": "Gran evento Yamaha en Bogotá este mes",
+      "excerpt": "No te pierdas el encuentro de motociclistas Yamaha más grande del año en la capital.",
+      "content": "Yamaha Colombia invita a todos los motociclistas a participar en el evento más esperado del año. Habrá exhibición de nuevos modelos, test rides, charlas con expertos y muchas sorpresas más. La cita es el 25 de noviembre en el Centro de Eventos.",
+      "author": {
+        "name": "Pedro Sánchez",
+        "avatar": "/assets/authors/pedro.jpg"
+      },
+      "category": "Eventos",
+      "publishedAt": "2024-11-01T16:00:00Z",
+      "updatedAt": "2024-11-01T16:00:00Z",
+      "featured": false,
+      "tags": ["Eventos", "Bogotá", "Comunidad", "Test Ride"],
+      "image": {
+        "main": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200",
+        "thumbnail": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400",
+        "alt": "Evento de motocicletas"
+      },
+      "readTime": "4 min"
+    },
+    {
+      "id": "comparativa-naked",
+      "slug": "comparativa-naked-media-cilindrada",
+      "title": "Comparativa: Las mejores naked de media cilindrada",
+      "excerpt": "Enfrentamos las naked más populares del mercado para ayudarte a elegir la mejor opción.",
+      "content": "En esta comparativa analizamos a fondo las mejores opciones en el segmento de naked de media cilindrada. Desde la MT-07 hasta sus competidoras directas, evaluamos rendimiento, equipamiento y relación calidad-precio.",
+      "author": {
+        "name": "Carlos Rodríguez",
+        "avatar": "/assets/authors/carlos.jpg"
+      },
+      "category": "Comparativas",
+      "publishedAt": "2024-10-28T13:45:00Z",
+      "updatedAt": "2024-10-28T13:45:00Z",
+      "featured": false,
+      "tags": ["Comparativa", "Naked", "MT-07", "Guía de compra"],
+      "image": {
+        "main": "https://images.unsplash.com/photo-1591768575966-4a776b6a4c4e?w=1200",
+        "thumbnail": "https://images.unsplash.com/photo-1591768575966-4a776b6a4c4e?w=400",
+        "alt": "Motocicletas naked"
+      },
+      "readTime": "10 min"
+    },
+    {
+      "id": "seguridad-vial",
+      "slug": "equipamiento-seguridad-motociclista",
+      "title": "Equipamiento de seguridad esencial para todo motociclista",
+      "excerpt": "Una guía completa sobre el equipo de protección que no puede faltar cuando conduces tu moto.",
+      "content": "La seguridad debe ser siempre la prioridad número uno al conducir una motocicleta. En este artículo repasamos el equipamiento esencial que todo motociclista debe tener: desde el casco hasta las botas, pasando por chaquetas, guantes y protecciones.",
+      "author": {
+        "name": "María González",
+        "avatar": "/assets/authors/maria.jpg"
+      },
+      "category": "Seguridad",
+      "publishedAt": "2024-10-25T10:20:00Z",
+      "updatedAt": "2024-10-25T10:20:00Z",
+      "featured": false,
+      "tags": ["Seguridad", "Equipamiento", "Protección", "Consejos"],
+      "image": {
+        "main": "https://images.unsplash.com/photo-1558980394-4c7c9f93474b?w=1200",
+        "thumbnail": "https://images.unsplash.com/photo-1558980394-4c7c9f93474b?w=400",
+        "alt": "Equipamiento de seguridad"
+      },
+      "readTime": "6 min"
+    },
+    {
+      "id": "rutas-colombia",
+      "slug": "mejores-rutas-motocicleta-colombia",
+      "title": "Las 10 mejores rutas para recorrer en moto por Colombia",
+      "excerpt": "Descubre los recorridos más espectaculares del país para disfrutar sobre dos ruedas.",
+      "content": "Colombia ofrece paisajes increíbles y carreteras perfectas para los amantes de las motocicletas. Desde la cordillera de los Andes hasta las costas caribeñas, te presentamos las 10 rutas que todo motociclista debe recorrer al menos una vez en la vida.",
+      "author": {
+        "name": "Jorge Martínez",
+        "avatar": "/assets/authors/jorge.jpg"
+      },
+      "category": "Viajes",
+      "publishedAt": "2024-10-22T08:00:00Z",
+      "updatedAt": "2024-10-22T08:00:00Z",
+      "featured": true,
+      "tags": ["Rutas", "Viajes", "Colombia", "Turismo"],
+      "image": {
+        "main": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200",
+        "thumbnail": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400",
+        "alt": "Ruta en motocicleta"
+      },
+      "readTime": "12 min"
+    }
+  ]
+}

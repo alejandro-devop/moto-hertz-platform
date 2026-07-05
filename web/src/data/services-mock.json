@@ -1,0 +1,252 @@
+{
+  "services": [
+    {
+      "id": "mantenimiento-preventivo",
+      "slug": "mantenimiento-preventivo",
+      "name": "Mantenimiento Preventivo",
+      "category": "Mantenimiento",
+      "shortDescription": "Mantén tu moto en óptimas condiciones con nuestros planes de mantenimiento programado.",
+      "fullDescription": "El mantenimiento preventivo es esencial para prolongar la vida útil de tu motocicleta. Nuestro equipo de técnicos certificados realiza revisiones completas siguiendo los estándares de Yamaha, incluyendo cambio de aceite, revisión de frenos, ajuste de cadena, y más.",
+      "icon": "🔧",
+      "features": [
+        "Cambio de aceite y filtro",
+        "Revisión de frenos",
+        "Ajuste de cadena y transmisión",
+        "Inspección de neumáticos",
+        "Revisión de sistemas eléctricos",
+        "Diagnóstico computarizado"
+      ],
+      "benefits": [
+        "Previene averías costosas",
+        "Mantiene la garantía vigente",
+        "Mejora el rendimiento",
+        "Aumenta la seguridad"
+      ],
+      "pricing": {
+        "from": 150000,
+        "currency": "COP",
+        "frequency": "cada 5,000 km"
+      },
+      "duration": "2-3 horas",
+      "featured": true,
+      "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800"
+    },
+    {
+      "id": "revision-tecnico-mecanica",
+      "slug": "revision-tecnico-mecanica",
+      "name": "Revisión Técnico Mecánica",
+      "category": "Inspección",
+      "shortDescription": "Preparamos tu moto para pasar la revisión técnico mecánica sin inconvenientes.",
+      "fullDescription": "Servicio completo de preparación y acompañamiento para la revisión técnico mecánica y de emisiones. Realizamos todas las correcciones necesarias para que tu motocicleta cumpla con las normativas vigentes.",
+      "icon": "✅",
+      "features": [
+        "Pre-inspección completa",
+        "Ajuste de luces y señales",
+        "Revisión de frenos",
+        "Control de emisiones",
+        "Corrección de fallas detectadas",
+        "Acompañamiento al centro de diagnóstico"
+      ],
+      "benefits": [
+        "Aprobación garantizada",
+        "Ahorra tiempo y dinero",
+        "Cumple con normativas",
+        "Paz mental al conducir"
+      ],
+      "pricing": {
+        "from": 200000,
+        "currency": "COP",
+        "frequency": "una vez al año"
+      },
+      "duration": "3-4 horas",
+      "featured": true,
+      "image": "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800"
+    },
+    {
+      "id": "reparacion-motor",
+      "slug": "reparacion-motor",
+      "name": "Reparación de Motor",
+      "category": "Reparación",
+      "shortDescription": "Diagnóstico y reparación especializada de motores Yamaha con repuestos originales.",
+      "fullDescription": "Contamos con técnicos especializados en reparación de motores Yamaha. Utilizamos equipos de diagnóstico de última generación y repuestos originales para garantizar la máxima calidad en cada reparación.",
+      "icon": "⚙️",
+      "features": [
+        "Diagnóstico computarizado",
+        "Rectificación de cilindros",
+        "Cambio de pistones y anillos",
+        "Ajuste de válvulas",
+        "Reparación de culata",
+        "Pruebas de rendimiento"
+      ],
+      "benefits": [
+        "Técnicos certificados",
+        "Repuestos originales",
+        "Garantía en reparaciones",
+        "Restaura el rendimiento"
+      ],
+      "pricing": {
+        "from": 800000,
+        "currency": "COP",
+        "frequency": "según daño"
+      },
+      "duration": "1-2 semanas",
+      "featured": false,
+      "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800"
+    },
+    {
+      "id": "suspension-frenos",
+      "slug": "suspension-y-frenos",
+      "name": "Suspensión y Frenos",
+      "category": "Reparación",
+      "shortDescription": "Mantenimiento y reparación del sistema de suspensión y frenos para máxima seguridad.",
+      "fullDescription": "La suspensión y los frenos son elementos críticos para tu seguridad. Ofrecemos servicio completo de mantenimiento, ajuste y reparación de estos sistemas vitales.",
+      "icon": "🛡️",
+      "features": [
+        "Cambio de aceite de horquilla",
+        "Ajuste de suspensión",
+        "Cambio de pastillas de freno",
+        "Sangrado de sistema hidráulico",
+        "Cambio de discos de freno",
+        "Calibración y ajustes"
+      ],
+      "benefits": [
+        "Mayor seguridad",
+        "Mejor confort de manejo",
+        "Frenado óptimo",
+        "Previene accidentes"
+      ],
+      "pricing": {
+        "from": 250000,
+        "currency": "COP",
+        "frequency": "según necesidad"
+      },
+      "duration": "2-4 horas",
+      "featured": false,
+      "image": "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800"
+    },
+    {
+      "id": "diagnostico-electronico",
+      "slug": "diagnostico-electronico",
+      "name": "Diagnóstico Electrónico",
+      "category": "Diagnóstico",
+      "shortDescription": "Análisis computarizado completo de todos los sistemas electrónicos de tu moto.",
+      "fullDescription": "Utilizamos equipos de diagnóstico Yamaha oficiales para identificar fallas en sistemas de inyección, ABS, control de tracción y todos los componentes electrónicos de tu motocicleta.",
+      "icon": "💻",
+      "features": [
+        "Lectura de códigos de error",
+        "Análisis de sensores",
+        "Revisión de sistema de inyección",
+        "Diagnóstico de ABS",
+        "Control de tracción",
+        "Actualización de software"
+      ],
+      "benefits": [
+        "Identifica fallas ocultas",
+        "Previene problemas mayores",
+        "Optimiza rendimiento",
+        "Tecnología oficial Yamaha"
+      ],
+      "pricing": {
+        "from": 100000,
+        "currency": "COP",
+        "frequency": "según necesidad"
+      },
+      "duration": "1-2 horas",
+      "featured": true,
+      "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800"
+    },
+    {
+      "id": "lavado-detallado",
+      "slug": "lavado-y-detallado",
+      "name": "Lavado y Detallado",
+      "category": "Estética",
+      "shortDescription": "Servicio premium de lavado, pulido y protección para mantener tu moto impecable.",
+      "fullDescription": "Más que un lavado, es un tratamiento completo de belleza para tu motocicleta. Incluye lavado profundo, pulido, encerado, limpieza de motor, y tratamiento de plásticos y cromados.",
+      "icon": "✨",
+      "features": [
+        "Lavado profundo con productos especializados",
+        "Pulido de carrocería",
+        "Encerado protector",
+        "Limpieza y desengrase de motor",
+        "Tratamiento de plásticos",
+        "Brillo de cromados y aluminio"
+      ],
+      "benefits": [
+        "Protege la pintura",
+        "Aspecto de moto nueva",
+        "Previene corrosión",
+        "Aumenta valor de reventa"
+      ],
+      "pricing": {
+        "from": 80000,
+        "currency": "COP",
+        "frequency": "mensual"
+      },
+      "duration": "2-3 horas",
+      "featured": false,
+      "image": "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800"
+    },
+    {
+      "id": "personalización",
+      "slug": "personalizacion",
+      "name": "Personalización",
+      "category": "Accesorios",
+      "shortDescription": "Personaliza tu moto con accesorios originales Yamaha instalados por expertos.",
+      "fullDescription": "Convierte tu Yamaha en única. Ofrecemos instalación profesional de todo tipo de accesorios: escapes, protectores, maletas, sistemas de audio, iluminación LED, y más.",
+      "icon": "🎨",
+      "features": [
+        "Instalación de escapes deportivos",
+        "Protectores de carenado y motor",
+        "Sistemas de maletas",
+        "Iluminación LED",
+        "Manubrios y retrovisores",
+        "Audio y conectividad"
+      ],
+      "benefits": [
+        "Accesorios originales",
+        "Instalación garantizada",
+        "Mejora funcionalidad",
+        "Estilo único"
+      ],
+      "pricing": {
+        "from": 150000,
+        "currency": "COP",
+        "frequency": "según proyecto"
+      },
+      "duration": "variable",
+      "featured": false,
+      "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800"
+    },
+    {
+      "id": "garantia-extendida",
+      "slug": "garantia-extendida",
+      "name": "Garantía Extendida",
+      "category": "Protección",
+      "shortDescription": "Extiende la protección de tu inversión con nuestros planes de garantía extendida.",
+      "fullDescription": "Protege tu motocicleta más allá de la garantía de fábrica. Nuestros planes de garantía extendida cubren motor, transmisión, componentes eléctricos y más, dándote tranquilidad por años.",
+      "icon": "🛡️",
+      "features": [
+        "Cobertura de motor y transmisión",
+        "Componentes eléctricos",
+        "Sistema de frenos",
+        "Suspensión",
+        "Asistencia en carretera",
+        "Moto de reemplazo"
+      ],
+      "benefits": [
+        "Protección total",
+        "Sin costos inesperados",
+        "Asistencia 24/7",
+        "Tranquilidad garantizada"
+      ],
+      "pricing": {
+        "from": 500000,
+        "currency": "COP",
+        "frequency": "por año"
+      },
+      "duration": "inmediato",
+      "featured": true,
+      "image": "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800"
+    }
+  ]
+}

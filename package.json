@@ -6,9 +6,9 @@
     "node": ">=18"
   },
   "scripts": {
-    "dev:web": "pnpm --filter web dev",
-    "dev:backend": "pnpm --filter backend dev",
-    "dev:cms": "pnpm --filter cms-admin dev",
+    "dev:web": "pnpm --filter ./web dev",
+    "dev:backend": "pnpm --filter ./backend dev",
+    "dev:cms": "pnpm --filter ./cms-admin dev",
     "lint": "pnpm -r lint",
     "build": "pnpm -r build",
     "test": "pnpm -r test"

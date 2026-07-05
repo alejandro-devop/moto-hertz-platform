@@ -1,0 +1,119 @@
+// =============================================================================
+// MIXINS - Responsive Breakpoint System
+// =============================================================================
+
+@use "sass:map";
+@use "variables" as *;
+
+// Main breakpoint mixin (mobile-first approach)
+@mixin breakpoint($size) {
+  $breakpoint: map.get($breakpoints, $size);
+
+  @if $breakpoint == null {
+    @error "Breakpoint '#{$size}' is not defined. Available breakpoints: #{map.keys($breakpoints)}";
+  }
+
+  @if $breakpoint == 0 {
+    // For xs, no media query needed since it's mobile-first
+    @content;
+  } @else {
+    @media (min-width: $breakpoint) {
+      @content;
+    }
+  }
+}
+
+// Mixin for ranges between breakpoints
+@mixin breakpoint-between($min, $max) {
+  $min-breakpoint: map.get($breakpoints, $min);
+  $max-breakpoint: map.get($breakpoints, $max);
+
+  @if $min-breakpoint == null {
+    @error "Minimum breakpoint '#{$min}' is not defined.";
+  }
+
+  @if $max-breakpoint == null {
+    @error "Maximum breakpoint '#{$max}' is not defined.";
+  }
+
+  @if $min-breakpoint == 0 {
+    @media (max-width: #{$max-breakpoint - 1px}) {
+      @content;
+    }
+  } @else {
+    @media (min-width: $min-breakpoint) and (max-width: #{$max-breakpoint - 1px}) {
+      @content;
+    }
+  }
+}
+
+// Mixin for maximum width (desktop-first approach)
+@mixin breakpoint-max($size) {
+  $breakpoint: map.get($breakpoints, $size);
+
+  @if $breakpoint == null {
+    @error "Breakpoint '#{$size}' is not defined.";
+  }
+
+  @if $breakpoint > 0 {
+    @media (max-width: #{$breakpoint - 1px}) {
+      @content;
+    }
+  }
+}
+
+// Convenience mixins for each breakpoint
+@mixin xs {
+  @include breakpoint(xs) {
+    @content;
+  }
+}
+
+@mixin sm {
+  @include breakpoint(sm) {
+    @content;
+  }
+}
+
+@mixin md {
+  @include breakpoint(md) {
+    @content;
+  }
+}
+
+@mixin lg {
+  @include breakpoint(lg) {
+    @content;
+  }
+}
+
+@mixin xl {
+  @include breakpoint(xl) {
+    @content;
+  }
+}
+
+@mixin xxl {
+  @include breakpoint(2xl) {
+    @content;
+  }
+}
+
+// Mixins for specific ranges only
+@mixin mobile-only {
+  @include breakpoint-max(sm) {
+    @content;
+  }
+}
+
+@mixin tablet-only {
+  @include breakpoint-between(sm, lg) {
+    @content;
+  }
+}
+
+@mixin desktop-only {
+  @include breakpoint(lg) {
+    @content;
+  }
+}

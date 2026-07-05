@@ -1,0 +1,20 @@
+{
+  "name": "Yamaha Oriente",
+  "short_name": "Yamaha Oriente",
+  "description": "Sitio web de Yamaha Oriente",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0066cc",
+  "icons": [
+    {
+      "src": "/assets/logos/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": ["automotive", "business"],
+  "lang": "es",
+  "dir": "ltr",
+  "orientation": "portrait-primary"
+}

@@ -1,0 +1,13 @@
+.parallaxContainer {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .parallaxContainer {
+    will-change: auto;
+    transform: none !important;
+  }
+}

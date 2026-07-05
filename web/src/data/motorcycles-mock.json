@@ -1,0 +1,456 @@
+{
+  "motorcycles": [
+    {
+      "id": "mt-09",
+      "slug": "mt-09",
+      "name": "MT-09",
+      "category": "Hyper Naked",
+      "year": 2024,
+      "price": 42500000,
+      "currency": "COP",
+      "description": "La MT-09 es una motocicleta Hyper Naked de alto rendimiento.",
+      "fullDescription": "La Yamaha MT-09 representa lo mejor de la categoría Hyper Naked. Equipada con un motor 3 cilindros en línea de 890cc, ofrece 119 HP de potencia y un rendimiento excepcional.",
+      "engine": {
+        "type": "3 cilindros en línea",
+        "displacement": "890cc",
+        "power": "119 HP",
+        "torque": "93 Nm"
+      },
+      "features": [
+        "Control de tracción",
+        "Modos de conducción",
+        "ABS",
+        "Quickshifter"
+      ],
+      "colors": ["Azul Yamaha", "Negro", "Gris Tech"],
+      "images": {
+        "main": "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+        "gallery": [
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg"
+        ]
+      },
+      "specs": {
+        "weight": "189 kg",
+        "seatHeight": "825 mm",
+        "fuelCapacity": "14 L",
+        "transmission": "6 velocidades"
+      },
+      "available": true,
+      "featured": true
+    },
+    {
+      "id": "yzf-r1",
+      "slug": "yzf-r1",
+      "name": "YZF-R1",
+      "category": "Supersport",
+      "year": 2024,
+      "price": 78000000,
+      "currency": "COP",
+      "description": "La YZF-R1 es una motocicleta Supersport de alto rendimiento.",
+      "fullDescription": "La Yamaha YZF-R1 representa lo mejor de la categoría Supersport. Equipada con un motor 4 cilindros en línea de 998cc, ofrece 200 HP de potencia y un rendimiento excepcional.",
+      "engine": {
+        "type": "4 cilindros en línea",
+        "displacement": "998cc",
+        "power": "200 HP",
+        "torque": "112.4 Nm"
+      },
+      "features": [
+        "Control de tracción",
+        "Control de deslizamiento",
+        "Control de lanzamiento",
+        "Control de freno motor",
+        "ABS en curva",
+        "IMU de 6 ejes"
+      ],
+      "colors": ["Azul Racing", "Negro Team Yamaha", "Blanco/Azul"],
+      "images": {
+        "main": "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+        "gallery": [
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg"
+        ]
+      },
+      "specs": {
+        "weight": "201 kg",
+        "seatHeight": "855 mm",
+        "fuelCapacity": "17 L",
+        "transmission": "6 velocidades"
+      },
+      "available": true,
+      "featured": true
+    },
+    {
+      "id": "tenere-700",
+      "name": "Ténéré 700",
+      "category": "Adventure",
+      "year": 2024,
+      "price": 46000000,
+      "currency": "COP",
+      "engine": {
+        "type": "2 cilindros en línea",
+        "displacement": "689cc",
+        "power": "72 HP",
+        "torque": "68 Nm"
+      },
+      "features": [
+        "ABS",
+        "Suspensión de largo recorrido",
+        "Chasis tubular de acero",
+        "Protector de motor"
+      ],
+      "colors": ["Azul Icon", "Negro Raven", "Blanco Explorer"],
+      "images": {
+        "main": "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+        "gallery": [
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg"
+        ]
+      },
+      "specs": {
+        "weight": "205 kg",
+        "seatHeight": "875 mm",
+        "fuelCapacity": "16 L",
+        "transmission": "6 velocidades"
+      },
+      "available": true,
+      "featured": true,
+      "slug": "tenere-700",
+      "description": "La Ténéré 700 es una adventure verdadera, diseñada para conquistar cualquier terreno con su motor bicilíndrico y suspensión de largo recorrido.",
+      "fullDescription": "La Yamaha Ténéré 700 es la compañera perfecta para aventuras sin límites. Inspirada en las legendarias Dakar, combina un motor CP2 de 689cc con un chasis tubular de acero y suspensión de largo recorrido. Su diseño minimalista y robusto la hace ideal para explorar caminos desconocidos con total confianza."
+    },
+    {
+      "id": "xmax-300",
+      "name": "XMAX 300",
+      "category": "Scooter",
+      "year": 2024,
+      "price": 28000000,
+      "currency": "COP",
+      "engine": {
+        "type": "Monocilíndrico",
+        "displacement": "292cc",
+        "power": "28 HP",
+        "torque": "29 Nm"
+      },
+      "features": [
+        "ABS",
+        "Control de tracción",
+        "Smart Key",
+        "Conectividad Bluetooth"
+      ],
+      "colors": ["Gris Sonic", "Negro Midnight", "Azul Phantom"],
+      "images": {
+        "main": "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+        "gallery": [
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg"
+        ]
+      },
+      "specs": {
+        "weight": "179 kg",
+        "seatHeight": "795 mm",
+        "fuelCapacity": "13 L",
+        "transmission": "Automática CVT"
+      },
+      "available": true,
+      "featured": false,
+      "slug": "xmax-300",
+      "description": "El XMAX 300 es el scooter premium de Yamaha, que combina estilo, confort y tecnología avanzada para la movilidad urbana.",
+      "fullDescription": "El Yamaha XMAX 300 redefine el concepto de scooter premium. Con su motor Blue Core de 292cc, ofrece un rendimiento excepcional y bajo consumo. Equipado con Smart Key, conectividad Bluetooth y un amplio espacio de almacenamiento, es la elección perfecta para riders urbanos que buscan comodidad y estilo."
+    },
+    {
+      "id": "mt-07",
+      "name": "MT-07",
+      "category": "Hyper Naked",
+      "year": 2024,
+      "price": 35800000,
+      "currency": "COP",
+      "engine": {
+        "type": "2 cilindros en línea",
+        "displacement": "689cc",
+        "power": "74 HP",
+        "torque": "67 Nm"
+      },
+      "features": ["ABS", "Chasis ligero", "Motor CP2", "LCD display"],
+      "colors": ["Azul Ice Fluo", "Negro Storm", "Gris Tech"],
+      "images": {
+        "main": "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+        "gallery": [
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg"
+        ]
+      },
+      "specs": {
+        "weight": "184 kg",
+        "seatHeight": "805 mm",
+        "fuelCapacity": "14 L",
+        "transmission": "6 velocidades"
+      },
+      "available": true,
+      "featured": false,
+      "slug": "mt-07",
+      "description": "La MT-07 es la naked accesible que ofrece diversión pura con su motor CP2 y chasis ultraligero.",
+      "fullDescription": "La Yamaha MT-07 es sinónimo de diversión en estado puro. Su motor bicilíndrico CP2 de 689cc entrega un par generoso desde bajas revoluciones, mientras que su chasis ligero de solo 184 kg garantiza una agilidad excepcional. Perfecta para riders que buscan emociones sin complicaciones."
+    },
+    {
+      "id": "yzf-r7",
+      "name": "YZF-R7",
+      "category": "Supersport",
+      "year": 2024,
+      "price": 41200000,
+      "currency": "COP",
+      "engine": {
+        "type": "2 cilindros en línea",
+        "displacement": "689cc",
+        "power": "73 HP",
+        "torque": "67 Nm"
+      },
+      "features": [
+        "ABS",
+        "Quickshifter opcional",
+        "Carenado deportivo",
+        "Chasis deportivo"
+      ],
+      "colors": ["Azul Racing", "Negro Yamaha", "Blanco/Azul GP"],
+      "images": {
+        "main": "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+        "gallery": [
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg"
+        ]
+      },
+      "specs": {
+        "weight": "188 kg",
+        "seatHeight": "835 mm",
+        "fuelCapacity": "13 L",
+        "transmission": "6 velocidades"
+      },
+      "available": true,
+      "featured": false,
+      "slug": "yzf-r7",
+      "description": "La YZF-R7 es la deportiva supersport que combina rendimiento de pista con usabilidad diaria.",
+      "fullDescription": "La Yamaha YZF-R7 trae la emoción de las carreras a la calle. Con el probado motor CP2 de 689cc en un chasis deportivo inspirado en la R1, ofrece un equilibrio perfecto entre rendimiento y accesibilidad. Su diseño aerodinámico y posición de conducción deportiva la convierten en la elección ideal para track days y carreteras sinuosas."
+    },
+    {
+      "id": "tracer-9-gt",
+      "name": "Tracer 9 GT",
+      "category": "Sport Touring",
+      "year": 2024,
+      "price": 64000000,
+      "currency": "COP",
+      "engine": {
+        "type": "3 cilindros en línea",
+        "displacement": "890cc",
+        "power": "119 HP",
+        "torque": "93 Nm"
+      },
+      "features": [
+        "Control de crucero adaptativo",
+        "Suspensión electrónica",
+        "TFT a color",
+        "Quickshifter",
+        "Maletas laterales"
+      ],
+      "colors": ["Gris Tech", "Negro Midnight", "Azul Phantom"],
+      "images": {
+        "main": "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+        "gallery": [
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg"
+        ]
+      },
+      "specs": {
+        "weight": "220 kg",
+        "seatHeight": "810-825 mm",
+        "fuelCapacity": "18 L",
+        "transmission": "6 velocidades"
+      },
+      "available": true,
+      "featured": false,
+      "slug": "tracer-9-gt",
+      "description": "La Tracer 9 GT es la sport touring definitiva, con tecnología de vanguardia y comodidad para largos viajes.",
+      "fullDescription": "La Yamaha Tracer 9 GT es la máquina perfecta para devoradores de kilómetros. Equipada con control de crucero adaptativo, suspensión electrónica y maletas laterales integradas, combina el motor CP3 de 119 HP con el confort necesario para viajes de larga distancia. Su TFT a color de 7 pulgadas y múltiples ayudas electrónicas la hacen una touring de última generación."
+    },
+    {
+      "id": "xsr900",
+      "name": "XSR900",
+      "category": "Heritage",
+      "year": 2024,
+      "price": 46000000,
+      "currency": "COP",
+      "engine": {
+        "type": "3 cilindros en línea",
+        "displacement": "890cc",
+        "power": "119 HP",
+        "torque": "93 Nm"
+      },
+      "features": [
+        "Control de tracción",
+        "Modos de conducción",
+        "ABS",
+        "TFT display",
+        "Estilo retro"
+      ],
+      "colors": ["Negro Raven", "Gris Armor", "Verde Heritage"],
+      "images": {
+        "main": "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+        "gallery": [
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg"
+        ]
+      },
+      "specs": {
+        "weight": "193 kg",
+        "seatHeight": "830 mm",
+        "fuelCapacity": "14 L",
+        "transmission": "6 velocidades"
+      },
+      "available": true,
+      "featured": false,
+      "slug": "xsr900",
+      "description": "La XSR900 combina diseño retro con tecnología moderna, creando una naked heritage única.",
+      "fullDescription": "La Yamaha XSR900 es un tributo al legado de Yamaha con tecnología del siglo XXI. Su estética neo-retro esconde un corazón moderno: el potente motor CP3 de 890cc con 119 HP. Con control de tracción, modos de conducción y TFT display, ofrece una experiencia de conducción emocionante envuelta en un diseño atemporal."
+    },
+    {
+      "id": "niken",
+      "name": "Niken",
+      "category": "Sport",
+      "year": 2024,
+      "price": 77500000,
+      "currency": "COP",
+      "engine": {
+        "type": "3 cilindros en línea",
+        "displacement": "847cc",
+        "power": "115 HP",
+        "torque": "87.5 Nm"
+      },
+      "features": [
+        "Sistema LMW",
+        "3 ruedas",
+        "Control de tracción",
+        "ABS unificado",
+        "Modos de conducción"
+      ],
+      "colors": ["Gris Graphite", "Negro Midnight"],
+      "images": {
+        "main": "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+        "gallery": [
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg"
+        ]
+      },
+      "specs": {
+        "weight": "263 kg",
+        "seatHeight": "820 mm",
+        "fuelCapacity": "18 L",
+        "transmission": "6 velocidades"
+      },
+      "available": true,
+      "featured": false,
+      "slug": "niken",
+      "description": "La Niken es revolucionaria con su sistema LMW de tres ruedas, ofreciendo estabilidad y confianza sin precedentes.",
+      "fullDescription": "La Yamaha Niken rompe todos los esquemas con su innovador sistema LMW (Leaning Multi-Wheel). Sus dos ruedas delanteras le otorgan una tracción y estabilidad superiores en cualquier condición, mientras mantiene la emoción y agilidad de una moto deportiva. Equipada con el motor CP3 de 847cc, es una experiencia de conducción única."
+    },
+    {
+      "id": "wr250f",
+      "name": "WR250F",
+      "category": "Off-Road",
+      "year": 2024,
+      "price": 43800000,
+      "currency": "COP",
+      "engine": {
+        "type": "Monocilíndrico 4T",
+        "displacement": "250cc",
+        "power": "42 HP",
+        "torque": "26 Nm"
+      },
+      "features": [
+        "Motor de alto rendimiento",
+        "Suspensión ajustable",
+        "Arranque eléctrico",
+        "Homologada para calle"
+      ],
+      "colors": ["Azul Yamaha Racing"],
+      "images": {
+        "main": "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+        "gallery": [
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg",
+          "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/08/mt15-sp.jpg"
+        ]
+      },
+      "specs": {
+        "weight": "119 kg",
+        "seatHeight": "965 mm",
+        "fuelCapacity": "8.6 L",
+        "transmission": "5 velocidades"
+      },
+      "available": true,
+      "featured": false,
+      "slug": "wr250f",
+      "description": "La WR250F es una enduro de competición homologada para calle, diseñada para dominar el off-road.",
+      "fullDescription": "La Yamaha WR250F es una auténtica máquina de enduro con matrícula. Su motor monocilíndrico de 250cc de 4 tiempos ofrece potencia explosiva, mientras que su suspensión totalmente ajustable y chasis ligero de 119 kg la hacen increíblemente ágil en terrenos técnicos. Perfecta para riders que viven para el off-road."
+    }
+  ],
+  "categories": [
+    {
+      "id": "hyper-naked",
+      "name": "Hyper Naked",
+      "description": "Motos deportivas sin carenado, ágiles y potentes"
+    },
+    {
+      "id": "supersport",
+      "name": "Supersport",
+      "description": "Motos deportivas de alto rendimiento con carenado completo"
+    },
+    {
+      "id": "adventure",
+      "name": "Adventure",
+      "description": "Motos preparadas para largas distancias y todo terreno"
+    },
+    {
+      "id": "scooter",
+      "name": "Scooter",
+      "description": "Motos automáticas ideales para ciudad"
+    },
+    {
+      "id": "sport-touring",
+      "name": "Sport Touring",
+      "description": "Motos deportivas con comodidad para viajes largos"
+    },
+    {
+      "id": "heritage",
+      "name": "Heritage",
+      "description": "Motos con diseño retro y tecnología moderna"
+    },
+    {
+      "id": "sport",
+      "name": "Sport",
+      "description": "Motos deportivas de alto rendimiento"
+    },
+    {
+      "id": "off-road",
+      "name": "Off-Road",
+      "description": "Motos diseñadas para terrenos difíciles"
+    }
+  ]
+}

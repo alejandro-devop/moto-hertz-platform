@@ -1,0 +1,172 @@
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/variables" as *;
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+  overflow-y: auto;
+  animation: fadeIn 0.4s ease;
+}
+
+.modalContent {
+  background: white;
+  border-radius: 20px;
+  max-width: 500px;
+  width: 100%;
+  position: relative;
+  animation: slideUp 0.4s ease;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+}
+
+.closeButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: #f5f5f5;
+  color: #333;
+  font-size: 1.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+
+  &:hover {
+    background: #d10e10;
+    color: white;
+    transform: rotate(90deg);
+  }
+}
+
+.modalBody {
+  padding: 3rem 2rem 2rem;
+  text-align: center;
+
+  @include breakpoint(md) {
+    padding: 3.5rem 3rem 2.5rem;
+  }
+}
+
+.icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  animation: bounce 2s ease infinite;
+
+  @include breakpoint(md) {
+    font-size: 5rem;
+  }
+}
+
+.modalBody h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+
+  @include breakpoint(md) {
+    font-size: 2.25rem;
+  }
+}
+
+.subtitle {
+  font-size: 1.125rem;
+  color: #d10e10;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+
+  @include breakpoint(md) {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+  }
+}
+
+.message {
+  margin-bottom: 2rem;
+
+  p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.7;
+    margin-bottom: 1rem;
+
+    @include breakpoint(md) {
+      font-size: 1.0625rem;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.continueButton {
+  width: 100%;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #d10e10 0%, #a00c0e 100%);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(209, 14, 16, 0.3);
+
+  @include breakpoint(md) {
+    font-size: 1.0625rem;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(209, 14, 16, 0.4);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}

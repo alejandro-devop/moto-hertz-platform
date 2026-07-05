@@ -1,0 +1,10 @@
+export { default as Menu } from "./menu";
+export { default as Banner } from "./banner";
+export { default as Button } from "./button";
+export { default as Cards } from "./cards";
+export { default as SecondBanner } from "./second-banner";
+export { default as NewsSection } from "./news-section";
+export { default as Footer } from "./footer";
+export { default as Drawer } from "./drawer";
+export { default as Icon } from "./icon";
+export { ParallaxDemo } from "./parallax-demo";

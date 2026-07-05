@@ -1,0 +1,141 @@
+{
+  "sys": {
+    "id": "home-mock-entry",
+    "type": "Entry",
+    "createdAt": "2026-01-01T00:00:00Z",
+    "updatedAt": "2026-01-01T00:00:00Z",
+    "contentType": { "sys": { "id": "homePage" } }
+  },
+  "fields": {
+    "entryId": "home-mock-entry",
+    "title": "Yamaha Oriente - Home",
+    "slug": "home",
+    "layout": [
+      {
+        "sys": { "id": "banner-gallery-mock", "type": "Entry", "contentType": { "sys": { "id": "bannerGallery" } } },
+        "fields": {
+          "slides": [
+            {
+              "sys": { "id": "slide-1" },
+              "fields": {
+                "title": "Yamaha Oriente",
+                "caption": "Descubre la nueva generación de motocicletas Yamaha. Potencia, diseño y tecnología en perfecta armonía.",
+                "image": { "fields": { "file": { "url": "https://images.unsplash.com/photo-1558980664-769d59546b3d?w=1600" }, "title": "Banner 1" } },
+                "ctaButton": { "fields": { "label": "Explorar Modelos", "url": "/motos", "style": "primary" } }
+              }
+            },
+            {
+              "sys": { "id": "slide-2" },
+              "fields": {
+                "title": "Servicio técnico especializado",
+                "caption": "Mantén tu Yamaha en óptimas condiciones con nuestro equipo certificado.",
+                "image": { "fields": { "file": { "url": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600" }, "title": "Banner 2" } },
+                "ctaButton": { "fields": { "label": "Ver Servicios", "url": "/servicios", "style": "primary" } }
+              }
+            },
+            {
+              "sys": { "id": "slide-3" },
+              "fields": {
+                "title": "Encuentra tu punto de atención",
+                "caption": "Estamos cerca de ti con talleres y puntos de venta en toda la región Oriente.",
+                "image": { "fields": { "file": { "url": "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=1600" }, "title": "Banner 3" } },
+                "ctaButton": { "fields": { "label": "Ver Puntos de Atención", "url": "/puntos-atencion", "style": "primary" } }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "sys": { "id": "services-section-mock", "type": "Entry", "contentType": { "sys": { "id": "layout1Column" } } },
+        "fields": {
+          "entryId": "services-section-mock",
+          "components": [
+            {
+              "sys": { "id": "services-title", "contentType": { "sys": { "id": "title" } } },
+              "fields": { "text": "Servicios Yamaha" }
+            },
+            {
+              "sys": { "id": "services-subtitle", "contentType": { "sys": { "id": "paragraph" } } },
+              "fields": { "content": "Descubre todos los servicios que tenemos disponibles para ti" }
+            },
+            {
+              "sys": { "id": "service-mantenimiento", "contentType": { "sys": { "id": "serviceCard" } } },
+              "fields": {
+                "title": { "fields": { "text": "Mantenimiento Preventivo" } },
+                "caption": { "fields": { "content": "Mantén tu moto en óptimas condiciones con nuestros planes de mantenimiento programado." } },
+                "image": { "fields": { "url": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800" } },
+                "ctaButton": { "fields": { "text": "Ver más", "url": "/servicios/mantenimiento-preventivo" } }
+              }
+            },
+            {
+              "sys": { "id": "service-revision", "contentType": { "sys": { "id": "serviceCard" } } },
+              "fields": {
+                "title": { "fields": { "text": "Revisión Técnico Mecánica" } },
+                "caption": { "fields": { "content": "Preparamos tu moto para pasar la revisión técnico mecánica sin inconvenientes." } },
+                "image": { "fields": { "url": "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800" } },
+                "ctaButton": { "fields": { "text": "Ver más", "url": "/servicios/revision-tecnico-mecanica" } }
+              }
+            },
+            {
+              "sys": { "id": "service-diagnostico", "contentType": { "sys": { "id": "serviceCard" } } },
+              "fields": {
+                "title": { "fields": { "text": "Diagnóstico Electrónico" } },
+                "caption": { "fields": { "content": "Análisis computarizado completo de todos los sistemas electrónicos de tu moto." } },
+                "image": { "fields": { "url": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800" } },
+                "ctaButton": { "fields": { "text": "Ver más", "url": "/servicios/diagnostico-electronico" } }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "sys": { "id": "second-banner-mock", "type": "Entry", "contentType": { "sys": { "id": "fullWidthBanner" } } },
+        "fields": {
+          "title": "Financia tu próxima Yamaha",
+          "caption": "Planes de crédito flexibles para que estrenes tu moto sin complicaciones.",
+          "cta": { "fields": { "text": "Conocer planes", "url": "/motos" } },
+          "backgroundImage": { "fields": { "url": "https://images.unsplash.com/photo-1558980664-769d59546b3d?w=1600" } }
+        }
+      },
+      {
+        "sys": { "id": "news-section-mock", "type": "Entry", "contentType": { "sys": { "id": "layout1Column" } } },
+        "fields": {
+          "entryId": "news-section-mock",
+          "components": [
+            {
+              "sys": { "id": "news-title", "contentType": { "sys": { "id": "title" } } },
+              "fields": { "text": "Últimas Noticias" }
+            },
+            {
+              "sys": { "id": "news-subtitle", "contentType": { "sys": { "id": "paragraph" } } },
+              "fields": { "content": "Mantente al día con las últimas novedades, lanzamientos y tecnologías del mundo Yamaha" }
+            },
+            {
+              "sys": { "id": "news-mt10", "contentType": { "sys": { "id": "newsCard" } } },
+              "fields": {
+                "title": { "fields": { "text": "Yamaha presenta la nueva MT-10 2024" } },
+                "caption": { "fields": { "content": "La icónica naked japonesa llega con mejoras en electrónica y un diseño más agresivo para conquistar las calles." } },
+                "image": { "fields": { "url": "https://images.unsplash.com/photo-1558980664-769d59546b3d?w=1200" } },
+                "category": { "fields": { "text": "Lanzamientos" } },
+                "publishedDate": "2024-11-10T10:00:00Z",
+                "slug": "yamaha-mt-10-2024-lanzamiento"
+              }
+            },
+            {
+              "sys": { "id": "news-invierno", "contentType": { "sys": { "id": "newsCard" } } },
+              "fields": {
+                "title": { "fields": { "text": "Consejos para el mantenimiento de tu moto en invierno" } },
+                "caption": { "fields": { "content": "Conoce las mejores prácticas para mantener tu motocicleta en óptimas condiciones durante la temporada de frío." } },
+                "image": { "fields": { "url": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200" } },
+                "category": { "fields": { "text": "Mantenimiento" } },
+                "publishedDate": "2024-11-08T14:30:00Z",
+                "slug": "consejos-mantenimiento-moto-invierno"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "metadata": { "tags": [], "concepts": [] }
+}

@@ -1,0 +1,3475 @@
+{
+  "metadata": {
+    "tags": [],
+    "concepts": []
+  },
+  "sys": {
+    "space": {
+      "sys": {
+        "type": "Link",
+        "linkType": "Space",
+        "id": "w2inzsvnq03e"
+      }
+    },
+    "id": "3tL73yMyxMR3M8I0x6mgm4",
+    "type": "Entry",
+    "createdAt": "2025-10-31T02:53:15.426Z",
+    "updatedAt": "2025-11-04T23:59:10.232Z",
+    "environment": {
+      "sys": {
+        "id": "master",
+        "type": "Link",
+        "linkType": "Environment"
+      }
+    },
+    "publishedVersion": 14,
+    "revision": 3,
+    "contentType": {
+      "sys": {
+        "type": "Link",
+        "linkType": "ContentType",
+        "id": "homePage"
+      }
+    },
+    "locale": "en-US"
+  },
+  "fields": {
+    "entryId": "HomePage",
+    "title": "Yamaha Oriente",
+    "slug": "home",
+    "layout": [
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "6iCl8GcKWp0mL70cPJCYNw",
+          "type": "Entry",
+          "createdAt": "2025-11-04T23:48:58.642Z",
+          "updatedAt": "2025-11-11T00:20:23.397Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 7,
+          "revision": 2,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "layoutFullWidth"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "entryId": "Home > Banner Container",
+          "components": [
+            {
+              "metadata": {
+                "tags": [],
+                "concepts": []
+              },
+              "sys": {
+                "space": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "Space",
+                    "id": "w2inzsvnq03e"
+                  }
+                },
+                "id": "5xY1UzzDnzw0Rhm1mVkTEk",
+                "type": "Entry",
+                "createdAt": "2025-11-05T01:35:08.422Z",
+                "updatedAt": "2025-11-05T01:45:44.802Z",
+                "environment": {
+                  "sys": {
+                    "id": "master",
+                    "type": "Link",
+                    "linkType": "Environment"
+                  }
+                },
+                "publishedVersion": 5,
+                "revision": 2,
+                "contentType": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "ContentType",
+                    "id": "bannerGallery"
+                  }
+                },
+                "locale": "en-US"
+              },
+              "fields": {
+                "entryId": "Home > Banner Gallery",
+                "slides": [
+                  {
+                    "metadata": {
+                      "tags": [],
+                      "concepts": []
+                    },
+                    "sys": {
+                      "space": {
+                        "sys": {
+                          "type": "Link",
+                          "linkType": "Space",
+                          "id": "w2inzsvnq03e"
+                        }
+                      },
+                      "id": "fBcpXhJDxQFNkxWU8Gi0P",
+                      "type": "Entry",
+                      "createdAt": "2025-11-05T01:35:03.097Z",
+                      "updatedAt": "2025-11-05T01:35:03.097Z",
+                      "environment": {
+                        "sys": {
+                          "id": "master",
+                          "type": "Link",
+                          "linkType": "Environment"
+                        }
+                      },
+                      "publishedVersion": 8,
+                      "revision": 1,
+                      "contentType": {
+                        "sys": {
+                          "type": "Link",
+                          "linkType": "ContentType",
+                          "id": "gallerySlide"
+                        }
+                      },
+                      "locale": "en-US"
+                    },
+                    "fields": {
+                      "entryId": "Home > Banner Gallery > Slide 1",
+                      "image": {
+                        "metadata": {
+                          "tags": [],
+                          "concepts": []
+                        },
+                        "sys": {
+                          "space": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "Space",
+                              "id": "w2inzsvnq03e"
+                            }
+                          },
+                          "id": "5pMJ9iJtEywCJ7hVxYvxkn",
+                          "type": "Entry",
+                          "createdAt": "2025-11-05T01:33:01.972Z",
+                          "updatedAt": "2025-11-05T01:33:01.972Z",
+                          "environment": {
+                            "sys": {
+                              "id": "master",
+                              "type": "Link",
+                              "linkType": "Environment"
+                            }
+                          },
+                          "publishedVersion": 6,
+                          "revision": 1,
+                          "contentType": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "ContentType",
+                              "id": "image"
+                            }
+                          },
+                          "locale": "en-US"
+                        },
+                        "fields": {
+                          "entryId": "Home > Galletry Slide > Img 1",
+                          "url": "https://storage.googleapis.com/yamaha_oriente_bucket/banner-1.webp"
+                        }
+                      },
+                      "title": "Yamaha Oriente",
+                      "caption": "Descubre la nueva generación de motocicletas Yamaha. Potencia, diseño y tecnología en perfecta armonía.",
+                      "ctaButton": {
+                        "metadata": {
+                          "tags": [],
+                          "concepts": []
+                        },
+                        "sys": {
+                          "space": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "Space",
+                              "id": "w2inzsvnq03e"
+                            }
+                          },
+                          "id": "4PhRWhVnYojHQ5ogYxTASM",
+                          "type": "Entry",
+                          "createdAt": "2025-11-05T01:34:32.765Z",
+                          "updatedAt": "2025-11-05T01:34:32.765Z",
+                          "environment": {
+                            "sys": {
+                              "id": "master",
+                              "type": "Link",
+                              "linkType": "Environment"
+                            }
+                          },
+                          "publishedVersion": 4,
+                          "revision": 1,
+                          "contentType": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "ContentType",
+                              "id": "ctaButton"
+                            }
+                          },
+                          "locale": "en-US"
+                        },
+                        "fields": {
+                          "entryId": "Banner CTA Button",
+                          "text": "Explorar modelos ",
+                          "url": "/"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "metadata": {
+                      "tags": [],
+                      "concepts": []
+                    },
+                    "sys": {
+                      "space": {
+                        "sys": {
+                          "type": "Link",
+                          "linkType": "Space",
+                          "id": "w2inzsvnq03e"
+                        }
+                      },
+                      "id": "692cxGmQm6xB9ilTRU4KUx",
+                      "type": "Entry",
+                      "createdAt": "2025-11-05T01:43:03.245Z",
+                      "updatedAt": "2025-11-05T01:43:03.245Z",
+                      "environment": {
+                        "sys": {
+                          "id": "master",
+                          "type": "Link",
+                          "linkType": "Environment"
+                        }
+                      },
+                      "publishedVersion": 3,
+                      "revision": 1,
+                      "contentType": {
+                        "sys": {
+                          "type": "Link",
+                          "linkType": "ContentType",
+                          "id": "gallerySlide"
+                        }
+                      },
+                      "locale": "en-US"
+                    },
+                    "fields": {
+                      "entryId": "Home > Banner Gallery > Slide 2",
+                      "image": {
+                        "metadata": {
+                          "tags": [],
+                          "concepts": []
+                        },
+                        "sys": {
+                          "space": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "Space",
+                              "id": "w2inzsvnq03e"
+                            }
+                          },
+                          "id": "2B6R4G1IRRvJ14sz39Gi15",
+                          "type": "Entry",
+                          "createdAt": "2025-11-05T01:39:43.447Z",
+                          "updatedAt": "2025-11-05T01:39:43.447Z",
+                          "environment": {
+                            "sys": {
+                              "id": "master",
+                              "type": "Link",
+                              "linkType": "Environment"
+                            }
+                          },
+                          "publishedVersion": 2,
+                          "revision": 1,
+                          "contentType": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "ContentType",
+                              "id": "image"
+                            }
+                          },
+                          "locale": "en-US"
+                        },
+                        "fields": {
+                          "entryId": "Home > Galletry Slide > Img 2",
+                          "url": "https://storage.googleapis.com/yamaha_oriente_bucket/banner-2.webp"
+                        }
+                      },
+                      "title": "Yamaha Oriente",
+                      "caption": "Descubre la nueva generación de motocicletas Yamaha. Potencia, diseño y tecnología en perfecta armonía.",
+                      "ctaButton": {
+                        "metadata": {
+                          "tags": [],
+                          "concepts": []
+                        },
+                        "sys": {
+                          "space": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "Space",
+                              "id": "w2inzsvnq03e"
+                            }
+                          },
+                          "id": "4PhRWhVnYojHQ5ogYxTASM",
+                          "type": "Entry",
+                          "createdAt": "2025-11-05T01:34:32.765Z",
+                          "updatedAt": "2025-11-05T01:34:32.765Z",
+                          "environment": {
+                            "sys": {
+                              "id": "master",
+                              "type": "Link",
+                              "linkType": "Environment"
+                            }
+                          },
+                          "publishedVersion": 4,
+                          "revision": 1,
+                          "contentType": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "ContentType",
+                              "id": "ctaButton"
+                            }
+                          },
+                          "locale": "en-US"
+                        },
+                        "fields": {
+                          "entryId": "Banner CTA Button",
+                          "text": "Explorar modelos ",
+                          "url": "/"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "metadata": {
+                      "tags": [],
+                      "concepts": []
+                    },
+                    "sys": {
+                      "space": {
+                        "sys": {
+                          "type": "Link",
+                          "linkType": "Space",
+                          "id": "w2inzsvnq03e"
+                        }
+                      },
+                      "id": "hX8osimfrr7PJQymsHCfG",
+                      "type": "Entry",
+                      "createdAt": "2025-11-05T01:43:28.733Z",
+                      "updatedAt": "2025-11-05T01:43:28.733Z",
+                      "environment": {
+                        "sys": {
+                          "id": "master",
+                          "type": "Link",
+                          "linkType": "Environment"
+                        }
+                      },
+                      "publishedVersion": 3,
+                      "revision": 1,
+                      "contentType": {
+                        "sys": {
+                          "type": "Link",
+                          "linkType": "ContentType",
+                          "id": "gallerySlide"
+                        }
+                      },
+                      "locale": "en-US"
+                    },
+                    "fields": {
+                      "entryId": "Home > Banner Gallery > Slide 3",
+                      "image": {
+                        "metadata": {
+                          "tags": [],
+                          "concepts": []
+                        },
+                        "sys": {
+                          "space": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "Space",
+                              "id": "w2inzsvnq03e"
+                            }
+                          },
+                          "id": "8k3dNCEz3wGBtkUFagNuT",
+                          "type": "Entry",
+                          "createdAt": "2025-11-05T01:39:53.959Z",
+                          "updatedAt": "2025-11-05T01:39:53.959Z",
+                          "environment": {
+                            "sys": {
+                              "id": "master",
+                              "type": "Link",
+                              "linkType": "Environment"
+                            }
+                          },
+                          "publishedVersion": 2,
+                          "revision": 1,
+                          "contentType": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "ContentType",
+                              "id": "image"
+                            }
+                          },
+                          "locale": "en-US"
+                        },
+                        "fields": {
+                          "entryId": "Home > Galletry Slide > Img 3",
+                          "url": "https://storage.googleapis.com/yamaha_oriente_bucket/banner-3.webp"
+                        }
+                      },
+                      "title": "Yamaha Oriente",
+                      "caption": "Descubre la nueva generación de motocicletas Yamaha. Potencia, diseño y tecnología en perfecta armonía.",
+                      "ctaButton": {
+                        "metadata": {
+                          "tags": [],
+                          "concepts": []
+                        },
+                        "sys": {
+                          "space": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "Space",
+                              "id": "w2inzsvnq03e"
+                            }
+                          },
+                          "id": "4PhRWhVnYojHQ5ogYxTASM",
+                          "type": "Entry",
+                          "createdAt": "2025-11-05T01:34:32.765Z",
+                          "updatedAt": "2025-11-05T01:34:32.765Z",
+                          "environment": {
+                            "sys": {
+                              "id": "master",
+                              "type": "Link",
+                              "linkType": "Environment"
+                            }
+                          },
+                          "publishedVersion": 4,
+                          "revision": 1,
+                          "contentType": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "ContentType",
+                              "id": "ctaButton"
+                            }
+                          },
+                          "locale": "en-US"
+                        },
+                        "fields": {
+                          "entryId": "Banner CTA Button",
+                          "text": "Explorar modelos ",
+                          "url": "/"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "metadata": {
+                      "tags": [],
+                      "concepts": []
+                    },
+                    "sys": {
+                      "space": {
+                        "sys": {
+                          "type": "Link",
+                          "linkType": "Space",
+                          "id": "w2inzsvnq03e"
+                        }
+                      },
+                      "id": "4IYyLgvy8GukvAiY5QTaST",
+                      "type": "Entry",
+                      "createdAt": "2025-11-05T01:43:43.736Z",
+                      "updatedAt": "2025-11-05T01:43:43.736Z",
+                      "environment": {
+                        "sys": {
+                          "id": "master",
+                          "type": "Link",
+                          "linkType": "Environment"
+                        }
+                      },
+                      "publishedVersion": 3,
+                      "revision": 1,
+                      "contentType": {
+                        "sys": {
+                          "type": "Link",
+                          "linkType": "ContentType",
+                          "id": "gallerySlide"
+                        }
+                      },
+                      "locale": "en-US"
+                    },
+                    "fields": {
+                      "entryId": "Home > Banner Gallery > Slide 4",
+                      "image": {
+                        "metadata": {
+                          "tags": [],
+                          "concepts": []
+                        },
+                        "sys": {
+                          "space": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "Space",
+                              "id": "w2inzsvnq03e"
+                            }
+                          },
+                          "id": "13KTUv0BeINLug2z5zc8lU",
+                          "type": "Entry",
+                          "createdAt": "2025-11-05T01:40:06.112Z",
+                          "updatedAt": "2025-11-05T01:40:06.112Z",
+                          "environment": {
+                            "sys": {
+                              "id": "master",
+                              "type": "Link",
+                              "linkType": "Environment"
+                            }
+                          },
+                          "publishedVersion": 2,
+                          "revision": 1,
+                          "contentType": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "ContentType",
+                              "id": "image"
+                            }
+                          },
+                          "locale": "en-US"
+                        },
+                        "fields": {
+                          "entryId": "Home > Galletry Slide > Img 4",
+                          "url": "https://storage.googleapis.com/yamaha_oriente_bucket/banner-4.webp"
+                        }
+                      },
+                      "title": "Yamaha Oriente",
+                      "caption": "Descubre la nueva generación de motocicletas Yamaha. Potencia, diseño y tecnología en perfecta armonía.",
+                      "ctaButton": {
+                        "metadata": {
+                          "tags": [],
+                          "concepts": []
+                        },
+                        "sys": {
+                          "space": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "Space",
+                              "id": "w2inzsvnq03e"
+                            }
+                          },
+                          "id": "4PhRWhVnYojHQ5ogYxTASM",
+                          "type": "Entry",
+                          "createdAt": "2025-11-05T01:34:32.765Z",
+                          "updatedAt": "2025-11-05T01:34:32.765Z",
+                          "environment": {
+                            "sys": {
+                              "id": "master",
+                              "type": "Link",
+                              "linkType": "Environment"
+                            }
+                          },
+                          "publishedVersion": 4,
+                          "revision": 1,
+                          "contentType": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "ContentType",
+                              "id": "ctaButton"
+                            }
+                          },
+                          "locale": "en-US"
+                        },
+                        "fields": {
+                          "entryId": "Banner CTA Button",
+                          "text": "Explorar modelos ",
+                          "url": "/"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "metadata": {
+                      "tags": [],
+                      "concepts": []
+                    },
+                    "sys": {
+                      "space": {
+                        "sys": {
+                          "type": "Link",
+                          "linkType": "Space",
+                          "id": "w2inzsvnq03e"
+                        }
+                      },
+                      "id": "6LW9pjvmne8bkCf6GSZZ9L",
+                      "type": "Entry",
+                      "createdAt": "2025-11-05T01:43:55.207Z",
+                      "updatedAt": "2025-11-05T01:43:55.207Z",
+                      "environment": {
+                        "sys": {
+                          "id": "master",
+                          "type": "Link",
+                          "linkType": "Environment"
+                        }
+                      },
+                      "publishedVersion": 3,
+                      "revision": 1,
+                      "contentType": {
+                        "sys": {
+                          "type": "Link",
+                          "linkType": "ContentType",
+                          "id": "gallerySlide"
+                        }
+                      },
+                      "locale": "en-US"
+                    },
+                    "fields": {
+                      "entryId": "Home > Banner Gallery > Slide 5",
+                      "image": {
+                        "metadata": {
+                          "tags": [],
+                          "concepts": []
+                        },
+                        "sys": {
+                          "space": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "Space",
+                              "id": "w2inzsvnq03e"
+                            }
+                          },
+                          "id": "7kp451QnfajxzlZJFlap3b",
+                          "type": "Entry",
+                          "createdAt": "2025-11-05T01:40:17.867Z",
+                          "updatedAt": "2025-11-05T01:40:17.867Z",
+                          "environment": {
+                            "sys": {
+                              "id": "master",
+                              "type": "Link",
+                              "linkType": "Environment"
+                            }
+                          },
+                          "publishedVersion": 2,
+                          "revision": 1,
+                          "contentType": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "ContentType",
+                              "id": "image"
+                            }
+                          },
+                          "locale": "en-US"
+                        },
+                        "fields": {
+                          "entryId": "Home > Galletry Slide > Img 5",
+                          "url": "https://storage.googleapis.com/yamaha_oriente_bucket/banner-5.webp"
+                        }
+                      },
+                      "title": "Yamaha Oriente",
+                      "caption": "Descubre la nueva generación de motocicletas Yamaha. Potencia, diseño y tecnología en perfecta armonía.",
+                      "ctaButton": {
+                        "metadata": {
+                          "tags": [],
+                          "concepts": []
+                        },
+                        "sys": {
+                          "space": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "Space",
+                              "id": "w2inzsvnq03e"
+                            }
+                          },
+                          "id": "4PhRWhVnYojHQ5ogYxTASM",
+                          "type": "Entry",
+                          "createdAt": "2025-11-05T01:34:32.765Z",
+                          "updatedAt": "2025-11-05T01:34:32.765Z",
+                          "environment": {
+                            "sys": {
+                              "id": "master",
+                              "type": "Link",
+                              "linkType": "Environment"
+                            }
+                          },
+                          "publishedVersion": 4,
+                          "revision": 1,
+                          "contentType": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "ContentType",
+                              "id": "ctaButton"
+                            }
+                          },
+                          "locale": "en-US"
+                        },
+                        "fields": {
+                          "entryId": "Banner CTA Button",
+                          "text": "Explorar modelos ",
+                          "url": "/"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "metadata": {
+                      "tags": [],
+                      "concepts": []
+                    },
+                    "sys": {
+                      "space": {
+                        "sys": {
+                          "type": "Link",
+                          "linkType": "Space",
+                          "id": "w2inzsvnq03e"
+                        }
+                      },
+                      "id": "3R4T5dl8AgPQmKw7dsLLI4",
+                      "type": "Entry",
+                      "createdAt": "2025-11-05T01:44:15.703Z",
+                      "updatedAt": "2025-11-05T01:44:15.703Z",
+                      "environment": {
+                        "sys": {
+                          "id": "master",
+                          "type": "Link",
+                          "linkType": "Environment"
+                        }
+                      },
+                      "publishedVersion": 3,
+                      "revision": 1,
+                      "contentType": {
+                        "sys": {
+                          "type": "Link",
+                          "linkType": "ContentType",
+                          "id": "gallerySlide"
+                        }
+                      },
+                      "locale": "en-US"
+                    },
+                    "fields": {
+                      "entryId": "Home > Banner Gallery > Slide 6",
+                      "image": {
+                        "metadata": {
+                          "tags": [],
+                          "concepts": []
+                        },
+                        "sys": {
+                          "space": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "Space",
+                              "id": "w2inzsvnq03e"
+                            }
+                          },
+                          "id": "25yORrr0I4RMVCpF5ilYNe",
+                          "type": "Entry",
+                          "createdAt": "2025-11-05T01:40:30.641Z",
+                          "updatedAt": "2025-11-05T01:40:30.641Z",
+                          "environment": {
+                            "sys": {
+                              "id": "master",
+                              "type": "Link",
+                              "linkType": "Environment"
+                            }
+                          },
+                          "publishedVersion": 2,
+                          "revision": 1,
+                          "contentType": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "ContentType",
+                              "id": "image"
+                            }
+                          },
+                          "locale": "en-US"
+                        },
+                        "fields": {
+                          "entryId": "Home > Galletry Slide > Img 6",
+                          "url": "https://storage.googleapis.com/yamaha_oriente_bucket/banner-6.webp"
+                        }
+                      },
+                      "title": "Yamaha Oriente",
+                      "caption": "Descubre la nueva generación de motocicletas Yamaha. Potencia, diseño y tecnología en perfecta armonía.",
+                      "ctaButton": {
+                        "metadata": {
+                          "tags": [],
+                          "concepts": []
+                        },
+                        "sys": {
+                          "space": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "Space",
+                              "id": "w2inzsvnq03e"
+                            }
+                          },
+                          "id": "4PhRWhVnYojHQ5ogYxTASM",
+                          "type": "Entry",
+                          "createdAt": "2025-11-05T01:34:32.765Z",
+                          "updatedAt": "2025-11-05T01:34:32.765Z",
+                          "environment": {
+                            "sys": {
+                              "id": "master",
+                              "type": "Link",
+                              "linkType": "Environment"
+                            }
+                          },
+                          "publishedVersion": 4,
+                          "revision": 1,
+                          "contentType": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "ContentType",
+                              "id": "ctaButton"
+                            }
+                          },
+                          "locale": "en-US"
+                        },
+                        "fields": {
+                          "entryId": "Banner CTA Button",
+                          "text": "Explorar modelos ",
+                          "url": "/"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "metadata": {
+                      "tags": [],
+                      "concepts": []
+                    },
+                    "sys": {
+                      "space": {
+                        "sys": {
+                          "type": "Link",
+                          "linkType": "Space",
+                          "id": "w2inzsvnq03e"
+                        }
+                      },
+                      "id": "1wfSNsQGIvmNMLdozH1oXM",
+                      "type": "Entry",
+                      "createdAt": "2025-11-05T01:44:29.877Z",
+                      "updatedAt": "2025-11-05T01:44:29.877Z",
+                      "environment": {
+                        "sys": {
+                          "id": "master",
+                          "type": "Link",
+                          "linkType": "Environment"
+                        }
+                      },
+                      "publishedVersion": 3,
+                      "revision": 1,
+                      "contentType": {
+                        "sys": {
+                          "type": "Link",
+                          "linkType": "ContentType",
+                          "id": "gallerySlide"
+                        }
+                      },
+                      "locale": "en-US"
+                    },
+                    "fields": {
+                      "entryId": "Home > Banner Gallery > Slide 7",
+                      "image": {
+                        "metadata": {
+                          "tags": [],
+                          "concepts": []
+                        },
+                        "sys": {
+                          "space": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "Space",
+                              "id": "w2inzsvnq03e"
+                            }
+                          },
+                          "id": "25bxDF5fl7vs6OKkaAlm31",
+                          "type": "Entry",
+                          "createdAt": "2025-11-05T01:40:40.992Z",
+                          "updatedAt": "2025-11-05T01:40:40.992Z",
+                          "environment": {
+                            "sys": {
+                              "id": "master",
+                              "type": "Link",
+                              "linkType": "Environment"
+                            }
+                          },
+                          "publishedVersion": 2,
+                          "revision": 1,
+                          "contentType": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "ContentType",
+                              "id": "image"
+                            }
+                          },
+                          "locale": "en-US"
+                        },
+                        "fields": {
+                          "entryId": "Home > Galletry Slide > Img 7",
+                          "url": "https://storage.googleapis.com/yamaha_oriente_bucket/banner-7.webp"
+                        }
+                      },
+                      "title": "Yamaha Oriente",
+                      "caption": "Descubre la nueva generación de motocicletas Yamaha. Potencia, diseño y tecnología en perfecta armonía.",
+                      "ctaButton": {
+                        "metadata": {
+                          "tags": [],
+                          "concepts": []
+                        },
+                        "sys": {
+                          "space": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "Space",
+                              "id": "w2inzsvnq03e"
+                            }
+                          },
+                          "id": "4PhRWhVnYojHQ5ogYxTASM",
+                          "type": "Entry",
+                          "createdAt": "2025-11-05T01:34:32.765Z",
+                          "updatedAt": "2025-11-05T01:34:32.765Z",
+                          "environment": {
+                            "sys": {
+                              "id": "master",
+                              "type": "Link",
+                              "linkType": "Environment"
+                            }
+                          },
+                          "publishedVersion": 4,
+                          "revision": 1,
+                          "contentType": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "ContentType",
+                              "id": "ctaButton"
+                            }
+                          },
+                          "locale": "en-US"
+                        },
+                        "fields": {
+                          "entryId": "Banner CTA Button",
+                          "text": "Explorar modelos ",
+                          "url": "/"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "metadata": {
+                      "tags": [],
+                      "concepts": []
+                    },
+                    "sys": {
+                      "space": {
+                        "sys": {
+                          "type": "Link",
+                          "linkType": "Space",
+                          "id": "w2inzsvnq03e"
+                        }
+                      },
+                      "id": "39NDgvva3EGEl5ssKsLpWy",
+                      "type": "Entry",
+                      "createdAt": "2025-11-05T01:44:52.952Z",
+                      "updatedAt": "2025-11-05T01:44:52.952Z",
+                      "environment": {
+                        "sys": {
+                          "id": "master",
+                          "type": "Link",
+                          "linkType": "Environment"
+                        }
+                      },
+                      "publishedVersion": 3,
+                      "revision": 1,
+                      "contentType": {
+                        "sys": {
+                          "type": "Link",
+                          "linkType": "ContentType",
+                          "id": "gallerySlide"
+                        }
+                      },
+                      "locale": "en-US"
+                    },
+                    "fields": {
+                      "entryId": "Home > Banner Gallery > Slide 8",
+                      "image": {
+                        "metadata": {
+                          "tags": [],
+                          "concepts": []
+                        },
+                        "sys": {
+                          "space": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "Space",
+                              "id": "w2inzsvnq03e"
+                            }
+                          },
+                          "id": "3B2XZeZYLkVaCoUspW3XJt",
+                          "type": "Entry",
+                          "createdAt": "2025-11-05T01:40:50.859Z",
+                          "updatedAt": "2025-11-05T01:40:50.859Z",
+                          "environment": {
+                            "sys": {
+                              "id": "master",
+                              "type": "Link",
+                              "linkType": "Environment"
+                            }
+                          },
+                          "publishedVersion": 2,
+                          "revision": 1,
+                          "contentType": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "ContentType",
+                              "id": "image"
+                            }
+                          },
+                          "locale": "en-US"
+                        },
+                        "fields": {
+                          "entryId": "Home > Galletry Slide > Img 8",
+                          "url": "https://storage.googleapis.com/yamaha_oriente_bucket/banner-8.webp"
+                        }
+                      },
+                      "title": "Yamaha Oriente",
+                      "caption": "Descubre la nueva generación de motocicletas Yamaha. Potencia, diseño y tecnología en perfecta armonía.",
+                      "ctaButton": {
+                        "metadata": {
+                          "tags": [],
+                          "concepts": []
+                        },
+                        "sys": {
+                          "space": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "Space",
+                              "id": "w2inzsvnq03e"
+                            }
+                          },
+                          "id": "4PhRWhVnYojHQ5ogYxTASM",
+                          "type": "Entry",
+                          "createdAt": "2025-11-05T01:34:32.765Z",
+                          "updatedAt": "2025-11-05T01:34:32.765Z",
+                          "environment": {
+                            "sys": {
+                              "id": "master",
+                              "type": "Link",
+                              "linkType": "Environment"
+                            }
+                          },
+                          "publishedVersion": 4,
+                          "revision": 1,
+                          "contentType": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "ContentType",
+                              "id": "ctaButton"
+                            }
+                          },
+                          "locale": "en-US"
+                        },
+                        "fields": {
+                          "entryId": "Banner CTA Button",
+                          "text": "Explorar modelos ",
+                          "url": "/"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "metadata": {
+                      "tags": [],
+                      "concepts": []
+                    },
+                    "sys": {
+                      "space": {
+                        "sys": {
+                          "type": "Link",
+                          "linkType": "Space",
+                          "id": "w2inzsvnq03e"
+                        }
+                      },
+                      "id": "4CGbywJ4UNk9tart6iPFVv",
+                      "type": "Entry",
+                      "createdAt": "2025-11-05T01:45:19.625Z",
+                      "updatedAt": "2025-11-05T01:45:19.625Z",
+                      "environment": {
+                        "sys": {
+                          "id": "master",
+                          "type": "Link",
+                          "linkType": "Environment"
+                        }
+                      },
+                      "publishedVersion": 2,
+                      "revision": 1,
+                      "contentType": {
+                        "sys": {
+                          "type": "Link",
+                          "linkType": "ContentType",
+                          "id": "gallerySlide"
+                        }
+                      },
+                      "locale": "en-US"
+                    },
+                    "fields": {
+                      "entryId": "Home > Banner Gallery > Slide 9",
+                      "image": {
+                        "metadata": {
+                          "tags": [],
+                          "concepts": []
+                        },
+                        "sys": {
+                          "space": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "Space",
+                              "id": "w2inzsvnq03e"
+                            }
+                          },
+                          "id": "I0ONt443qYCJoJ8ciZZJJ",
+                          "type": "Entry",
+                          "createdAt": "2025-11-05T01:41:02.662Z",
+                          "updatedAt": "2025-11-05T01:41:02.662Z",
+                          "environment": {
+                            "sys": {
+                              "id": "master",
+                              "type": "Link",
+                              "linkType": "Environment"
+                            }
+                          },
+                          "publishedVersion": 2,
+                          "revision": 1,
+                          "contentType": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "ContentType",
+                              "id": "image"
+                            }
+                          },
+                          "locale": "en-US"
+                        },
+                        "fields": {
+                          "entryId": "Home > Galletry Slide > Img 9",
+                          "url": "https://storage.googleapis.com/yamaha_oriente_bucket/banner-9.webp"
+                        }
+                      },
+                      "title": "Yamaha Oriente",
+                      "caption": "Descubre la nueva generación de motocicletas Yamaha. Potencia, diseño y tecnología en perfecta armonía.",
+                      "ctaButton": {
+                        "metadata": {
+                          "tags": [],
+                          "concepts": []
+                        },
+                        "sys": {
+                          "space": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "Space",
+                              "id": "w2inzsvnq03e"
+                            }
+                          },
+                          "id": "4PhRWhVnYojHQ5ogYxTASM",
+                          "type": "Entry",
+                          "createdAt": "2025-11-05T01:34:32.765Z",
+                          "updatedAt": "2025-11-05T01:34:32.765Z",
+                          "environment": {
+                            "sys": {
+                              "id": "master",
+                              "type": "Link",
+                              "linkType": "Environment"
+                            }
+                          },
+                          "publishedVersion": 4,
+                          "revision": 1,
+                          "contentType": {
+                            "sys": {
+                              "type": "Link",
+                              "linkType": "ContentType",
+                              "id": "ctaButton"
+                            }
+                          },
+                          "locale": "en-US"
+                        },
+                        "fields": {
+                          "entryId": "Banner CTA Button",
+                          "text": "Explorar modelos ",
+                          "url": "/"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "5HHRTCHeWC3Z7VmqVP7mjN",
+          "type": "Entry",
+          "createdAt": "2025-11-04T23:50:42.546Z",
+          "updatedAt": "2025-11-11T22:05:03.969Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 8,
+          "revision": 3,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "layout1Column"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "layout1Column": "Home > Services Caption  Container",
+          "components": [
+            {
+              "metadata": {
+                "tags": [],
+                "concepts": []
+              },
+              "sys": {
+                "space": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "Space",
+                    "id": "w2inzsvnq03e"
+                  }
+                },
+                "id": "74k19l7m62y8tHLOylRUKj",
+                "type": "Entry",
+                "createdAt": "2025-11-11T22:02:38.545Z",
+                "updatedAt": "2025-11-11T22:02:38.545Z",
+                "environment": {
+                  "sys": {
+                    "id": "master",
+                    "type": "Link",
+                    "linkType": "Environment"
+                  }
+                },
+                "publishedVersion": 5,
+                "revision": 1,
+                "contentType": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "ContentType",
+                    "id": "title"
+                  }
+                },
+                "locale": "en-US"
+              },
+              "fields": {
+                "entryId": "Home > Services Section Title",
+                "text": "Servicios Yamaha"
+              }
+            },
+            {
+              "metadata": {
+                "tags": [],
+                "concepts": []
+              },
+              "sys": {
+                "space": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "Space",
+                    "id": "w2inzsvnq03e"
+                  }
+                },
+                "id": "2lUUhiQWbl6M8Tf8T0bPrR",
+                "type": "Entry",
+                "createdAt": "2025-11-11T22:03:09.201Z",
+                "updatedAt": "2025-11-11T22:03:09.201Z",
+                "environment": {
+                  "sys": {
+                    "id": "master",
+                    "type": "Link",
+                    "linkType": "Environment"
+                  }
+                },
+                "publishedVersion": 4,
+                "revision": 1,
+                "contentType": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "ContentType",
+                    "id": "paragraph"
+                  }
+                },
+                "locale": "en-US"
+              },
+              "fields": {
+                "entryId": "Home > Services section paragraph",
+                "content": "Descubre todos los servicios que tenemos disponibles para ti"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "1jjATnHCc9jBZe7knar3kS",
+          "type": "Entry",
+          "createdAt": "2025-11-04T23:53:02.964Z",
+          "updatedAt": "2025-11-11T22:20:29.016Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 8,
+          "revision": 4,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "layout1Column"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "layout1Column": "Home > Services Tiles Container",
+          "components": [
+            {
+              "metadata": {
+                "tags": [],
+                "concepts": []
+              },
+              "sys": {
+                "space": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "Space",
+                    "id": "w2inzsvnq03e"
+                  }
+                },
+                "id": "vIs5xXw23QEbAxOBA0ag9",
+                "type": "Entry",
+                "createdAt": "2025-11-11T22:08:47.914Z",
+                "updatedAt": "2025-11-11T22:10:24.304Z",
+                "environment": {
+                  "sys": {
+                    "id": "master",
+                    "type": "Link",
+                    "linkType": "Environment"
+                  }
+                },
+                "publishedVersion": 11,
+                "revision": 3,
+                "contentType": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "ContentType",
+                    "id": "serviceCard"
+                  }
+                },
+                "locale": "en-US"
+              },
+              "fields": {
+                "entryId": "Home > Service Card > Tienda Yamaha",
+                "image": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "6H4BowzLb5Yi4RRRNaVhni",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:07:03.369Z",
+                    "updatedAt": "2025-11-11T22:10:46.848Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 7,
+                    "revision": 2,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "image"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Tienda yamaha > Services > Image",
+                    "url": "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/07/elementos-de-servicio.jpg"
+                  }
+                },
+                "title": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "1R9lb9Y8Kb5hEfErlDLqQi",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:08:04.469Z",
+                    "updatedAt": "2025-11-11T22:08:04.469Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 8,
+                    "revision": 1,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "title"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Home > Service Card > Tienda yamaha > Title",
+                    "text": "Tienda Yamaha"
+                  }
+                },
+                "caption": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "6A1Ypf65SdWfE1bvPRGEf7",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:08:44.651Z",
+                    "updatedAt": "2025-11-11T22:09:55.063Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 8,
+                    "revision": 2,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "paragraph"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Servicios > Tienda yamaha > paragraph",
+                    "content": "Llévanos contigo siempre, conoce nuestros productos."
+                  }
+                },
+                "ctaButton": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "6oBeKgsADa8asJAtYJFEex",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:09:34.590Z",
+                    "updatedAt": "2025-11-11T22:10:03.386Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 7,
+                    "revision": 2,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "ctaButton"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Tienda Yamaha > Visitanos CTA",
+                    "text": "VISITANOS",
+                    "url": "yamahaoriente.com"
+                  }
+                }
+              }
+            },
+            {
+              "metadata": {
+                "tags": [],
+                "concepts": []
+              },
+              "sys": {
+                "space": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "Space",
+                    "id": "w2inzsvnq03e"
+                  }
+                },
+                "id": "1ns6eDpYXGVm47ol8p61Qb",
+                "type": "Entry",
+                "createdAt": "2025-11-11T22:19:00.072Z",
+                "updatedAt": "2025-11-11T22:19:00.072Z",
+                "environment": {
+                  "sys": {
+                    "id": "master",
+                    "type": "Link",
+                    "linkType": "Environment"
+                  }
+                },
+                "publishedVersion": 2,
+                "revision": 1,
+                "contentType": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "ContentType",
+                    "id": "serviceCard"
+                  }
+                },
+                "locale": "en-US"
+              },
+              "fields": {
+                "entryId": "Home > Service Card > Simula credito",
+                "image": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "6H4BowzLb5Yi4RRRNaVhni",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:07:03.369Z",
+                    "updatedAt": "2025-11-11T22:10:46.848Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 7,
+                    "revision": 2,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "image"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Tienda yamaha > Services > Image",
+                    "url": "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/07/elementos-de-servicio.jpg"
+                  }
+                },
+                "title": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "1R9lb9Y8Kb5hEfErlDLqQi",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:08:04.469Z",
+                    "updatedAt": "2025-11-11T22:08:04.469Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 8,
+                    "revision": 1,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "title"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Home > Service Card > Tienda yamaha > Title",
+                    "text": "Tienda Yamaha"
+                  }
+                },
+                "caption": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "6A1Ypf65SdWfE1bvPRGEf7",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:08:44.651Z",
+                    "updatedAt": "2025-11-11T22:09:55.063Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 8,
+                    "revision": 2,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "paragraph"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Servicios > Tienda yamaha > paragraph",
+                    "content": "Llévanos contigo siempre, conoce nuestros productos."
+                  }
+                },
+                "ctaButton": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "6oBeKgsADa8asJAtYJFEex",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:09:34.590Z",
+                    "updatedAt": "2025-11-11T22:10:03.386Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 7,
+                    "revision": 2,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "ctaButton"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Tienda Yamaha > Visitanos CTA",
+                    "text": "VISITANOS",
+                    "url": "yamahaoriente.com"
+                  }
+                }
+              }
+            },
+            {
+              "metadata": {
+                "tags": [],
+                "concepts": []
+              },
+              "sys": {
+                "space": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "Space",
+                    "id": "w2inzsvnq03e"
+                  }
+                },
+                "id": "flSBQbV1ncb83od1UQUKH",
+                "type": "Entry",
+                "createdAt": "2025-11-11T22:18:48.855Z",
+                "updatedAt": "2025-11-11T22:18:48.855Z",
+                "environment": {
+                  "sys": {
+                    "id": "master",
+                    "type": "Link",
+                    "linkType": "Environment"
+                  }
+                },
+                "publishedVersion": 2,
+                "revision": 1,
+                "contentType": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "ContentType",
+                    "id": "serviceCard"
+                  }
+                },
+                "locale": "en-US"
+              },
+              "fields": {
+                "entryId": "Home > Service Card > Protege tus datos",
+                "image": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "6H4BowzLb5Yi4RRRNaVhni",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:07:03.369Z",
+                    "updatedAt": "2025-11-11T22:10:46.848Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 7,
+                    "revision": 2,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "image"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Tienda yamaha > Services > Image",
+                    "url": "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/07/elementos-de-servicio.jpg"
+                  }
+                },
+                "title": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "1R9lb9Y8Kb5hEfErlDLqQi",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:08:04.469Z",
+                    "updatedAt": "2025-11-11T22:08:04.469Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 8,
+                    "revision": 1,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "title"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Home > Service Card > Tienda yamaha > Title",
+                    "text": "Tienda Yamaha"
+                  }
+                },
+                "caption": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "6A1Ypf65SdWfE1bvPRGEf7",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:08:44.651Z",
+                    "updatedAt": "2025-11-11T22:09:55.063Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 8,
+                    "revision": 2,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "paragraph"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Servicios > Tienda yamaha > paragraph",
+                    "content": "Llévanos contigo siempre, conoce nuestros productos."
+                  }
+                },
+                "ctaButton": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "6oBeKgsADa8asJAtYJFEex",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:09:34.590Z",
+                    "updatedAt": "2025-11-11T22:10:03.386Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 7,
+                    "revision": 2,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "ctaButton"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Tienda Yamaha > Visitanos CTA",
+                    "text": "VISITANOS",
+                    "url": "yamahaoriente.com"
+                  }
+                }
+              }
+            },
+            {
+              "metadata": {
+                "tags": [],
+                "concepts": []
+              },
+              "sys": {
+                "space": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "Space",
+                    "id": "w2inzsvnq03e"
+                  }
+                },
+                "id": "1SqsnNj8YwCVI1E1htnb3S",
+                "type": "Entry",
+                "createdAt": "2025-11-11T22:12:30.476Z",
+                "updatedAt": "2025-11-11T22:12:30.476Z",
+                "environment": {
+                  "sys": {
+                    "id": "master",
+                    "type": "Link",
+                    "linkType": "Environment"
+                  }
+                },
+                "publishedVersion": 2,
+                "revision": 1,
+                "contentType": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "ContentType",
+                    "id": "serviceCard"
+                  }
+                },
+                "locale": "en-US"
+              },
+              "fields": {
+                "entryId": "Home > Service Card > Agenda tu cita",
+                "image": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "6H4BowzLb5Yi4RRRNaVhni",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:07:03.369Z",
+                    "updatedAt": "2025-11-11T22:10:46.848Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 7,
+                    "revision": 2,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "image"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Tienda yamaha > Services > Image",
+                    "url": "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/07/elementos-de-servicio.jpg"
+                  }
+                },
+                "title": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "1R9lb9Y8Kb5hEfErlDLqQi",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:08:04.469Z",
+                    "updatedAt": "2025-11-11T22:08:04.469Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 8,
+                    "revision": 1,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "title"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Home > Service Card > Tienda yamaha > Title",
+                    "text": "Tienda Yamaha"
+                  }
+                },
+                "caption": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "6A1Ypf65SdWfE1bvPRGEf7",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:08:44.651Z",
+                    "updatedAt": "2025-11-11T22:09:55.063Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 8,
+                    "revision": 2,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "paragraph"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Servicios > Tienda yamaha > paragraph",
+                    "content": "Llévanos contigo siempre, conoce nuestros productos."
+                  }
+                },
+                "ctaButton": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "6oBeKgsADa8asJAtYJFEex",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:09:34.590Z",
+                    "updatedAt": "2025-11-11T22:10:03.386Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 7,
+                    "revision": 2,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "ctaButton"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Tienda Yamaha > Visitanos CTA",
+                    "text": "VISITANOS",
+                    "url": "yamahaoriente.com"
+                  }
+                }
+              }
+            },
+            {
+              "metadata": {
+                "tags": [],
+                "concepts": []
+              },
+              "sys": {
+                "space": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "Space",
+                    "id": "w2inzsvnq03e"
+                  }
+                },
+                "id": "2Qfq14MGlLCeDdqV9Kt8Wl",
+                "type": "Entry",
+                "createdAt": "2025-11-11T22:12:17.620Z",
+                "updatedAt": "2025-11-11T22:12:17.620Z",
+                "environment": {
+                  "sys": {
+                    "id": "master",
+                    "type": "Link",
+                    "linkType": "Environment"
+                  }
+                },
+                "publishedVersion": 2,
+                "revision": 1,
+                "contentType": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "ContentType",
+                    "id": "serviceCard"
+                  }
+                },
+                "locale": "en-US"
+              },
+              "fields": {
+                "entryId": "Home > Service Card > Puntos Atención",
+                "image": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "6H4BowzLb5Yi4RRRNaVhni",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:07:03.369Z",
+                    "updatedAt": "2025-11-11T22:10:46.848Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 7,
+                    "revision": 2,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "image"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Tienda yamaha > Services > Image",
+                    "url": "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/07/elementos-de-servicio.jpg"
+                  }
+                },
+                "title": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "1R9lb9Y8Kb5hEfErlDLqQi",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:08:04.469Z",
+                    "updatedAt": "2025-11-11T22:08:04.469Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 8,
+                    "revision": 1,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "title"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Home > Service Card > Tienda yamaha > Title",
+                    "text": "Tienda Yamaha"
+                  }
+                },
+                "caption": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "6A1Ypf65SdWfE1bvPRGEf7",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:08:44.651Z",
+                    "updatedAt": "2025-11-11T22:09:55.063Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 8,
+                    "revision": 2,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "paragraph"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Servicios > Tienda yamaha > paragraph",
+                    "content": "Llévanos contigo siempre, conoce nuestros productos."
+                  }
+                },
+                "ctaButton": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "6oBeKgsADa8asJAtYJFEex",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:09:34.590Z",
+                    "updatedAt": "2025-11-11T22:10:03.386Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 7,
+                    "revision": 2,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "ctaButton"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Tienda Yamaha > Visitanos CTA",
+                    "text": "VISITANOS",
+                    "url": "yamahaoriente.com"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "3i8WavjaKwBCW36CeODUni",
+          "type": "Entry",
+          "createdAt": "2025-11-04T23:53:59.787Z",
+          "updatedAt": "2025-11-11T22:28:48.313Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 6,
+          "revision": 3,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "layoutFullWidth"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "entryId": "Home > Second Banner Container",
+          "components": [
+            {
+              "metadata": {
+                "tags": [],
+                "concepts": []
+              },
+              "sys": {
+                "space": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "Space",
+                    "id": "w2inzsvnq03e"
+                  }
+                },
+                "id": "59MVZ0lpFVG5smFSMAyowT",
+                "type": "Entry",
+                "createdAt": "2025-11-11T22:26:43.188Z",
+                "updatedAt": "2025-11-11T22:28:32.757Z",
+                "environment": {
+                  "sys": {
+                    "id": "master",
+                    "type": "Link",
+                    "linkType": "Environment"
+                  }
+                },
+                "publishedVersion": 7,
+                "revision": 2,
+                "contentType": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "ContentType",
+                    "id": "fullWidthBanner"
+                  }
+                },
+                "locale": "en-US"
+              },
+              "fields": {
+                "entryId": "Home > Second Banner",
+                "title": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "5CvECMv0fvf9DJ6F37t476",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:25:13.982Z",
+                    "updatedAt": "2025-11-11T22:25:13.982Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 3,
+                    "revision": 1,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "title"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Home > Second Banner > Title",
+                    "text": "TIENDA YAMAHA"
+                  }
+                },
+                "caption": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "5fhDt57wb94NcHJwyqeh8X",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:26:02.120Z",
+                    "updatedAt": "2025-11-11T22:26:02.120Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 8,
+                    "revision": 1,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "paragraph"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Home > Second Banner > Paragraph",
+                    "content": "Compra repuestos originales, prendas de moda y accesorios exclusivos para vivir cada kilómetro con estilo. "
+                  }
+                },
+                "cta": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "50wdjlCXjQa3XYKDKg33an",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:26:38.618Z",
+                    "updatedAt": "2025-11-11T22:26:38.618Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 4,
+                    "revision": 1,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "ctaButton"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "CTA Comprar ahora",
+                    "text": "COMPRAR AHORA",
+                    "url": "yamahaoriente.com"
+                  }
+                },
+                "image": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "3bcV7YfCF8pvhNuSqm8N24",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:28:26.251Z",
+                    "updatedAt": "2025-11-11T22:28:26.251Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 3,
+                    "revision": 1,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "image"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Home > Second banner > image",
+                    "url": "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/07/COLECCION-RACING-DUAL.jpg"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "7AuSTIiQWJbKf0RXIPcaSj",
+          "type": "Entry",
+          "createdAt": "2025-11-04T23:54:45.716Z",
+          "updatedAt": "2025-11-11T22:30:27.650Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 7,
+          "revision": 3,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "layout1Column"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "layout1Column": "Home > News Caption Container",
+          "components": [
+            {
+              "metadata": {
+                "tags": [],
+                "concepts": []
+              },
+              "sys": {
+                "space": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "Space",
+                    "id": "w2inzsvnq03e"
+                  }
+                },
+                "id": "5qykhLtYmOIKcKrxfgRXpU",
+                "type": "Entry",
+                "createdAt": "2025-11-11T22:29:37.318Z",
+                "updatedAt": "2025-11-11T22:29:37.318Z",
+                "environment": {
+                  "sys": {
+                    "id": "master",
+                    "type": "Link",
+                    "linkType": "Environment"
+                  }
+                },
+                "publishedVersion": 4,
+                "revision": 1,
+                "contentType": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "ContentType",
+                    "id": "title"
+                  }
+                },
+                "locale": "en-US"
+              },
+              "fields": {
+                "entryId": "Home > Noticias Title",
+                "text": "Últimas Noticias"
+              }
+            },
+            {
+              "metadata": {
+                "tags": [],
+                "concepts": []
+              },
+              "sys": {
+                "space": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "Space",
+                    "id": "w2inzsvnq03e"
+                  }
+                },
+                "id": "73e073pdAxe33vtV9nLrHM",
+                "type": "Entry",
+                "createdAt": "2025-11-11T22:30:23.363Z",
+                "updatedAt": "2025-11-11T22:30:23.363Z",
+                "environment": {
+                  "sys": {
+                    "id": "master",
+                    "type": "Link",
+                    "linkType": "Environment"
+                  }
+                },
+                "publishedVersion": 4,
+                "revision": 1,
+                "contentType": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "ContentType",
+                    "id": "paragraph"
+                  }
+                },
+                "locale": "en-US"
+              },
+              "fields": {
+                "entryId": "Home > news Section > paragraph",
+                "content": "Mantente al día con las últimas novedades, lanzamientos y tecnologías del mundo Yamaha"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "25SzLxk5oS5J3jhwW79mIU",
+          "type": "Entry",
+          "createdAt": "2025-11-04T23:57:22.006Z",
+          "updatedAt": "2025-11-11T22:37:54.866Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 6,
+          "revision": 2,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "layout1Column"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "layout1Column": "Home > News Container",
+          "components": [
+            {
+              "metadata": {
+                "tags": [],
+                "concepts": []
+              },
+              "sys": {
+                "space": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "Space",
+                    "id": "w2inzsvnq03e"
+                  }
+                },
+                "id": "6lEsSsdUJBMgzM14fqHXjg",
+                "type": "Entry",
+                "createdAt": "2025-11-11T22:35:34.065Z",
+                "updatedAt": "2025-11-11T22:35:56.377Z",
+                "environment": {
+                  "sys": {
+                    "id": "master",
+                    "type": "Link",
+                    "linkType": "Environment"
+                  }
+                },
+                "publishedVersion": 11,
+                "revision": 2,
+                "contentType": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "ContentType",
+                    "id": "newsCard"
+                  }
+                },
+                "locale": "en-US"
+              },
+              "fields": {
+                "entryId": "Home > News > MT 09 2024",
+                "image": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "44xviWzRoa3QnJ3qRcuxt1",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:32:27.592Z",
+                    "updatedAt": "2025-11-11T22:32:27.592Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 4,
+                    "revision": 1,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "image"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Motos > MT-09 News Card Image",
+                    "url": "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/05/mt07-360-azul.jpg"
+                  }
+                },
+                "title": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "7dO4UZM4PBheO0Erjpu3pw",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:32:53.920Z",
+                    "updatedAt": "2025-11-11T22:32:53.920Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 4,
+                    "revision": 1,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "title"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Home > News > MT 09 2024 > title",
+                    "text": "Nueva Yamaha MT-09 2024: Más potencia y tecnología"
+                  }
+                },
+                "caption": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "426WsNlUctfMo80xVelN89",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:35:12.623Z",
+                    "updatedAt": "2025-11-11T22:35:12.623Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 4,
+                    "revision": 1,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "paragraph"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "News > Mt 09 2024 > paragraph",
+                    "content": "La renovada MT-09 llega con un motor mejorado de 890cc, nueva electrónica y un diseño más agresivo que mantiene la esencia naked de Yamaha."
+                  }
+                },
+                "badge": "Lanzamientos",
+                "ctaUrl": "#",
+                "ctaText": "Leer más"
+              }
+            },
+            {
+              "metadata": {
+                "tags": [],
+                "concepts": []
+              },
+              "sys": {
+                "space": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "Space",
+                    "id": "w2inzsvnq03e"
+                  }
+                },
+                "id": "25ScdzSvvcCFlcp00KUfxB",
+                "type": "Entry",
+                "createdAt": "2025-11-11T22:36:42.971Z",
+                "updatedAt": "2025-11-11T22:36:42.971Z",
+                "environment": {
+                  "sys": {
+                    "id": "master",
+                    "type": "Link",
+                    "linkType": "Environment"
+                  }
+                },
+                "publishedVersion": 2,
+                "revision": 1,
+                "contentType": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "ContentType",
+                    "id": "newsCard"
+                  }
+                },
+                "locale": "en-US"
+              },
+              "fields": {
+                "entryId": "Home > News > R1M",
+                "image": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "44xviWzRoa3QnJ3qRcuxt1",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:32:27.592Z",
+                    "updatedAt": "2025-11-11T22:32:27.592Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 4,
+                    "revision": 1,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "image"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Motos > MT-09 News Card Image",
+                    "url": "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/05/mt07-360-azul.jpg"
+                  }
+                },
+                "title": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "7dO4UZM4PBheO0Erjpu3pw",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:32:53.920Z",
+                    "updatedAt": "2025-11-11T22:32:53.920Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 4,
+                    "revision": 1,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "title"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Home > News > MT 09 2024 > title",
+                    "text": "Nueva Yamaha MT-09 2024: Más potencia y tecnología"
+                  }
+                },
+                "caption": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "426WsNlUctfMo80xVelN89",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:35:12.623Z",
+                    "updatedAt": "2025-11-11T22:35:12.623Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 4,
+                    "revision": 1,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "paragraph"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "News > Mt 09 2024 > paragraph",
+                    "content": "La renovada MT-09 llega con un motor mejorado de 890cc, nueva electrónica y un diseño más agresivo que mantiene la esencia naked de Yamaha."
+                  }
+                },
+                "badge": "Lanzamientos",
+                "ctaUrl": "#",
+                "ctaText": "Leer más"
+              }
+            },
+            {
+              "metadata": {
+                "tags": [],
+                "concepts": []
+              },
+              "sys": {
+                "space": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "Space",
+                    "id": "w2inzsvnq03e"
+                  }
+                },
+                "id": "1GAwrXPnAtpEXxV5ycMr7K",
+                "type": "Entry",
+                "createdAt": "2025-11-11T22:36:53.163Z",
+                "updatedAt": "2025-11-11T22:36:53.163Z",
+                "environment": {
+                  "sys": {
+                    "id": "master",
+                    "type": "Link",
+                    "linkType": "Environment"
+                  }
+                },
+                "publishedVersion": 2,
+                "revision": 1,
+                "contentType": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "ContentType",
+                    "id": "newsCard"
+                  }
+                },
+                "locale": "en-US"
+              },
+              "fields": {
+                "entryId": "Home > News > Tenere",
+                "image": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "44xviWzRoa3QnJ3qRcuxt1",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:32:27.592Z",
+                    "updatedAt": "2025-11-11T22:32:27.592Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 4,
+                    "revision": 1,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "image"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Motos > MT-09 News Card Image",
+                    "url": "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/05/mt07-360-azul.jpg"
+                  }
+                },
+                "title": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "7dO4UZM4PBheO0Erjpu3pw",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:32:53.920Z",
+                    "updatedAt": "2025-11-11T22:32:53.920Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 4,
+                    "revision": 1,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "title"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Home > News > MT 09 2024 > title",
+                    "text": "Nueva Yamaha MT-09 2024: Más potencia y tecnología"
+                  }
+                },
+                "caption": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "426WsNlUctfMo80xVelN89",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:35:12.623Z",
+                    "updatedAt": "2025-11-11T22:35:12.623Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 4,
+                    "revision": 1,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "paragraph"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "News > Mt 09 2024 > paragraph",
+                    "content": "La renovada MT-09 llega con un motor mejorado de 890cc, nueva electrónica y un diseño más agresivo que mantiene la esencia naked de Yamaha."
+                  }
+                },
+                "badge": "Lanzamientos",
+                "ctaUrl": "#",
+                "ctaText": "Leer más"
+              }
+            },
+            {
+              "metadata": {
+                "tags": [],
+                "concepts": []
+              },
+              "sys": {
+                "space": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "Space",
+                    "id": "w2inzsvnq03e"
+                  }
+                },
+                "id": "6cBx1igpHMikSwScEkcuUF",
+                "type": "Entry",
+                "createdAt": "2025-11-11T22:37:01.609Z",
+                "updatedAt": "2025-11-11T22:37:01.609Z",
+                "environment": {
+                  "sys": {
+                    "id": "master",
+                    "type": "Link",
+                    "linkType": "Environment"
+                  }
+                },
+                "publishedVersion": 2,
+                "revision": 1,
+                "contentType": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "ContentType",
+                    "id": "newsCard"
+                  }
+                },
+                "locale": "en-US"
+              },
+              "fields": {
+                "entryId": "Home > News > NMax",
+                "image": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "44xviWzRoa3QnJ3qRcuxt1",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:32:27.592Z",
+                    "updatedAt": "2025-11-11T22:32:27.592Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 4,
+                    "revision": 1,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "image"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Motos > MT-09 News Card Image",
+                    "url": "https://extranet.incolmotos-yamaha.com.co/wp-content/uploads/2025/05/mt07-360-azul.jpg"
+                  }
+                },
+                "title": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "7dO4UZM4PBheO0Erjpu3pw",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:32:53.920Z",
+                    "updatedAt": "2025-11-11T22:32:53.920Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 4,
+                    "revision": 1,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "title"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "Home > News > MT 09 2024 > title",
+                    "text": "Nueva Yamaha MT-09 2024: Más potencia y tecnología"
+                  }
+                },
+                "caption": {
+                  "metadata": {
+                    "tags": [],
+                    "concepts": []
+                  },
+                  "sys": {
+                    "space": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Space",
+                        "id": "w2inzsvnq03e"
+                      }
+                    },
+                    "id": "426WsNlUctfMo80xVelN89",
+                    "type": "Entry",
+                    "createdAt": "2025-11-11T22:35:12.623Z",
+                    "updatedAt": "2025-11-11T22:35:12.623Z",
+                    "environment": {
+                      "sys": {
+                        "id": "master",
+                        "type": "Link",
+                        "linkType": "Environment"
+                      }
+                    },
+                    "publishedVersion": 4,
+                    "revision": 1,
+                    "contentType": {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "ContentType",
+                        "id": "paragraph"
+                      }
+                    },
+                    "locale": "en-US"
+                  },
+                  "fields": {
+                    "entryId": "News > Mt 09 2024 > paragraph",
+                    "content": "La renovada MT-09 llega con un motor mejorado de 890cc, nueva electrónica y un diseño más agresivo que mantiene la esencia naked de Yamaha."
+                  }
+                },
+                "badge": "Lanzamientos",
+                "ctaUrl": "#",
+                "ctaText": "Leer más"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "metadata": {
+          "tags": [],
+          "concepts": []
+        },
+        "sys": {
+          "space": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Space",
+              "id": "w2inzsvnq03e"
+            }
+          },
+          "id": "2MUwjmAPnTCm4K5bRLUnjA",
+          "type": "Entry",
+          "createdAt": "2025-11-04T23:58:54.850Z",
+          "updatedAt": "2025-11-04T23:58:54.850Z",
+          "environment": {
+            "sys": {
+              "id": "master",
+              "type": "Link",
+              "linkType": "Environment"
+            }
+          },
+          "publishedVersion": 2,
+          "revision": 1,
+          "contentType": {
+            "sys": {
+              "type": "Link",
+              "linkType": "ContentType",
+              "id": "layout1Column"
+            }
+          },
+          "locale": "en-US"
+        },
+        "fields": {
+          "layout1Column": "Home > News CTA container"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,184 @@
+// =============================================================================
+// NEWS SECTION - CSS Module
+// =============================================================================
+
+@use "../../styles/abstracts" as *;
+
+.newsSection {
+  padding: 4rem 0;
+  background-color: #f9fafb;
+}
+
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1200px;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @include sm {
+    padding: 0 1.5rem;
+  }
+
+  @include lg {
+    padding: 0 2rem;
+  }
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+  width: 100%;
+}
+
+.title {
+  font-size: 1.875rem;
+  font-weight: bold;
+  color: #111827;
+  margin-bottom: 1rem;
+
+  @include md {
+    font-size: 2.25rem;
+  }
+}
+
+.subtitle {
+  font-size: 1.125rem;
+  color: #6b7280;
+  max-width: 42rem;
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  gap: 2rem;
+  width: 100%;
+  max-width: 80rem;
+
+  @include md {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.article {
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+  opacity: 0;
+  transform: scale(0.8);
+
+  &:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  }
+
+  &.articleVisible {
+    animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+}
+
+.imageContainer {
+  position: relative;
+  height: 12rem;
+  background: linear-gradient(to right, #3b82f6, #8b5cf6);
+}
+
+.imagePlaceholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.imagePlaceholderContent {
+  color: white;
+  text-align: center;
+}
+
+.imagePlaceholderIcon {
+  font-size: 3.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.imagePlaceholderText {
+  font-size: 0.875rem;
+  opacity: 0.8;
+}
+
+.categoryBadge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background-color: #dc2626;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.content {
+  padding: 1.5rem;
+  padding-bottom: 2rem;
+}
+
+.dateContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 0.75rem;
+}
+
+.articleTitle {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #111827;
+  margin-bottom: 0.75rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.excerpt {
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-start;
+  padding-top: 0.5rem;
+}
+
+.ctaContainer {
+  text-align: center;
+  margin-top: 4rem;
+
+  @include md {
+    margin-top: 5rem;
+  }
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

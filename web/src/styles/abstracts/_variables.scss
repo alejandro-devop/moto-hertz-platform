@@ -1,0 +1,28 @@
+// =============================================================================
+// VARIABLES - Breakpoint System
+// =============================================================================
+
+@use "sass:map";
+
+// Design system breakpoints
+$breakpoints: (
+  xs: 0,
+  // Extra small - Small phones
+  sm: 640px,
+  // Small - Modern smartphones
+  md: 768px,
+  // Medium - Tablets / phones horizontal
+  lg: 1024px,
+  // Large - Small laptops
+  xl: 1280px,
+  // Extra large - Standard monitors
+  2xl: 1536px // Huge - Large monitors / widescreen,,
+);
+
+// Individual variables for easy access
+$breakpoint-xs: map.get($breakpoints, xs);
+$breakpoint-sm: map.get($breakpoints, sm);
+$breakpoint-md: map.get($breakpoints, md);
+$breakpoint-lg: map.get($breakpoints, lg);
+$breakpoint-xl: map.get($breakpoints, xl);
+$breakpoint-2xl: map.get($breakpoints, 2xl);

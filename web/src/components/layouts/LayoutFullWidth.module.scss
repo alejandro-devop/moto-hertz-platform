@@ -1,0 +1,77 @@
+// LayoutFullWidth.module.scss
+// Full width layout container with centered content
+
+.layoutFullWidth {
+  width: 100%;
+  min-height: auto;
+  display: flex;
+  position: relative;
+
+  // Content wrapper for centering
+  .contentWrapper {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  // Padding variations
+  &.padding-none {
+    padding: 0;
+  }
+
+  &.padding-sm {
+    padding: 1rem 0;
+  }
+
+  &.padding-md {
+    padding: 2rem 0;
+  }
+
+  &.padding-lg {
+    padding: 4rem 0;
+  }
+
+  &.padding-xl {
+    padding: 6rem 0;
+  }
+
+  // Vertical alignment
+  &.vertical-top {
+    align-items: flex-start;
+  }
+
+  &.vertical-center {
+    align-items: center;
+  }
+
+  &.vertical-bottom {
+    align-items: flex-end;
+  }
+
+  // Horizontal alignment
+  &.horizontal-left {
+    justify-content: flex-start;
+
+    .contentWrapper {
+      margin-left: 0;
+      margin-right: auto;
+    }
+  }
+
+  &.horizontal-center {
+    justify-content: center;
+
+    .contentWrapper {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  &.horizontal-right {
+    justify-content: flex-end;
+
+    .contentWrapper {
+      margin-left: auto;
+      margin-right: 0;
+    }
+  }
+}

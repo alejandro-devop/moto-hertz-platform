@@ -1,0 +1,130 @@
+// =============================================================================
+// MAIN STYLES - Main SASS file
+// =============================================================================
+
+// Import abstracts (variables, mixins, functions)
+@use "abstracts" as *;
+
+// Import examples (you can comment this line in production)
+@use "examples";
+
+// Here you can add your global styles
+// @import 'base';
+// @import 'components';
+// @import 'layout';
+// @import 'pages';
+
+// Example of global styles using the breakpoint system
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+
+  @include sm {
+    font-size: 16px;
+  }
+
+  @include lg {
+    font-size: 18px;
+  }
+}
+
+// Basic responsive reset
+* {
+  box-sizing: border-box;
+}
+
+// Main container
+.main-container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1rem;
+
+  @include sm {
+    padding: 0 1.5rem;
+  }
+
+  @include md {
+    padding: 0 2rem;
+  }
+
+  @include lg {
+    max-width: 1200px;
+    padding: 0 2.5rem;
+  }
+
+  @include xl {
+    max-width: 1400px;
+  }
+}
+
+// Section spacing utilities
+.section-spacing {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+
+  @include sm {
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  @include md {
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+  }
+
+  @include lg {
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+  }
+
+  @include xl {
+    margin-top: 6rem;
+    margin-bottom: 6rem;
+  }
+}
+
+.section-spacing-sm {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+
+  @include sm {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  @include md {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  @include lg {
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+  }
+}
+
+.section-spacing-lg {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+
+  @include sm {
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+  }
+
+  @include md {
+    margin-top: 6rem;
+    margin-bottom: 6rem;
+  }
+
+  @include lg {
+    margin-top: 8rem;
+    margin-bottom: 8rem;
+  }
+
+  @include xl {
+    margin-top: 10rem;
+    margin-bottom: 10rem;
+  }
+}

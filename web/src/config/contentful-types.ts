@@ -1,0 +1,18 @@
+export default [
+  "layoutFullWidth",
+  "layout2Column",
+  "layout1Column",
+  "newsCard",
+  "serviceCard",
+  "captionBlock",
+  "paragraph",
+  "title",
+  "bannerGallery",
+  "gallerySlide",
+  "ctaButton",
+  "menuItem",
+  "image",
+  "menu",
+  "homePage",
+  "fullWidthBanner",
+];

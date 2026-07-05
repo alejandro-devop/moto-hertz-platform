@@ -1,0 +1,81 @@
+// Layout1Column.module.scss
+// Single column layout with max-width constraints
+
+.layout1Column {
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+
+  // Padding variations
+  &.padding-none {
+    padding: 0;
+  }
+
+  &.padding-sm {
+    padding: 1rem;
+  }
+
+  &.padding-md {
+    padding: 2rem 1.5rem;
+  }
+
+  &.padding-lg {
+    padding: 4rem 2rem;
+  }
+
+  &.padding-xl {
+    padding: 6rem 2.5rem;
+  }
+
+  // Max width variations
+  &.maxWidth-sm {
+    max-width: 640px;
+  }
+
+  &.maxWidth-md {
+    max-width: 768px;
+  }
+
+  &.maxWidth-lg {
+    max-width: 1024px;
+  }
+
+  &.maxWidth-xl {
+    max-width: 1280px;
+  }
+
+  &.maxWidth-full {
+    max-width: 100%;
+  }
+
+  // Alignment
+  &.align-left {
+    margin-left: 0;
+    margin-right: auto;
+  }
+
+  &.align-center {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  &.align-right {
+    margin-left: auto;
+    margin-right: 0;
+  }
+
+  // Responsive adjustments
+  @media (max-width: 768px) {
+    &.padding-md {
+      padding: 1.5rem 1rem;
+    }
+
+    &.padding-lg {
+      padding: 2.5rem 1rem;
+    }
+
+    &.padding-xl {
+      padding: 4rem 1rem;
+    }
+  }
+}

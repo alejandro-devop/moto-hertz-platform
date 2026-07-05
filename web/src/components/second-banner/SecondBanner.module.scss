@@ -1,0 +1,170 @@
+/* SecondBanner Component Styles */
+.banner {
+  width: 100%;
+  height: 80vh;
+  position: relative;
+  overflow: hidden;
+  margin-top: 4rem; /* Espaciado superior */
+  /* Improve performance for parallax animations */
+  will-change: transform;
+  transform: translateZ(0); /* Force hardware acceleration */
+
+  /* Fade-in initial state */
+  opacity: 0;
+
+  &.bannerVisible {
+    animation: fadeIn 1s ease-out forwards;
+  }
+}
+
+.backgroundContainer {
+  position: absolute;
+  inset: 0;
+  /* Scale reducido para movimiento parallax más sutil */
+  transform: scale(1.05);
+  will-change: transform;
+
+  /* Improve parallax performance */
+  backface-visibility: hidden;
+  perspective: 1000px;
+
+  /* Ensure proper centering */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.backgroundImage {
+  object-fit: cover;
+  object-position: center center;
+  /* Improve image rendering during parallax */
+  image-rendering: auto;
+  transform: translateZ(0);
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.4) 0%,
+    rgba(0, 0, 0, 0.2) 50%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+}
+
+.contentContainer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.content {
+  text-align: center;
+  color: white;
+  z-index: 10;
+  max-width: 56rem; /* 4xl */
+  padding: 0 1rem;
+  /* Improve parallax performance for content */
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.title {
+  font-size: 3rem; /* 5xl */
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.description {
+  font-size: 1.25rem; /* xl */
+  margin-bottom: 2rem;
+  max-width: 42rem; /* 2xl */
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.625;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+.ctaContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.ctaButton {
+  font-size: 1.125rem !important; /* lg */
+  padding: 1rem 2rem !important;
+}
+
+/* Responsive Styles */
+@media (min-width: 640px) {
+  .content {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .title {
+    font-size: 3.75rem; /* 6xl */
+  }
+
+  .description {
+    font-size: 1.5rem; /* 2xl */
+  }
+}
+
+@media (min-width: 1024px) {
+  .content {
+    padding: 0 2rem;
+  }
+
+  .title {
+    font-size: 4.5rem; /* 7xl */
+  }
+}
+
+/* Disable parallax on mobile devices for better performance */
+@media (max-width: 767px) {
+  .backgroundContainer {
+    transform: scale(1) !important;
+  }
+
+  .content {
+    transform: none !important;
+  }
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .banner,
+  .backgroundContainer,
+  .content {
+    will-change: auto;
+    transform: none !important;
+  }
+
+  .backgroundContainer {
+    transform: scale(1) !important;
+  }
+
+  .banner {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
