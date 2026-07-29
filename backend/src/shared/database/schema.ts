@@ -1,8 +1,12 @@
 import { pgTable, uuid, integer, varchar, decimal, boolean, timestamp, text, jsonb } from 'drizzle-orm/pg-core';
 import { generateUuidV7 } from './uuid';
 import type {
+  MotorcycleCommercial,
+  MotorcycleCondition,
   MotorcycleEngine,
   MotorcycleImages,
+  MotorcycleLocation,
+  MotorcyclePaperwork,
   MotorcycleSpecs,
 } from '../../types/services/motorcycle.types';
 
@@ -16,7 +20,13 @@ export const motorcycles = pgTable('motorcycles', {
   slug: varchar('slug', { length: 255 }).notNull().unique(),
   name: varchar('name', { length: 255 }).notNull(),
   category: varchar('category', { length: 100 }),
+  brand: varchar('brand', { length: 100 }),
+  condition: varchar('condition', { length: 10 })
+    .$type<MotorcycleCondition>()
+    .notNull()
+    .default('NEW'),
   year: integer('year'),
+  mileageKm: integer('mileage_km'),
   price: decimal('price', { precision: 15, scale: 2 }),
   currency: varchar('currency', { length: 3 }).notNull().default('COP'),
   description: text('description'),
@@ -26,6 +36,9 @@ export const motorcycles = pgTable('motorcycles', {
   colors: jsonb('colors').$type<string[]>().default([]),
   images: jsonb('images').$type<MotorcycleImages>(),
   specs: jsonb('specs').$type<MotorcycleSpecs>(),
+  paperwork: jsonb('paperwork').$type<MotorcyclePaperwork>(),
+  commercial: jsonb('commercial').$type<MotorcycleCommercial>(),
+  location: jsonb('location').$type<MotorcycleLocation>(),
   available: boolean('available').notNull().default(true),
   featured: boolean('featured').notNull().default(false),
   createdAt: timestamp('created_at').notNull().defaultNow(),

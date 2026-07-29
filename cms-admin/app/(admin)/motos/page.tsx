@@ -123,6 +123,8 @@ export default function MotosPage() {
           <TableHeader>
             <TableRow>
               <TableHead>Nombre</TableHead>
+              <TableHead>Marca</TableHead>
+              <TableHead>Condición</TableHead>
               <TableHead>Categoría</TableHead>
               <TableHead>Precio</TableHead>
               <TableHead>Estado</TableHead>
@@ -133,6 +135,12 @@ export default function MotosPage() {
             {motorcycles.map((motorcycle) => (
               <TableRow key={motorcycle.id}>
                 <TableCell className="font-medium">{motorcycle.name}</TableCell>
+                <TableCell>{motorcycle.brand || "—"}</TableCell>
+                <TableCell>
+                  <Badge variant={motorcycle.condition === "USED" ? "secondary" : "outline"}>
+                    {motorcycle.condition === "USED" ? "Usada" : "Nueva"}
+                  </Badge>
+                </TableCell>
                 <TableCell>{motorcycle.category || "—"}</TableCell>
                 <TableCell>
                   {motorcycle.price ? `${motorcycle.price} ${motorcycle.currency}` : "—"}
@@ -160,7 +168,7 @@ export default function MotosPage() {
             ))}
             {motorcycles.length === 0 && (
               <TableRow>
-                <TableCell colSpan={5} className="text-center text-muted-foreground">
+                <TableCell colSpan={7} className="text-center text-muted-foreground">
                   No hay motos registradas todavía.
                 </TableCell>
               </TableRow>

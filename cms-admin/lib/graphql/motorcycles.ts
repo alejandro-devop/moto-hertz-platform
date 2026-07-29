@@ -1,3 +1,5 @@
+export type MotorcycleCondition = "NEW" | "USED";
+
 export interface MotorcycleEngine {
   type?: string | null;
   displacement?: string | null;
@@ -17,12 +19,40 @@ export interface MotorcycleSpecs {
   transmission?: string | null;
 }
 
+/** Documentación y procedencia. Fechas en formato ISO `YYYY-MM-DD`. */
+export interface MotorcyclePaperwork {
+  registrationCity?: string | null;
+  soatExpiresAt?: string | null;
+  soatNote?: string | null;
+  technicalInspectionExpiresAt?: string | null;
+  technicalInspectionNote?: string | null;
+  registrationCostNote?: string | null;
+  transferIncluded?: boolean | null;
+  singleOwner?: boolean | null;
+  provenanceWarranty?: boolean | null;
+}
+
+export interface MotorcycleCommercial {
+  acceptsTradeIn?: boolean | null;
+  hasFinancing?: boolean | null;
+  paymentMethods?: string[] | null;
+}
+
+export interface MotorcycleLocation {
+  name?: string | null;
+  address?: string | null;
+  city?: string | null;
+}
+
 export interface Motorcycle {
   id: string;
   slug: string;
   name: string;
   category?: string | null;
+  brand?: string | null;
+  condition: MotorcycleCondition;
   year?: number | null;
+  mileageKm?: number | null;
   price?: string | null;
   currency: string;
   description?: string | null;
@@ -32,6 +62,9 @@ export interface Motorcycle {
   colors: string[];
   images?: MotorcycleImages | null;
   specs?: MotorcycleSpecs | null;
+  paperwork?: MotorcyclePaperwork | null;
+  commercial?: MotorcycleCommercial | null;
+  location?: MotorcycleLocation | null;
   available: boolean;
   featured: boolean;
 }
@@ -40,7 +73,10 @@ export interface MotorcycleFormInput {
   slug: string;
   name: string;
   category?: string;
+  brand?: string;
+  condition?: MotorcycleCondition;
   year?: number;
+  mileageKm?: number;
   price?: string;
   currency?: string;
   description?: string;
@@ -50,6 +86,9 @@ export interface MotorcycleFormInput {
   colors?: string[];
   images?: MotorcycleImages;
   specs?: MotorcycleSpecs;
+  paperwork?: MotorcyclePaperwork;
+  commercial?: MotorcycleCommercial;
+  location?: MotorcycleLocation;
   available?: boolean;
   featured?: boolean;
 }
@@ -59,7 +98,10 @@ const MOTORCYCLE_FIELDS = /* GraphQL */ `
   slug
   name
   category
+  brand
+  condition
   year
+  mileageKm
   price
   currency
   description
@@ -81,6 +123,27 @@ const MOTORCYCLE_FIELDS = /* GraphQL */ `
     seatHeight
     fuelCapacity
     transmission
+  }
+  paperwork {
+    registrationCity
+    soatExpiresAt
+    soatNote
+    technicalInspectionExpiresAt
+    technicalInspectionNote
+    registrationCostNote
+    transferIncluded
+    singleOwner
+    provenanceWarranty
+  }
+  commercial {
+    acceptsTradeIn
+    hasFinancing
+    paymentMethods
+  }
+  location {
+    name
+    address
+    city
   }
   available
   featured

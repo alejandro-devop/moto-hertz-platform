@@ -16,6 +16,12 @@ function buildFilters(options: ListMotorcyclesOptions): SQL | undefined {
   if (options.category) {
     conditions.push(eq(motorcycles.category, options.category));
   }
+  if (options.brand) {
+    conditions.push(eq(motorcycles.brand, options.brand));
+  }
+  if (options.condition) {
+    conditions.push(eq(motorcycles.condition, options.condition));
+  }
   if (options.featured !== undefined) {
     conditions.push(eq(motorcycles.featured, options.featured));
   }
