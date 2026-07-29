@@ -71,7 +71,7 @@ export default function Cards({
       : [];
 
   return (
-    <section className="py-16 bg-gray-50">
+    <section className={`${styles.section} py-16 bg-gray-50`}>
       <div
         className="container mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8"
         style={{

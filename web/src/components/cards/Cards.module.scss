@@ -1,3 +1,10 @@
+// El reset global (`* { padding: 0 }`) no está en ninguna capa, así que gana
+// sobre las utilidades de Tailwind (`@layer utilities`) y anula el `py-16` de
+// la sección. El espaciado vertical se define aquí, igual que en NewsSection.
+.section {
+  padding: 4rem 0;
+}
+
 .card {
   padding-bottom: 2rem;
   opacity: 0;
