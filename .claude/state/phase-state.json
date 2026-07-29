@@ -1,15 +1,15 @@
 {
   "project": "yamaha-oriente-platform",
-  "current_phase": 3,
+  "current_phase": 7,
   "phases": [
     { "id": 0, "name": "Fundación del monorepo", "doc": "docs/phases/00-fundacion-monorepo.md", "status": "completed" },
     { "id": 1, "name": "Migración de web", "doc": "docs/phases/01-migracion-web.md", "status": "completed" },
     { "id": 2, "name": "Migración de backend", "doc": "docs/phases/02-migracion-backend.md", "status": "completed" },
-    { "id": 3, "name": "Brainstorming cms-admin", "doc": "docs/phases/03-brainstorming-cms.md", "status": "pending" },
-    { "id": 4, "name": "Scaffold cms-admin", "doc": "docs/phases/04-scaffold-cms.md", "status": "pending" },
-    { "id": 5, "name": "Integración end-to-end", "doc": "docs/phases/05-integracion-e2e.md", "status": "pending" },
-    { "id": 6, "name": "Entorno de desarrollo local unificado", "doc": "docs/phases/06-dev-local-unificado.md", "status": "pending" },
-    { "id": 7, "name": "Despliegue a producción", "doc": "docs/phases/07-despliegue-produccion.md", "status": "pending" },
+    { "id": 3, "name": "Brainstorming cms-admin", "doc": "docs/phases/03-brainstorming-cms.md", "status": "completed" },
+    { "id": 4, "name": "Scaffold cms-admin", "doc": "docs/phases/04-scaffold-cms.md", "status": "completed" },
+    { "id": 5, "name": "Integración end-to-end", "doc": "docs/phases/05-integracion-e2e.md", "status": "completed" },
+    { "id": 6, "name": "Entorno de desarrollo local unificado", "doc": "docs/phases/06-dev-local-unificado.md", "status": "completed" },
+    { "id": 7, "name": "Despliegue a producción", "doc": "docs/phases/07-despliegue-produccion.md", "status": "in_progress" },
     { "id": 8, "name": "QA y documentación final", "doc": "docs/phases/08-qa-y-cierre.md", "status": "pending" }
   ],
   "log": [
@@ -27,6 +27,26 @@
       "phase": 2,
       "completed_at": "2026-07-05T00:00:00Z",
       "notes": "backend/ poblado desde xavi-platform-node (renombrado a yamaha-oriente-backend), descartando los 24 módulos de dominio de finanzas/productividad y conservando solo infraestructura genérica (Express/Apollo bootstrap, Drizzle, Redis, errores, logging, tests, Docker). Dominios confirmados por el usuario: motorcycle, service-point, service, news — los 4 tienen tabla en schema.ts y migración SQL, pero solo motorcycle quedó implementado end-to-end (GraphQL schema/resolvers, service con Drizzle, validadores Zod, tests) como referencia de patrón para los otros 3 en una fase posterior. Autenticación diferida: usuario confirmó que solo cms-admin la necesitará (web es público sin usuarios finales), así que no se copió el módulo de auth de xavi ni se implementó JWT en esta fase — placeholder documentado en graphql/server.ts y CLAUDE.md. Verificado con Docker Desktop: docker-compose up levantó postgres+redis+adminer+app sanos, migraciones se aplicaron automáticamente al iniciar el contenedor, y se probaron mutation/queries GraphQL reales (motorcycleAdd, motorcycle, motorcycles) contra la DB. Tests unitarios del módulo de referencia (6/6) pasan. Usuario confirmó cerrar la fase para continuar la Fase 3 en una sesión aparte."
+    },
+    {
+      "phase": 3,
+      "completed_at": "2026-07-05T00:00:00Z",
+      "notes": "Decisión de arquitectura de cms-admin confirmada por el usuario: panel custom en Next.js + TypeScript (no CMS externo), consumiendo el GraphQL del backend propio. UI con shadcn/ui, cliente de datos TanStack Query + graphql-request. Entidades a administrar: motos, puntos de atención, servicios, noticias, banners de home, configuración general (SEO/contacto). Auth: un solo rol admin (sin roles diferenciados por ahora), reutilizando el sistema de auth del backend. Medios: almacenamiento inicial en folder local del propio servidor (sin servicio externo tipo S3/Cloudinary). Sin preview en vivo del contenido en web por ahora. Documentado en docs/architecture/cms-admin.md."
+    },
+    {
+      "phase": 4,
+      "completed_at": "2026-07-06T00:00:00Z",
+      "notes": "Backend: agregada autenticación mínima de admin único (sin tabla de usuarios) — ADMIN_EMAIL/ADMIN_PASSWORD_HASH (bcrypt) por env, mutation login emite JWT (jsonwebtoken), getGraphQLContext valida el header Authorization, y las mutations de motorcycle (Add/Edit/Remove) ahora exigen requireAuth. Verificado con curl: login exitoso, mutation sin token rechazada (401/UNAUTHENTICATED), mutation con token exitosa. cms-admin: scaffold Next.js 15 + TypeScript + Tailwind v4 + shadcn/ui (paquete yamaha-oriente-cms-admin, puerto 3001, agregado a .claude/launch.json), TanStack Query + graphql-request como cliente de datos. Auth: login page → route handler /api/auth/login llama al backend y guarda el JWT en cookie httpOnly → middleware.ts protege todas las rutas salvo /login y /api/auth/* → proxy same-origin /api/graphql lee la cookie server-side y reenvía Authorization: Bearer al backend (el JWT nunca es accesible desde JS del navegador). Layout con sidebar (Motos, Puntos de atención, Servicios, Noticias) y logout; los 3 últimos módulos quedan como placeholders 'próximamente'. CRUD completo de Motos (listado/crear/editar/eliminar) contra el backend real, con dialog de shadcn/ui y campos de listas como texto separado por comas. Verificado en navegador real (preview tools): login, listado, creación, edición y eliminación confirmados contra Postgres real vía psql (solo queda el registro pre-existente MT-09 tras limpiar el registro de prueba). Bug encontrado y corregido: graphql-request no acepta URLs relativas (usa `new URL()` internamente), se resolvió construyendo la URL absoluta contra window.location.origin en el cliente del navegador. Usuario confirmó que el patrón de CRUD (tabla + Dialog de shadcn/ui + TanStack Query) es el esperado para replicar en los demás dominios. Nota: `pnpm --filter cms-admin lint` falla por una incompatibilidad preexistente de eslint-config-next 15.5.20 (typescript-eslint v6) con eslint v9 instalado por create-next-app — no introducida por este trabajo, análogo a los errores de lint preexistentes ya documentados en la Fase 1 de `web`; tsc --noEmit no tiene errores."
+    },
+    {
+      "phase": 5,
+      "completed_at": "2026-07-07T00:00:00Z",
+      "notes": "Alcance reducido y confirmado por el usuario: de los 4 dominios previstos, solo motorcycle tenía capa GraphQL completa en backend (Fase 2) — service-point/service/news solo tienen tabla y migración SQL. Se integró end-to-end únicamente motos: web/src/services/motorcycles.ts + web/src/types/motorcycle.ts reemplazan motorcycles-mock.json (eliminado) en /motos y /motos/[slug] (TanStack Query); NEXT_PUBLIC_BACKEND_GRAPHQL_URL agregado a web/.env.example. Verificado manualmente que crear/editar/eliminar una moto en cms-admin se refleja en web tras refrescar. servicios/puntos-atencion/noticias y la home (contentful.ts) quedan explícitamente diferidos y documentados en docs/architecture/data-flow.md, junto con el plan de retomada (replicar patrón motorcycle en backend, luego cms-admin, luego web, dominio por dominio). Usuario confirmó explícitamente: (1) cerrar la fase con este alcance reducido, y (2) relajar en espíritu el criterio DoD sobre contentful.ts — sigue activo como fuente real de datos de la home (no se marcó como legado porque no lo es), en vez de exigir su remoción literal. No se creó script de seed formal; los datos de prueba de motos provienen de las pruebas manuales de Fases 2/4."
+    },
+    {
+      "phase": 6,
+      "completed_at": "2026-07-07T00:00:00Z",
+      "notes": "Script raíz `pnpm dev` (usa `concurrently`, agregado como devDependency del workspace raíz) levanta `docker:up` (backend + postgres + redis + adminer, hot-reload vía volúmenes) en paralelo con `web` y `cms-admin` nativos. Scripts auxiliares `docker:up/stop/down/logs` en la raíz delegan a los homónimos de `backend/package.json`. README raíz actualizado con tabla de puertos (web:3000, cms-admin:3001, backend:8080, adminer:8081, postgres:5432, redis:6379) e instrucciones de arranque único. De paso, corregidos dos rough edges encontrados al verificar: (1) warning cosmético de Docker Compose por interpolación de `backend/.env` (contiene el hash bcrypt del admin sin escapar `$`, formato correcto para `.env` pero que Compose intenta interpolar igual para sus propias sustituciones) — resuelto agregando `--env-file /dev/null` a todos los `docker compose` de `backend/package.json`, ya que el `docker-compose.yml` no usa `${VAR}` en ningún lado; (2) eliminado `version: '3.8'` obsoleto del docker-compose. Verificado end-to-end real: `pnpm dev` desde cero sin warnings, sin conflictos de puertos, con curl confirmando 200/307/400 esperados en los 4 servicios HTTP. Usuario confirmó cierre de fase tras aclarar que esta fase es solo de entorno local y no implica ninguna decisión de despliegue a producción (eso es Fase 7, aún sin iniciar)."
     }
   ]
 }

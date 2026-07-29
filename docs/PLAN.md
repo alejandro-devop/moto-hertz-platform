@@ -9,7 +9,7 @@ Monorepo (pnpm workspaces) con 3 paquetes:
 ## Decisiones ya confirmadas con el usuario
 
 - Herramienta de monorepo: **pnpm workspaces** (sin Turborepo por ahora).
-- Target de despliegue del backend: **Cloud Run** (Docker), no Cloud Functions serverless puro.
+- ~~Target de despliegue del backend: Cloud Run (Docker)~~ — **revertido en Fase 7**: los 3 paquetes (`web`, `backend`, `cms-admin`) se despliegan juntos en un único **droplet de DigitalOcean**, vía Docker Compose (ver `docs/phases/07-despliegue-produccion.md`). No se usa GCP/Cloud Run ni Vercel.
 
 ## Fases
 

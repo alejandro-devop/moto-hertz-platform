@@ -1,49 +1,18 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
-import { useState, lazy, Suspense } from "react";
-import Image from "next/image";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import Menu from "@/components/menu";
+import { useParams } from "next/navigation";
+import { lazy, Suspense, useState } from "react";
 import Footer from "@/components/footer";
+import Menu from "@/components/menu";
 import { useInView } from "@/hooks";
-import motorcyclesData from "@/data/motorcycles-mock.json";
+import { getMotorcycleBySlug, getMotorcycles } from "@/services/motorcycles";
+import type { Motorcycle } from "@/types/motorcycle";
 import styles from "./MotorcycleDetail.module.scss";
 
 const ImageModal = lazy(() => import("@/components/image-modal"));
 const Modal = lazy(() => import("@/components/modal"));
-
-type Motorcycle = {
-  id: string;
-  slug: string;
-  name: string;
-  category: string;
-  year: number;
-  price: number;
-  currency: string;
-  description: string;
-  fullDescription: string;
-  engine: {
-    type: string;
-    displacement: string;
-    power: string;
-    torque: string;
-  };
-  features: string[];
-  colors: string[];
-  images: {
-    main: string;
-    gallery: string[];
-  };
-  specs: {
-    weight: string;
-    seatHeight: string;
-    fuelCapacity: string;
-    transmission: string;
-  };
-  available: boolean;
-  featured: boolean;
-};
 
 function RelatedMotorcycleCard({ moto }: { moto: Motorcycle }) {
   const { ref, isInView } = useInView({
@@ -58,13 +27,15 @@ function RelatedMotorcycleCard({ moto }: { moto: Motorcycle }) {
     >
       <Link href={`/motos/${moto.slug}`} className={styles.relatedLink}>
         <div className={styles.relatedImage}>
-          <img src={moto.images.main} alt={moto.name} />
+          <img src={moto.images?.main} alt={moto.name} />
         </div>
         <div className={styles.relatedContent}>
           <h4>{moto.name}</h4>
           <p className={styles.relatedCategory}>{moto.category}</p>
           <p className={styles.relatedPrice}>
-            {moto.currency} ${moto.price.toLocaleString()}
+            {moto.price
+              ? `${moto.currency} $${Number(moto.price).toLocaleString()}`
+              : "Consultar"}
           </p>
         </div>
       </Link>
@@ -74,7 +45,6 @@ function RelatedMotorcycleCard({ moto }: { moto: Motorcycle }) {
 
 export default function MotorcycleDetailPage() {
   const params = useParams();
-  const router = useRouter();
   const slug = params.slug as string;
 
   const [selectedImage, setSelectedImage] = useState(0);
@@ -84,8 +54,27 @@ export default function MotorcycleDetailPage() {
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
   const [isTestDriveModalOpen, setIsTestDriveModalOpen] = useState(false);
 
-  const motorcycles = motorcyclesData.motorcycles as Motorcycle[];
-  const motorcycle = motorcycles.find((m) => m.slug === slug);
+  const { data: motorcycle, isLoading } = useQuery({
+    queryKey: ["motorcycle", slug],
+    queryFn: () => getMotorcycleBySlug(slug),
+  });
+
+  const { data: allMotorcycles } = useQuery({
+    queryKey: ["motorcycles"],
+    queryFn: () => getMotorcycles({ page: 1, limit: 100 }),
+  });
+
+  if (isLoading) {
+    return (
+      <>
+        <Menu />
+        <div className={styles.notFound}>
+          <p>Cargando...</p>
+        </div>
+        <Footer />
+      </>
+    );
+  }
 
   if (!motorcycle) {
     return (
@@ -104,7 +93,7 @@ export default function MotorcycleDetailPage() {
   }
 
   // Motos relacionadas (misma categoría, excluyendo la actual)
-  const relatedMotorcycles = motorcycles
+  const relatedMotorcycles = (allMotorcycles?.motorcycles ?? [])
     .filter((m) => m.category === motorcycle.category && m.slug !== slug)
     .slice(0, 3);
 
@@ -138,7 +127,7 @@ export default function MotorcycleDetailPage() {
                   style={{ cursor: "pointer" }}
                 >
                   <img
-                    src={motorcycle.images.gallery[selectedImage]}
+                    src={(motorcycle.images?.gallery ?? [])[selectedImage]}
                     alt={`${motorcycle.name} - Vista ${selectedImage + 1}`}
                   />
                   {motorcycle.featured && (
@@ -158,7 +147,7 @@ export default function MotorcycleDetailPage() {
                   </div>
                 </div>
                 <div className={styles.thumbnails}>
-                  {motorcycle.images.gallery.map((img, index) => (
+                  {(motorcycle.images?.gallery ?? []).map((img, index) => (
                     <button
                       key={index}
                       className={`${styles.thumbnail} ${
@@ -185,7 +174,9 @@ export default function MotorcycleDetailPage() {
                       {motorcycle.currency}
                     </span>
                     <span className={styles.amount}>
-                      ${motorcycle.price.toLocaleString()}
+                      {motorcycle.price
+                        ? `$${Number(motorcycle.price).toLocaleString()}`
+                        : "Consultar"}
                     </span>
                   </div>
                 </div>
@@ -229,19 +220,19 @@ export default function MotorcycleDetailPage() {
                   <div className={styles.specItem}>
                     <span className={styles.specLabel}>Motor</span>
                     <span className={styles.specValue}>
-                      {motorcycle.engine.displacement}
+                      {motorcycle.engine?.displacement}
                     </span>
                   </div>
                   <div className={styles.specItem}>
                     <span className={styles.specLabel}>Potencia</span>
                     <span className={styles.specValue}>
-                      {motorcycle.engine.power}
+                      {motorcycle.engine?.power}
                     </span>
                   </div>
                   <div className={styles.specItem}>
                     <span className={styles.specLabel}>Peso</span>
                     <span className={styles.specValue}>
-                      {motorcycle.specs.weight}
+                      {motorcycle.specs?.weight}
                     </span>
                   </div>
                 </div>
@@ -268,19 +259,19 @@ export default function MotorcycleDetailPage() {
                 <div className={styles.specsList}>
                   <div className={styles.specRow}>
                     <span>Tipo</span>
-                    <span>{motorcycle.engine.type}</span>
+                    <span>{motorcycle.engine?.type}</span>
                   </div>
                   <div className={styles.specRow}>
                     <span>Cilindrada</span>
-                    <span>{motorcycle.engine.displacement}</span>
+                    <span>{motorcycle.engine?.displacement}</span>
                   </div>
                   <div className={styles.specRow}>
                     <span>Potencia</span>
-                    <span>{motorcycle.engine.power}</span>
+                    <span>{motorcycle.engine?.power}</span>
                   </div>
                   <div className={styles.specRow}>
                     <span>Torque</span>
-                    <span>{motorcycle.engine.torque}</span>
+                    <span>{motorcycle.engine?.torque}</span>
                   </div>
                 </div>
               </div>
@@ -290,19 +281,19 @@ export default function MotorcycleDetailPage() {
                 <div className={styles.specsList}>
                   <div className={styles.specRow}>
                     <span>Peso</span>
-                    <span>{motorcycle.specs.weight}</span>
+                    <span>{motorcycle.specs?.weight}</span>
                   </div>
                   <div className={styles.specRow}>
                     <span>Altura del asiento</span>
-                    <span>{motorcycle.specs.seatHeight}</span>
+                    <span>{motorcycle.specs?.seatHeight}</span>
                   </div>
                   <div className={styles.specRow}>
                     <span>Capacidad combustible</span>
-                    <span>{motorcycle.specs.fuelCapacity}</span>
+                    <span>{motorcycle.specs?.fuelCapacity}</span>
                   </div>
                   <div className={styles.specRow}>
                     <span>Transmisión</span>
-                    <span>{motorcycle.specs.transmission}</span>
+                    <span>{motorcycle.specs?.transmission}</span>
                   </div>
                 </div>
               </div>
@@ -354,7 +345,7 @@ export default function MotorcycleDetailPage() {
       {/* Image Modal - Client Side Only */}
       <Suspense fallback={null}>
         <ImageModal
-          images={motorcycle.images.gallery}
+          images={motorcycle.images?.gallery ?? []}
           initialIndex={modalImageIndex}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}

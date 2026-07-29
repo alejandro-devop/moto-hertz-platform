@@ -1,5 +1,6 @@
 import { motorcycleService } from '../../../services/motorcycle.service';
 import { withValidatedResolver } from '../../utils/validation';
+import { requireAuth } from '../../utils/error-handler';
 import {
   motorcycleAddInputSchema,
   motorcycleEditInputSchema,
@@ -10,9 +11,8 @@ import {
 
 /**
  * Query/lectura pública (catálogo consumido por `web`). Las mutaciones
- * quedan sin `requireAuth` porque en esta fase no existe aún cms-admin ni
- * su capa de autenticación (ver Fase 3/4) — se añadirá `requireAuth` a las
- * mutaciones una vez exista un admin autenticado que las use.
+ * requieren un admin autenticado (JWT emitido por `login`, ver
+ * `cms-admin`) vía `requireAuth`.
  */
 export const motorcycleResolvers = {
   Query: {
@@ -36,7 +36,8 @@ export const motorcycleResolvers = {
   Mutation: {
     motorcycleAdd: withValidatedResolver(
       motorcycleAddInputSchema,
-      async (_: unknown, { input }: { input: any }) => {
+      async (_: unknown, { input }: { input: any }, context) => {
+        requireAuth(context, 'motorcycleAdd');
         return motorcycleService.createMotorcycle(input);
       },
       'motorcycleAdd'
@@ -44,7 +45,8 @@ export const motorcycleResolvers = {
 
     motorcycleEdit: withValidatedResolver(
       motorcycleEditInputSchema,
-      async (_: unknown, { input }: { input: any }) => {
+      async (_: unknown, { input }: { input: any }, context) => {
+        requireAuth(context, 'motorcycleEdit');
         const { id, ...rest } = input;
         return motorcycleService.updateMotorcycle(id, rest);
       },
@@ -53,7 +55,8 @@ export const motorcycleResolvers = {
 
     motorcycleRemove: withValidatedResolver(
       motorcycleIdArgSchema,
-      async (_: unknown, { id }: { id: string }) => {
+      async (_: unknown, { id }: { id: string }, context) => {
+        requireAuth(context, 'motorcycleRemove');
         return motorcycleService.deleteMotorcycle(id);
       },
       'motorcycleRemove'

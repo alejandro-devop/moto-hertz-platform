@@ -6,7 +6,7 @@ WORKDIR /app
 COPY package*.json ./
 COPY tsconfig.json ./
 
-RUN npm ci && npm cache clean --force
+RUN npm install && npm cache clean --force
 
 COPY src ./src
 
@@ -21,7 +21,7 @@ RUN apk add --no-cache dumb-init postgresql-client
 
 COPY package*.json ./
 
-RUN npm ci --only=production && npm cache clean --force
+RUN npm install --omit=dev && npm cache clean --force
 RUN npm install tsx
 
 COPY --from=builder /app/dist ./dist

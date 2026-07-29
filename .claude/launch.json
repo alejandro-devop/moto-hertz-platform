@@ -6,6 +6,12 @@
       "runtimeExecutable": "/Users/jako/Developer/frontend/web/yamaha-oriente-platform/.claude/dev-web.sh",
       "runtimeArgs": [],
       "port": 3000
+    },
+    {
+      "name": "cms-admin",
+      "runtimeExecutable": "/Users/jako/Developer/frontend/web/yamaha-oriente-platform/.claude/dev-cms-admin.sh",
+      "runtimeArgs": [],
+      "port": 3001
     }
   ]
 }

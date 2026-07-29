@@ -6,12 +6,20 @@
     "node": ">=18"
   },
   "scripts": {
+    "dev": "pnpm run docker:up && concurrently -n web,cms-admin -c blue,magenta \"pnpm --filter ./web dev\" \"pnpm --filter ./cms-admin dev\"",
     "dev:web": "pnpm --filter ./web dev",
     "dev:backend": "pnpm --filter ./backend dev",
     "dev:cms": "pnpm --filter ./cms-admin dev",
+    "docker:up": "pnpm --filter ./backend docker:up",
+    "docker:stop": "pnpm --filter ./backend docker:stop",
+    "docker:down": "pnpm --filter ./backend docker:down",
+    "docker:logs": "pnpm --filter ./backend docker:logs",
     "lint": "pnpm -r lint",
     "build": "pnpm -r build",
     "test": "pnpm -r test"
   },
-  "packageManager": "pnpm@9.0.0"
+  "packageManager": "pnpm@9.0.0",
+  "devDependencies": {
+    "concurrently": "^10.0.3"
+  }
 }

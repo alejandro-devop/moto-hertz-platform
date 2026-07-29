@@ -1,48 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import Menu from "@/components/menu";
+import { useMemo, useState } from "react";
 import Footer from "@/components/footer";
+import Menu from "@/components/menu";
 import { useInView } from "@/hooks";
-import motorcyclesData from "@/data/motorcycles-mock.json";
+import { categorySlug, getMotorcycles } from "@/services/motorcycles";
+import type { Motorcycle } from "@/types/motorcycle";
 import styles from "./Motos.module.scss";
-
-type Motorcycle = {
-  id: string;
-  slug: string;
-  name: string;
-  category: string;
-  year: number;
-  price: number;
-  currency: string;
-  engine: {
-    type: string;
-    displacement: string;
-    power: string;
-    torque: string;
-  };
-  features: string[];
-  colors: string[];
-  images: {
-    main: string;
-    gallery: string[];
-  };
-  specs: {
-    weight: string;
-    seatHeight: string;
-    fuelCapacity: string;
-    transmission: string;
-  };
-  available: boolean;
-  featured: boolean;
-};
-
-type Category = {
-  id: string;
-  name: string;
-  description: string;
-};
 
 function MotorcycleCard({ moto, index }: { moto: Motorcycle; index: number }) {
   const { ref, isInView } = useInView({
@@ -58,7 +24,7 @@ function MotorcycleCard({ moto, index }: { moto: Motorcycle; index: number }) {
     >
       {moto.featured && <span className={styles.featuredBadge}>Destacada</span>}
       <div className={styles.imageContainer}>
-        <img src={moto.images.main} alt={moto.name} loading="lazy" />
+        <img src={moto.images?.main} alt={moto.name} loading="lazy" />
       </div>
       <div className={styles.cardContent}>
         <div className={styles.cardHeader}>
@@ -68,11 +34,11 @@ function MotorcycleCard({ moto, index }: { moto: Motorcycle; index: number }) {
         <div className={styles.engineInfo}>
           <div className={styles.engineSpec}>
             <span className={styles.label}>Motor</span>
-            <span className={styles.value}>{moto.engine.displacement}</span>
+            <span className={styles.value}>{moto.engine?.displacement}</span>
           </div>
           <div className={styles.engineSpec}>
             <span className={styles.label}>Potencia</span>
-            <span className={styles.value}>{moto.engine.power}</span>
+            <span className={styles.value}>{moto.engine?.power}</span>
           </div>
         </div>
         <div className={styles.features}>
@@ -86,7 +52,9 @@ function MotorcycleCard({ moto, index }: { moto: Motorcycle; index: number }) {
           <div className={styles.price}>
             <span className={styles.currency}>{moto.currency}</span>
             <span className={styles.amount}>
-              ${moto.price.toLocaleString()}
+              {moto.price
+                ? `$${Number(moto.price).toLocaleString()}`
+                : "Consultar"}
             </span>
           </div>
           <Link href={`/motos/${moto.slug}`} className={styles.detailsButton}>
@@ -100,16 +68,28 @@ function MotorcycleCard({ moto, index }: { moto: Motorcycle; index: number }) {
 
 export default function MotosPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const motorcycles = motorcyclesData.motorcycles as Motorcycle[];
-  const categories = motorcyclesData.categories as Category[];
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["motorcycles"],
+    queryFn: () => getMotorcycles({ page: 1, limit: 100 }),
+  });
+
+  const motorcycles = data?.motorcycles ?? [];
+
+  const categories = useMemo(() => {
+    const names = new Set<string>();
+    for (const moto of motorcycles) {
+      if (moto.category) names.add(moto.category);
+    }
+    return [...names].map((name) => ({ id: categorySlug(name), name }));
+  }, [motorcycles]);
 
   const filteredMotorcycles =
     selectedCategory === "all"
       ? motorcycles
       : motorcycles.filter(
           (moto) =>
-            moto.category.toLowerCase().replace(/\s+/g, "-") ===
-            selectedCategory
+            moto.category && categorySlug(moto.category) === selectedCategory,
         );
 
   return (
@@ -153,15 +133,29 @@ export default function MotosPage() {
           </div>
         </section>
 
-        <section className={styles.motorcyclesGrid}>
-          <div className={styles.gridContainer}>
-            {filteredMotorcycles.map((moto, index) => (
-              <MotorcycleCard key={moto.id} moto={moto} index={index} />
-            ))}
+        {isLoading && (
+          <div className={styles.noResults}>
+            <p>Cargando motocicletas...</p>
           </div>
-        </section>
+        )}
 
-        {filteredMotorcycles.length === 0 && (
+        {isError && (
+          <div className={styles.noResults}>
+            <p>No se pudo cargar el catálogo. Intenta de nuevo más tarde.</p>
+          </div>
+        )}
+
+        {!isLoading && !isError && (
+          <section className={styles.motorcyclesGrid}>
+            <div className={styles.gridContainer}>
+              {filteredMotorcycles.map((moto, index) => (
+                <MotorcycleCard key={moto.id} moto={moto} index={index} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {!isLoading && !isError && filteredMotorcycles.length === 0 && (
           <div className={styles.noResults}>
             <p>No se encontraron motocicletas en esta categoría.</p>
           </div>

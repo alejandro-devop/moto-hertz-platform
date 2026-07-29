@@ -63,6 +63,8 @@ const withPWA = require("next-pwa")({
 });
 
 const nextConfig: NextConfig = {
+  output: "standalone",
+
   // Optimizaciones para mejorar el rendimiento
   images: {
     // Formatos modernos de imagen

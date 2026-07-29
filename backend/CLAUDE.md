@@ -34,9 +34,9 @@ Registrar en `src/graphql/schema.ts` y `src/graphql/resolvers.ts`.
 
 `motorcycle` es la referencia de patrón completa (schema Drizzle, migración, service, tipos, validadores Zod, módulo GraphQL con query/mutations). Los otros 3 dominios confirmados con el usuario ya tienen tabla y migración, pero su capa de servicio/GraphQL queda pendiente para una fase posterior siguiendo el mismo patrón.
 
-## Autenticación — diferida
+## Autenticación
 
-**No hay autenticación implementada en esta fase.** Se decidió con el usuario que solo `cms-admin` la necesitará (el sitio público `web` no tiene usuarios finales). Los 4 dominios actuales son de lectura pública; las mutaciones GraphQL no tienen `requireAuth` todavía — se añadirá cuando exista `cms-admin` con un admin autenticado (Fase 3/4). Ver comentario en `src/graphql/server.ts` y en `src/graphql/modules/motorcycle/motorcycle.resolvers.ts`.
+Un solo rol admin (sin tabla de usuarios ni roles diferenciados, decisión de Fase 3): las credenciales viven en `ADMIN_EMAIL` / `ADMIN_PASSWORD_HASH` (bcrypt) por variable de entorno. La mutation `login(email, password)` (`src/graphql/modules/auth/`) verifica contra esas variables y devuelve un JWT (`src/shared/auth/jwt.ts`, secreto en `JWT_SECRET`). `getGraphQLContext` (`src/graphql/server.ts`) valida el header `Authorization: Bearer <token>` en cada request y expone `context.user` si es válido. Las queries de catálogo siguen siendo públicas; las mutaciones de escritura llaman a `requireAuth(context, operationName)` (`src/graphql/utils/error-handler.ts`) para exigir sesión — ver `motorcycle.resolvers.ts` como referencia a replicar en los demás dominios.
 
 ## Patrones obligatorios
 
