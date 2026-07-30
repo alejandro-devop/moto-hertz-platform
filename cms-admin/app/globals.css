@@ -4,11 +4,32 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ---------------------------------------------------------------------------
+ * Sistema de diseño del panel — «amarillo de placa sobre asfalto».
+ *
+ * El acento (`--primary`) es el amarillo de las placas colombianas y es el
+ * único color saturado de la interfaz: acción principal, destino activo y
+ * matrícula. Los grises llevan una pizca de amarillo dentro para que no se
+ * lean como grises de fábrica.
+ *
+ * Los colores de estado (`--success` / `--warning` / `--destructive`) son
+ * semánticos y viven aparte del acento: el amarillo nunca significa
+ * «cuidado», significa «esta es la acción».
+ *
+ * La barra de navegación (`--rail-*`) se queda en asfalto en los dos temas:
+ * es la constante del producto.
+ * ------------------------------------------------------------------------- */
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Las pilas van completas aquí, no como `var(--font-sans)`: eso se
+     autorreferenciaba y dejaba `font-family` inválida (de ahí el serif). Las
+     variables `--font-plex-*` las inyecta `next/font` en <html>. */
+  --font-sans: var(--font-plex-sans), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, Menlo,
+    Consolas, monospace;
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -18,6 +39,15 @@
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
+  --color-rail: var(--rail);
+  --color-rail-foreground: var(--rail-foreground);
+  --color-rail-muted: var(--rail-muted);
+  --color-rail-border: var(--rail-border);
+  --color-success: var(--success);
+  --color-success-surface: var(--success-surface);
+  --color-warning: var(--warning);
+  --color-warning-surface: var(--warning-surface);
+  --color-destructive-surface: var(--destructive-surface);
   --color-chart-5: var(--chart-5);
   --color-chart-4: var(--chart-4);
   --color-chart-3: var(--chart-3);
@@ -26,6 +56,7 @@
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
+  --color-border-soft: var(--border-soft);
   --color-destructive: var(--destructive);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
@@ -49,82 +80,153 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+
+  /* Superficies y texto — tema claro */
+  --background: oklch(0.9695 0.0067 97.35); /* niebla   #F6F5F0 */
+  --foreground: oklch(0.2217 0.0084 264.39); /* tinta    #191B1F */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2217 0.0084 264.39);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2217 0.0084 264.39);
+
+  /* Acento: amarillo de placa */
+  --primary: oklch(0.834 0.1584 88.96); /* placa    #F2C230 */
+  --primary-foreground: oklch(0.2092 0.0061 271.12); /* #17181B */
+
+  --secondary: oklch(0.9394 0.0109 95.17); /* #EDEBE3 */
+  --secondary-foreground: oklch(0.2217 0.0084 264.39);
+  --muted: oklch(0.9394 0.0109 95.17);
+  --muted-foreground: oklch(0.4683 0.0142 106.93); /* #5B5B52 */
+  --accent: oklch(0.9394 0.0109 95.17);
+  --accent-foreground: oklch(0.2217 0.0084 264.39);
+
+  --border: oklch(0.8941 0.0139 92.99); /* #DFDCD2 */
+  --border-soft: oklch(0.9278 0.0125 91.52); /* #EAE7DE */
+  --input: oklch(0.8941 0.0139 92.99);
+  --ring: oklch(0.834 0.1584 88.96);
+
+  /* Estados semánticos */
+  --success: oklch(0.5028 0.1056 160.32); /* vigente    #16764F */
+  --success-surface: oklch(0.5028 0.1056 160.32 / 12%);
+  --warning: oklch(0.5363 0.1117 71.8); /* por vencer #95610A */
+  --warning-surface: oklch(0.5363 0.1117 71.8 / 12%);
+  --destructive: oklch(0.5056 0.1483 29.78); /* vencido    #A93A2D */
+  --destructive-surface: oklch(0.5056 0.1483 29.78 / 12%);
+
+  /* Barra de navegación — asfalto, igual en los dos temas */
+  --rail: oklch(0.2256 0.0066 258.36); /* #1A1C1F */
+  --rail-foreground: oklch(0.9457 0.0096 93.57); /* #EFEDE6 */
+  --rail-muted: oklch(0.6438 0.0146 106.8); /* #8E8E84 */
+  --rail-border: oklch(0.3038 0.0084 255.56); /* #2C2F33 */
+
+  --chart-1: oklch(0.834 0.1584 88.96);
+  --chart-2: oklch(0.5028 0.1056 160.32);
+  --chart-3: oklch(0.5363 0.1117 71.8);
+  --chart-4: oklch(0.5056 0.1483 29.78);
+  --chart-5: oklch(0.6335 0.0161 106.85);
+
+  --sidebar: var(--rail);
+  --sidebar-foreground: var(--rail-foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: oklch(1 0 0 / 8%);
+  --sidebar-accent-foreground: var(--rail-foreground);
+  --sidebar-border: var(--rail-border);
+  --sidebar-ring: var(--primary);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: oklch(0.1763 0.0052 248.13); /* carbón  #0F1113 */
+  --foreground: oklch(0.9419 0.0094 99.99); /* #EDECE5 */
+  --card: oklch(0.2159 0.0075 248.17); /* #171A1D */
+  --card-foreground: oklch(0.9419 0.0094 99.99);
+  --popover: oklch(0.2159 0.0075 248.17);
+  --popover-foreground: oklch(0.9419 0.0094 99.99);
+
+  /* El acento no cambia: una placa es una placa. */
+  --primary: oklch(0.834 0.1584 88.96);
+  --primary-foreground: oklch(0.2092 0.0061 271.12);
+
+  --secondary: oklch(0.2538 0.0096 248.2); /* #1F2327 */
+  --secondary-foreground: oklch(0.9419 0.0094 99.99);
+  --muted: oklch(0.2538 0.0096 248.2);
+  --muted-foreground: oklch(0.7096 0.0128 106.72); /* #A2A299 */
+  --accent: oklch(0.2538 0.0096 248.2);
+  --accent-foreground: oklch(0.9419 0.0094 99.99);
+
+  --border: oklch(0.2988 0.0092 248.14); /* #2A2E32 */
+  --border-soft: oklch(0.2662 0.0095 248.18); /* #22262A */
+  --input: oklch(0.2988 0.0092 248.14);
+  --ring: oklch(0.834 0.1584 88.96);
+
+  --success: oklch(0.7078 0.1245 164.8); /* #43B98D */
+  --success-surface: oklch(0.7078 0.1245 164.8 / 14%);
+  --warning: oklch(0.7579 0.1417 80.07); /* #DFA531 */
+  --warning-surface: oklch(0.7579 0.1417 80.07 / 14%);
+  --destructive: oklch(0.6751 0.1454 30.07); /* #E2705F */
+  --destructive-surface: oklch(0.6751 0.1454 30.07 / 14%);
+
+  --rail: oklch(0.1525 0.004 229.14); /* #0A0C0D */
+  --rail-foreground: oklch(0.9419 0.0094 99.99);
+  --rail-muted: oklch(0.5634 0.0121 106.78); /* #76766E */
+  --rail-border: oklch(0.2491 0.0082 240.2); /* #1E2225 */
+
+  --chart-1: oklch(0.834 0.1584 88.96);
+  --chart-2: oklch(0.7078 0.1245 164.8);
+  --chart-3: oklch(0.7579 0.1417 80.07);
+  --chart-4: oklch(0.6751 0.1454 30.07);
+  --chart-5: oklch(0.5634 0.0121 106.78);
+
+  --sidebar: var(--rail);
+  --sidebar-foreground: var(--rail-foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: oklch(1 0 0 / 8%);
+  --sidebar-accent-foreground: var(--rail-foreground);
+  --sidebar-border: var(--rail-border);
+  --sidebar-ring: var(--primary);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
   html {
     @apply font-sans;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+  /* Los títulos y las cifras se aprietan; el texto corrido no. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-semibold tracking-tight;
+    text-wrap: balance;
+  }
+  /* Todo lo que se alinea en columna usa cifras de ancho fijo. */
+  th,
+  td,
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/**
+ * Tiras que se desplazan a lo ancho (secciones de la ficha, chips de filtro).
+ * `overflow-x: auto` por sí solo convierte el eje vertical en `auto` y saca una
+ * barra de scroll de 1 px de recorrido; hay que apagarla a mano.
+ */
+@utility scroll-x {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    display: none;
   }
 }
