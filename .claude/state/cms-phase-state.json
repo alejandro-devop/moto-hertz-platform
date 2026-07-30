@@ -1,9 +1,9 @@
 {
   "plan": "cms-admin — administración del resto del sitio",
   "doc": "docs/cms-plan/PLAN.md",
-  "current_phase": 0,
+  "current_phase": 1,
   "phases": [
-    { "id": 0, "name": "Cimientos del patrón", "doc": "docs/cms-plan/phases/00-cimientos-patron.md", "status": "in_progress" },
+    { "id": 0, "name": "Cimientos del patrón", "doc": "docs/cms-plan/phases/00-cimientos-patron.md", "status": "completed" },
     { "id": 1, "name": "Medios: subida de imágenes", "doc": "docs/cms-plan/phases/01-medios.md", "status": "pending" },
     { "id": 2, "name": "Puntos de atención", "doc": "docs/cms-plan/phases/02-puntos-de-atencion.md", "status": "pending" },
     { "id": 3, "name": "Servicios", "doc": "docs/cms-plan/phases/03-servicios.md", "status": "pending" },
@@ -12,5 +12,11 @@
     { "id": 6, "name": "Configuración del sitio", "doc": "docs/cms-plan/phases/06-configuracion-sitio.md", "status": "pending" },
     { "id": 7, "name": "QA y cierre del CMS", "doc": "docs/cms-plan/phases/07-qa-y-cierre.md", "status": "pending" }
   ],
-  "log": []
+  "log": [
+    {
+      "phase": 0,
+      "completed_at": "2026-07-30",
+      "notes": "Se extrajeron de `motos` diez piezas compartidas: seis componentes (ListaResponsive con su Paginacion, BarraFiltros, RowActions, FormSheet, form-fields) y cuatro módulos de lib (list-params, use-url-filters, form-sections, form-state). Commit 41b234e; el rediseño previo de motos sobre el que se apoya es efbf1ff. La receta de módulo nuevo en las tres capas quedó en docs/cms-plan/PATRON.md — es lo que debe leer cada fase siguiente antes de construir.\n\nTRES COSAS SE DEJARON SIN ABSTRAER A PROPÓSITO, y no son olvidos: (1) la fila/tarjeta de cada dominio (`<x>-row.tsx`), porque qué columnas hay y qué se destaca es la decisión más propia de cada sección — se extrajo solo el contenedor, que es donde vive la regla de paridad escritorio/móvil; (2) el estado de la ficha (~15 líneas de useState/useRef/useEffect con el cálculo de «sucio»), porque un hook genérico tendría que aceptar mapeo, validación y derivaciones del dominio — está escrito literalmente en PATRON.md §2.3 para copiar, y se extraerá cuando dos secciones más lo hayan repetido igual; (3) el GalleryEditor de fotos, porque la Fase 1 lo reescribe con subida real y moverlo ahora sería mudarlo dos veces. Reconsiderar (1) y (2) en la Fase 3, cuando ya haya dos copias reales que comparar.\n\nSe extrajeron además RowActions y BarraFiltros, que no estaban en la lista de candidatos del documento de fase: son mecánica pura (menú+hoja, fila+hoja) que se repetiría idéntica en cuatro módulos y que codifica la regla de paridad escritorio/móvil.\n\nVERIFICACIÓN: no hubo cambio de comportamiento. Se comparó el DOM renderizado contra un worktree en efbf1ff con un guion CDP sobre 8 bloques (lista, buscador, filtros+orden desde la URL, paginación, ficha con pestañas y aviso de descarte, menú de acciones, móvil a 390 px, errores de consola): salida byte a byte idéntica. El usuario confirmó las diez pruebas manuales, incluido el tema claro/oscuro, que el guion no cubría.\n\nDEUDA CONOCIDA que esta fase destapó y NO arregló: los desplegables de filtro miden 32 px de alto, no los 44 px que manda la regla de móvil de cms-admin/CLAUDE.md. La clase base de SelectTrigger (`data-[size=default]:h-8`) gana en la cascada sobre el h-11 que se le pasa. Es previo a esta fase (se comporta igual antes y después), pero se hereda a las cuatro secciones siguientes: se arregla en components/ui/select.tsx y conviene hacerlo antes de construir más módulos encima.\n\nOTROS HALLAZGOS: la base de desarrollo está vacía de motos, así que las fases 2–4 van a necesitar sembrar datos; puede valer la pena un backend/scripts/seed.ts de verdad. `pnpm lint` en cms-admin está roto por incompatibilidad de dependencias (@typescript-eslint 6.21 con ESLint 9.39), es previo y ajeno a este plan; la verificación se hace con `npx tsc --noEmit` y `next build`."
+    }
+  ]
 }

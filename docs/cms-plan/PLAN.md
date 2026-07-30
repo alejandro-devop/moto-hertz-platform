@@ -30,7 +30,7 @@ patrón en las tres capas.
 
 | # | Fase | Documento | Estado |
 |---|------|-----------|--------|
-| 0 | Cimientos del patrón | [00-cimientos-patron.md](phases/00-cimientos-patron.md) | pending |
+| 0 | Cimientos del patrón | [00-cimientos-patron.md](phases/00-cimientos-patron.md) | completed |
 | 1 | Medios: subida de imágenes | [01-medios.md](phases/01-medios.md) | pending |
 | 2 | Puntos de atención | [02-puntos-de-atencion.md](phases/02-puntos-de-atencion.md) | pending |
 | 3 | Servicios | [03-servicios.md](phases/03-servicios.md) | pending |
