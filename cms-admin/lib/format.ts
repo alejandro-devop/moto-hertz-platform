@@ -86,14 +86,31 @@ export function humanizeDays(days: number): string {
   return days > 0 ? `en ${n} ${unit}` : `hace ${n} ${unit}`;
 }
 
-/** `"Yamaha NMAX 155 V3"` + `2027` → `"yamaha-nmax-155-v3-2027"`. */
-export function slugify(...parts: (string | number | null | undefined)[]): string {
-  return parts
-    .filter((part) => part !== null && part !== undefined && part !== '')
-    .join(' ')
+/**
+ * Sin tildes y en minúsculas, para comparar texto escrito por humanos: quien
+ * busca «medellin» tiene que encontrar «Medellín».
+ */
+export function normalizarTexto(value: string): string {
+  return value
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
+    .toLowerCase();
+}
+
+/**
+ * Junta los campos por los que se puede buscar un registro en un solo texto ya
+ * normalizado. Los vacíos se caen solos.
+ */
+export function textoBuscable(...partes: (string | number | null | undefined)[]): string {
+  return normalizarTexto(partes.filter(Boolean).join(' '));
+}
+
+/** `"Yamaha NMAX 155 V3"` + `2027` → `"yamaha-nmax-155-v3-2027"`. */
+export function slugify(...parts: (string | number | null | undefined)[]): string {
+  const texto = parts
+    .filter((part) => part !== null && part !== undefined && part !== '')
+    .join(' ');
+  return normalizarTexto(texto)
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
 }

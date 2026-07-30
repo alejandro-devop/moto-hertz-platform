@@ -1,15 +1,9 @@
+import { seccionDeCampo as buscarSeccion, type SeccionFicha } from '@/lib/form-sections';
 import type { MotorcycleCondition } from '@/lib/graphql/motorcycles';
 
 export type SeccionId = 'identidad' | 'precio' | 'papeles' | 'tecnica' | 'fotos' | 'sede';
 
-export interface Seccion {
-  id: SeccionId;
-  label: string;
-  /** Qué se contesta en esta sección, en una línea. */
-  hint: string;
-  /** Campos del formulario que pertenecen a la sección, para ubicar errores. */
-  campos: string[];
-}
+export type Seccion = SeccionFicha<SeccionId>;
 
 /**
  * Los 41 campos de una moto agrupados como se piensan, no como están en la
@@ -103,5 +97,5 @@ export function seccionesVisibles(condition: MotorcycleCondition): Seccion[] {
 
 /** A qué sección pertenece un campo, para saltar al primer error. */
 export function seccionDeCampo(campo: string): SeccionId | undefined {
-  return SECCIONES.find((seccion) => seccion.campos.includes(campo))?.id;
+  return buscarSeccion(SECCIONES, campo);
 }

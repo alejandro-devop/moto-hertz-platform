@@ -3,7 +3,7 @@
   "doc": "docs/cms-plan/PLAN.md",
   "current_phase": 0,
   "phases": [
-    { "id": 0, "name": "Cimientos del patrón", "doc": "docs/cms-plan/phases/00-cimientos-patron.md", "status": "pending" },
+    { "id": 0, "name": "Cimientos del patrón", "doc": "docs/cms-plan/phases/00-cimientos-patron.md", "status": "in_progress" },
     { "id": 1, "name": "Medios: subida de imágenes", "doc": "docs/cms-plan/phases/01-medios.md", "status": "pending" },
     { "id": 2, "name": "Puntos de atención", "doc": "docs/cms-plan/phases/02-puntos-de-atencion.md", "status": "pending" },
     { "id": 3, "name": "Servicios", "doc": "docs/cms-plan/phases/03-servicios.md", "status": "pending" },

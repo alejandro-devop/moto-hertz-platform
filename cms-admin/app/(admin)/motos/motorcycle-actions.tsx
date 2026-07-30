@@ -1,16 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  Camera,
-  CheckCircle2,
-  ExternalLink,
-  MoreVertical,
-  Pencil,
-  Tag,
-  Trash2,
-  Undo2,
-} from 'lucide-react';
+import { Camera, CheckCircle2, ExternalLink, Pencil, Tag, Trash2, Undo2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   AlertDialog,
@@ -30,40 +21,21 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Sheet, SheetContent } from '@/components/ui/sheet';
+import { RowActions, type AccionFila } from '@/components/admin/row-actions';
 import { Thumb } from '@/components/admin/thumb';
 import { formatCop, groupDigits, onlyDigits } from '@/lib/format';
 import { urlPublicaDeMoto } from '@/lib/site';
-import { cn } from '@/lib/utils';
 import type { Motorcycle } from '@/lib/graphql/motorcycles';
 import type { SeccionId } from './form-sections';
 import { useMotorcycleMutations } from './use-motorcycles';
 
-interface Accion {
-  id: string;
-  label: string;
-  icon: React.ComponentType<{ className?: string }>;
-  onSelect: () => void;
-  /** Dato al margen: cuántas fotos tiene, a dónde lleva el enlace. */
-  tail?: string;
-  danger?: boolean;
-  href?: string;
-}
-
 /**
- * Todo lo que se le puede hacer a una moto. En escritorio es el menú de la
- * fila; en móvil, una hoja inferior con objetivos de 46 px. Las dos cosas que
- * de verdad pasan en el patio —cambiar precio y marcar vendida— van primero, y
- * eliminar va última, separada y en rojo.
+ * Todo lo que se le puede hacer a una moto. El menú y la hoja los dibuja
+ * `RowActions`; aquí solo se decide qué acciones hay y en qué orden: las dos
+ * cosas que de verdad pasan en el patio —cambiar precio y marcar vendida— van
+ * primero, y eliminar va última, separada y en rojo.
  */
 export function MotorcycleActions({
   motorcycle,
@@ -73,13 +45,12 @@ export function MotorcycleActions({
   onEdit: (motorcycle: Motorcycle, seccion?: SeccionId) => void;
 }) {
   const { patch, remove } = useMotorcycleMutations();
-  const [hoja, setHoja] = useState(false);
   const [precioAbierto, setPrecioAbierto] = useState(false);
   const [borradoAbierto, setBorradoAbierto] = useState(false);
 
   const fotos = (motorcycle.images?.gallery?.length ?? 0) + (motorcycle.images?.main ? 1 : 0);
 
-  const acciones: Accion[] = [
+  const acciones: AccionFila[] = [
     {
       id: 'precio',
       label: 'Cambiar precio',
@@ -139,80 +110,13 @@ export function MotorcycleActions({
     },
   ];
 
-  function ejecutar(accion: Accion) {
-    setHoja(false);
-    if (accion.href) {
-      window.open(accion.href, '_blank', 'noreferrer');
-      return;
-    }
-    accion.onSelect();
-  }
-
   return (
     <>
-      {/* Escritorio: menú anclado a la fila. */}
-      <DropdownMenu>
-        <DropdownMenuTrigger
-          render={
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              aria-label={`Acciones para ${motorcycle.name}`}
-              className="hidden md:inline-flex"
-            />
-          }
-        >
-          <MoreVertical />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-60">
-          {acciones.map((accion) => {
-            const Icon = accion.icon;
-            const item = (
-              <DropdownMenuItem
-                key={accion.id}
-                variant={accion.danger ? 'destructive' : 'default'}
-                onClick={() => ejecutar(accion)}
-                className="min-h-8 gap-2"
-              >
-                <Icon className="text-muted-foreground" />
-                <span className="flex-1">{accion.label}</span>
-                {accion.tail ? (
-                  <span className="font-mono text-[10px] text-muted-foreground">{accion.tail}</span>
-                ) : null}
-              </DropdownMenuItem>
-            );
-            return accion.danger ? (
-              <div key={accion.id}>
-                <DropdownMenuSeparator />
-                {item}
-              </div>
-            ) : (
-              item
-            );
-          })}
-        </DropdownMenuContent>
-      </DropdownMenu>
-
-      {/* Móvil: la misma lista en una hoja, con objetivos grandes. */}
-      <Button
-        variant="ghost"
-        size="icon-sm"
-        aria-label={`Acciones para ${motorcycle.name}`}
-        aria-haspopup="dialog"
-        onClick={() => setHoja(true)}
-        className="size-9 md:hidden"
-      >
-        <MoreVertical />
-      </Button>
-
-      <Sheet open={hoja} onOpenChange={setHoja}>
-        <SheetContent
-          side="bottom"
-          showCloseButton={false}
-          className="gap-0 rounded-t-2xl px-0 pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
-        >
-          <span className="mx-auto mb-2 h-1 w-9 rounded-full bg-border" aria-hidden />
-          <div className="flex items-center gap-3 border-b border-border-soft px-4 pb-3">
+      <RowActions
+        acciones={acciones}
+        etiqueta={`Acciones para ${motorcycle.name}`}
+        encabezado={
+          <>
             <Thumb src={motorcycle.images?.main} alt={motorcycle.name} className="size-10" />
             <span className="min-w-0">
               <span className="block truncate text-sm font-semibold">{motorcycle.name}</span>
@@ -220,40 +124,9 @@ export function MotorcycleActions({
                 {formatCop(motorcycle.price) ?? 'Sin precio'}
               </span>
             </span>
-          </div>
-          <div className="flex flex-col pt-1">
-            {acciones.map((accion) => {
-              const Icon = accion.icon;
-              return (
-                <div key={accion.id} className={cn(accion.danger && 'mt-1 border-t border-border-soft pt-1')}>
-                  <button
-                    type="button"
-                    onClick={() => ejecutar(accion)}
-                    className={cn(
-                      'flex min-h-12 w-full items-center gap-3 px-4 text-left text-[15px] font-medium',
-                      'focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none',
-                      accion.danger ? 'text-destructive' : 'text-foreground'
-                    )}
-                  >
-                    <Icon
-                      className={cn(
-                        'size-4 shrink-0',
-                        accion.danger ? 'text-destructive' : 'text-muted-foreground'
-                      )}
-                    />
-                    <span className="flex-1">{accion.label}</span>
-                    {accion.tail ? (
-                      <span className="font-mono text-[11px] text-muted-foreground">
-                        {accion.tail}
-                      </span>
-                    ) : null}
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-        </SheetContent>
-      </Sheet>
+          </>
+        }
+      />
 
       <PrecioDialog
         motorcycle={motorcycle}

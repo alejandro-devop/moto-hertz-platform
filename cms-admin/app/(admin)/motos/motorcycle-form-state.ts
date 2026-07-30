@@ -1,5 +1,11 @@
 import { z } from 'zod';
 import { groupDigits, onlyDigits, slugify, toDateInput } from '@/lib/format';
+import {
+  erroresDeZod,
+  listaDesdeTexto,
+  textoDesdeLista,
+  textoOpcional,
+} from '@/lib/form-state';
 import type {
   Motorcycle,
   MotorcycleCondition,
@@ -121,8 +127,8 @@ export function motorcycleToForm(motorcycle: Motorcycle): FormState {
     engineDisplacement: motorcycle.engine?.displacement ?? '',
     enginePower: motorcycle.engine?.power ?? '',
     engineTorque: motorcycle.engine?.torque ?? '',
-    features: (motorcycle.features ?? []).join(', '),
-    colors: (motorcycle.colors ?? []).join(', '),
+    features: textoDesdeLista(motorcycle.features),
+    colors: textoDesdeLista(motorcycle.colors),
     imagesMain: motorcycle.images?.main ?? '',
     imagesGallery: [...(motorcycle.images?.gallery ?? [])],
     specsWeight: motorcycle.specs?.weight ?? '',
@@ -142,7 +148,7 @@ export function motorcycleToForm(motorcycle: Motorcycle): FormState {
     provenanceWarranty: motorcycle.paperwork?.provenanceWarranty ?? false,
     acceptsTradeIn: motorcycle.commercial?.acceptsTradeIn ?? false,
     hasFinancing: motorcycle.commercial?.hasFinancing ?? false,
-    paymentMethods: (motorcycle.commercial?.paymentMethods ?? []).join(', '),
+    paymentMethods: textoDesdeLista(motorcycle.commercial?.paymentMethods),
     locationName: motorcycle.location?.name ?? '',
     locationAddress: motorcycle.location?.address ?? '',
     locationCity: motorcycle.location?.city ?? '',
@@ -151,20 +157,13 @@ export function motorcycleToForm(motorcycle: Motorcycle): FormState {
   };
 }
 
-function splitList(value: string): string[] {
-  return value
-    .split(',')
-    .map((item) => item.trim())
-    .filter(Boolean);
-}
-
 /** El slug se deriva del nombre y el año mientras nadie lo haya tocado. */
 export function slugSugerido(form: FormState): string {
   return slugify(form.name, form.year);
 }
 
 export function formToInput(form: FormState): MotorcycleFormInput {
-  const trim = (value: string) => value.trim() || undefined;
+  const trim = textoOpcional;
   const main = form.imagesMain.trim();
 
   return {
@@ -187,8 +186,8 @@ export function formToInput(form: FormState): MotorcycleFormInput {
       power: trim(form.enginePower),
       torque: trim(form.engineTorque),
     },
-    features: splitList(form.features),
-    colors: splitList(form.colors),
+    features: listaDesdeTexto(form.features),
+    colors: listaDesdeTexto(form.colors),
     /* `images.main` es obligatorio en el backend: sin portada no se envía nada. */
     images: main ? { main, gallery: form.imagesGallery.filter(Boolean) } : undefined,
     specs: {
@@ -215,7 +214,7 @@ export function formToInput(form: FormState): MotorcycleFormInput {
     commercial: {
       acceptsTradeIn: form.acceptsTradeIn,
       hasFinancing: form.hasFinancing,
-      paymentMethods: splitList(form.paymentMethods),
+      paymentMethods: listaDesdeTexto(form.paymentMethods),
     },
     location: {
       name: trim(form.locationName),
@@ -274,15 +273,7 @@ export interface ResultadoValidacion {
 }
 
 export function validar(form: FormState): ResultadoValidacion {
-  const resultado = esquema.safeParse(form);
-  const errores: Record<string, string> = {};
-
-  if (!resultado.success) {
-    for (const issue of resultado.error.issues) {
-      const campo = String(issue.path[0]);
-      if (!errores[campo]) errores[campo] = issue.message;
-    }
-  }
+  const errores = erroresDeZod(esquema.safeParse(form));
 
   /* La galería sin portada no se puede guardar: el backend exige `main`. */
   if (!form.imagesMain.trim() && form.imagesGallery.length > 0) {

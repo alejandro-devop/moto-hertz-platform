@@ -36,7 +36,24 @@ Next.js 15 (App Router) · TypeScript · React 19 · Tailwind v4 · shadcn/ui es
 
 El buscador (`admin-search.tsx`) escribe en `?q=` de `/motos`; `⌘K` lo enfoca desde cualquier pantalla.
 
-Piezas compartidas: `page-header`, `states` (vacío, error, esqueletos), `status-pill`, `thumb`, `proximamente`.
+Piezas compartidas de presentación: `page-header`, `states` (vacío, error, esqueletos), `status-pill`, `thumb`, `proximamente`.
+
+Piezas compartidas de módulo, extraídas de `motos` en la Fase 0 del plan CMS (receta completa en `../docs/cms-plan/PATRON.md`):
+
+| Pieza | Archivo | Qué resuelve |
+| --- | --- | --- |
+| `ListaResponsive` | `components/admin/responsive-list.tsx` | Tabla en escritorio, tarjetas en móvil, paginación en las dos. La fila y la tarjeta las pone cada módulo. |
+| `Paginacion` | `components/admin/pagination.tsx` | Primera, última y las vecinas de la actual. |
+| `BarraFiltros`, `SelectFiltro`, `FilterChip`, `opcionesDe` | `components/admin/filter-bar.tsx` | Fila de filtros en escritorio y hoja inferior en móvil, con el contador de filtros puestos. |
+| `RowActions`, `AccionFila` | `components/admin/row-actions.tsx` | La misma lista de acciones como menú de fila (escritorio) y como hoja inferior (móvil). |
+| `FormSheet` | `components/admin/form-sheet.tsx` | Armazón de la ficha: pestañas por sección con contador de errores, barra de guardado fija y aviso antes de descartar. |
+| `Field`, `ToggleRow`, `Grid`, `ALTO_CAMPO` | `components/admin/form-fields.tsx` | Los controles de la ficha. `ALTO_CAMPO` = `h-11 md:h-9`. |
+| `leerOpcion`, `escribirParams`, `paginar`, comparadores | `lib/list-params.ts` | Filtros en la URL (solo se serializa lo que se desvía del valor por defecto), orden y paginación. |
+| `useFiltrosUrl` | `lib/use-url-filters.ts` | `{ filtros, actualizar, limpiarTodo }`; **`actualizar` vuelve a la página 1**. |
+| `SeccionFicha`, `seccionDeCampo`, `erroresPorSeccion` | `lib/form-sections.ts` | La forma de una sección de ficha y dónde cae cada error. |
+| `erroresDeZod`, `listaDesdeTexto`, `textoDesdeLista`, `textoOpcional` | `lib/form-state.ts` | Plomería del estado de la ficha. |
+
+**Lo que quedó sin abstraer a propósito**: la fila/tarjeta de cada dominio (`<x>-row.tsx`), el estado de la ficha (15 líneas de `useState`/`useRef`/`useEffect`), el `GalleryEditor` de fotos (lo reescribe la Fase 1 de medios) y el diálogo de precio rápido. El razonamiento está en `../docs/cms-plan/PATRON.md`, sección «Lo que no se abstrajo, y por qué».
 
 ## Autenticación
 
@@ -49,6 +66,8 @@ Un solo admin (sin roles), credenciales por variable de entorno del backend (`AD
 
 ## Patrón de módulo CRUD (referencia: `motos`)
 
+> La receta paso a paso, en las tres capas del monorepo, está en **`../docs/cms-plan/PATRON.md`**. Aquí solo el resumen de esta capa.
+
 Cada dominio administrado sigue esta estructura, replicando `app/(admin)/motos/`:
 
 ```
@@ -57,8 +76,10 @@ app/(admin)/<dominio>/page.tsx           ← lista + orquestación de diálogos
 app/(admin)/<dominio>/filters.ts         ← tipos y funciones puras de filtro/orden/página
 app/(admin)/<dominio>/use-<dominio>.ts   ← query y mutaciones (TanStack Query)
 app/(admin)/<dominio>/<x>-row.tsx        ← fila de tabla + tarjeta de móvil
-app/(admin)/<dominio>/<x>-actions.tsx    ← menú de fila / hoja inferior + confirmaciones
-app/(admin)/<dominio>/<x>-form-sheet.tsx ← ficha por secciones
+app/(admin)/<dominio>/<x>-actions.tsx    ← qué acciones hay + sus confirmaciones
+app/(admin)/<dominio>/<x>-filters.tsx    ← los desplegables y chips concretos
+app/(admin)/<dominio>/form-sections.ts   ← en qué secciones se parte la ficha
+app/(admin)/<dominio>/<x>-form-sheet.tsx ← contenido de cada sección de la ficha
 app/(admin)/<dominio>/<x>-form-state.ts  ← estado plano, mapeo y validación Zod
 ```
 

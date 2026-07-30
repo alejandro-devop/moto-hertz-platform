@@ -1,0 +1,183 @@
+'use client';
+
+import { useState } from 'react';
+import { SlidersHorizontal, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { cn } from '@/lib/utils';
+
+/** Un filtro puesto o quitado de un toque, sin abrir nada. */
+export function FilterChip({
+  active,
+  onClick,
+  children,
+  icon: Icon,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+  icon?: React.ComponentType<{ className?: string }>;
+}) {
+  return (
+    <button
+      type="button"
+      aria-pressed={active}
+      onClick={onClick}
+      className={cn(
+        'inline-flex h-9 items-center gap-1.5 rounded-lg border px-2.5 text-[13px] font-medium transition-colors md:h-8',
+        'focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none',
+        active
+          ? 'border-foreground bg-foreground text-background'
+          : 'border-border bg-card text-muted-foreground hover:text-foreground'
+      )}
+    >
+      {Icon ? <Icon className="size-3.5" /> : null}
+      {children}
+      {active ? <X className="size-3.5 opacity-70" /> : null}
+    </button>
+  );
+}
+
+export const TRIGGER_FILTRO = 'h-9 md:h-8 bg-card text-[13px] font-medium';
+
+export interface OpcionFiltro<T extends string = string> {
+  value: T;
+  label: string;
+}
+
+/** `{ todas: 'Todos los estados', … }` → opciones en el orden en que se declararon. */
+export function opcionesDe<T extends string>(etiquetas: Record<T, string>): OpcionFiltro<T>[] {
+  return (Object.keys(etiquetas) as T[]).map((value) => ({ value, label: etiquetas[value] }));
+}
+
+/**
+ * El desplegable de un filtro. En la fila de escritorio va compacto; dentro de
+ * la hoja del móvil (`apilado`) ocupa el ancho y crece a 44 px de alto.
+ */
+export function SelectFiltro<T extends string>({
+  value,
+  onChange,
+  opciones,
+  etiqueta,
+  apilado,
+  align,
+  className,
+}: {
+  value: T;
+  onChange: (value: T) => void;
+  opciones: OpcionFiltro<T>[];
+  /** `aria-label` del control: «Filtrar por sede», «Ordenar la lista». */
+  etiqueta: string;
+  apilado?: boolean;
+  align?: 'start' | 'center' | 'end';
+  className?: string;
+}) {
+  return (
+    <Select value={value} onValueChange={(next) => onChange(next as T)}>
+      <SelectTrigger
+        className={cn(TRIGGER_FILTRO, apilado && 'h-11 w-full justify-between text-sm', className)}
+        aria-label={etiqueta}
+      >
+        <SelectValue>
+          {(actual: T) => opciones.find((opcion) => opcion.value === actual)?.label ?? String(actual)}
+        </SelectValue>
+      </SelectTrigger>
+      <SelectContent align={align}>
+        {opciones.map((opcion) => (
+          <SelectItem key={opcion.value} value={opcion.value}>
+            {opcion.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+}
+
+interface BarraProps {
+  /** Los desplegables del módulo. `apilado` es `true` dentro de la hoja del móvil. */
+  controles: (apilado: boolean) => React.ReactNode;
+  /** Filtros de un toque, visibles en las dos pantallas. */
+  chips?: React.ReactNode;
+  /** El selector de orden; recibe la clase que necesita en cada pantalla. */
+  orden?: (className?: string) => React.ReactNode;
+  /** Cuántos filtros están puestos, para la insignia del botón «Filtros». */
+  activos: number;
+  onLimpiar: () => void;
+}
+
+/**
+ * Los mismos filtros en las dos pantallas: en escritorio, una fila sobre la
+ * tabla con todo a la vista; en móvil, los chips y el orden a la mano y el
+ * resto en una hoja inferior, porque en 390 px no caben cuatro desplegables.
+ */
+export function BarraFiltros({ controles, chips, orden, activos, onLimpiar }: BarraProps) {
+  const [hojaAbierta, setHojaAbierta] = useState(false);
+
+  return (
+    <>
+      {/* Escritorio: todo a la vista, en una fila sobre la tabla. */}
+      <div className="hidden flex-wrap items-center gap-2 md:flex">
+        {controles(false)}
+        {chips}
+        {activos > 0 ? (
+          <Button variant="ghost" onClick={onLimpiar} className="h-8 text-[13px]">
+            Limpiar filtros
+          </Button>
+        ) : null}
+        <span className="flex-1" />
+        {orden?.()}
+      </div>
+
+      {/* Móvil: chips a la mano y el resto en una hoja. */}
+      <div className="scroll-x flex items-center gap-2 pb-0.5 md:hidden">
+        <Button
+          variant="outline"
+          onClick={() => setHojaAbierta(true)}
+          className="h-9 shrink-0 text-[13px]"
+        >
+          <SlidersHorizontal className="size-3.5" />
+          Filtros
+          {activos > 0 ? (
+            <span className="ml-0.5 grid size-4 place-items-center rounded-full bg-primary font-mono text-[10px] text-primary-foreground">
+              {activos}
+            </span>
+          ) : null}
+        </Button>
+        {chips ? <span className="flex shrink-0 items-center gap-2">{chips}</span> : null}
+        {orden?.('h-9 shrink-0')}
+      </div>
+
+      <Sheet open={hojaAbierta} onOpenChange={setHojaAbierta}>
+        <SheetContent
+          side="bottom"
+          className="gap-0 rounded-t-2xl pb-[max(1rem,env(safe-area-inset-bottom))]"
+        >
+          <SheetHeader className="pb-1">
+            <SheetTitle>Filtros</SheetTitle>
+          </SheetHeader>
+          <div className="flex flex-col gap-2 px-4 pt-2">{controles(true)}</div>
+          <div className="mt-4 flex gap-2 px-4">
+            <Button
+              variant="outline"
+              onClick={onLimpiar}
+              disabled={activos === 0}
+              className="h-11 flex-1"
+            >
+              Limpiar
+            </Button>
+            <Button onClick={() => setHojaAbierta(false)} className="h-11 flex-1">
+              Ver resultados
+            </Button>
+          </div>
+        </SheetContent>
+      </Sheet>
+    </>
+  );
+}
