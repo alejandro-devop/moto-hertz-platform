@@ -1,0 +1,16 @@
+{
+  "plan": "cms-admin — administración del resto del sitio",
+  "doc": "docs/cms-plan/PLAN.md",
+  "current_phase": 0,
+  "phases": [
+    { "id": 0, "name": "Cimientos del patrón", "doc": "docs/cms-plan/phases/00-cimientos-patron.md", "status": "pending" },
+    { "id": 1, "name": "Medios: subida de imágenes", "doc": "docs/cms-plan/phases/01-medios.md", "status": "pending" },
+    { "id": 2, "name": "Puntos de atención", "doc": "docs/cms-plan/phases/02-puntos-de-atencion.md", "status": "pending" },
+    { "id": 3, "name": "Servicios", "doc": "docs/cms-plan/phases/03-servicios.md", "status": "pending" },
+    { "id": 4, "name": "Noticias", "doc": "docs/cms-plan/phases/04-noticias.md", "status": "pending" },
+    { "id": 5, "name": "Home y banners", "doc": "docs/cms-plan/phases/05-home-y-banners.md", "status": "pending" },
+    { "id": 6, "name": "Configuración del sitio", "doc": "docs/cms-plan/phases/06-configuracion-sitio.md", "status": "pending" },
+    { "id": 7, "name": "QA y cierre del CMS", "doc": "docs/cms-plan/phases/07-qa-y-cierre.md", "status": "pending" }
+  ],
+  "log": []
+}

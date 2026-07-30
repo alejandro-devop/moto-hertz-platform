@@ -25,6 +25,10 @@ Monorepo (pnpm workspaces) con 3 paquetes:
 | 7 | Despliegue a producción | [07-despliegue-produccion.md](phases/07-despliegue-produccion.md) | pending |
 | 8 | QA y documentación final | [08-qa-y-cierre.md](phases/08-qa-y-cierre.md) | pending |
 
+## Plan hermano: el CMS
+
+La administración de las secciones que este plan dejó como placeholders (puntos de atención, servicios, noticias, banners, configuración del sitio y subida de imágenes) tiene su propio plan por fases en **[docs/cms-plan/PLAN.md](cms-plan/PLAN.md)**, que se ejecuta con la skill `cms-fase`. Son dos ejes de trabajo independientes sobre el mismo repositorio: este va sobre despliegue y cierre, aquel sobre construir el CMS.
+
 ## Cómo se ejecuta
 
 Este plan se ejecuta invocando la skill `yamaha-fase` (ver `.claude/skills/yamaha-fase/SKILL.md`). Cada invocación:
