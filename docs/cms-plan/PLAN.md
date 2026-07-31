@@ -39,6 +39,10 @@ patrón en las tres capas.
 | 6 | Configuración del sitio | [06-configuracion-sitio.md](phases/06-configuracion-sitio.md) | pending |
 | 7 | QA y cierre del CMS | [07-qa-y-cierre.md](phases/07-qa-y-cierre.md) | pending |
 
+Lo que **no** entra en ninguna fase —mejoras, deuda técnica y datos que faltan—
+vive en **[MEJORAS.md](MEJORAS.md)**. Es la única lista de pendientes del
+proyecto: lo que se resuelve se borra de ahí.
+
 ## Por qué este orden
 
 **Los cimientos van primero (Fase 0)** porque el módulo `motos` del admin ya

@@ -41,15 +41,16 @@ construyen secciones nuevas.
    - `docs/architecture/data-flow.md`: el flujo real, sin los diferidos que ya
      se resolvieron.
    - `docs/cms-plan/PATRON.md`: lo que se aprendió construyendo cinco módulos.
-8. **Deuda conocida.** Dejar en `docs/cms-plan/DEUDA.md` lo que quedó pendiente
-   a propósito, con el porqué. Un pendiente escrito es una decisión; uno no
-   escrito es un olvido.
+8. **Deuda conocida.** Volcar en `docs/cms-plan/MEJORAS.md` lo que quedó
+   pendiente a propósito, con el porqué. Un pendiente escrito es una decisión;
+   uno no escrito es un olvido. **No crear un `DEUDA.md` aparte**: `MEJORAS.md`
+   es la única lista de pendientes del proyecto y ya existe.
 
 ## Entregables
 
 - Lista de hallazgos del recorrido, con los que se arreglaron marcados.
 - Documentación al día en los cuatro archivos.
-- `docs/cms-plan/DEUDA.md`.
+- `docs/cms-plan/MEJORAS.md` al día con lo que se decidió no arreglar.
 
 ## Pruebas manuales
 
@@ -74,7 +75,7 @@ Este es el guion completo. Recórrelo entero: es la prueba de aceptación del CM
 
 - [ ] El guion de pruebas manuales se recorrió entero y los hallazgos están
       anotados.
-- [ ] Todo hallazgo está arreglado o registrado en `DEUDA.md` con su porqué.
+- [ ] Todo hallazgo está arreglado o registrado en `MEJORAS.md` con su porqué.
 - [ ] Ninguna sección tiene acciones que solo existan en escritorio.
 - [ ] `web/src/data/` no contiene JSON de contenido.
 - [ ] Los cuatro documentos están al día.
@@ -86,4 +87,4 @@ Este es el guion completo. Recórrelo entero: es la prueba de aceptación del CM
 
 - La tentación de esta fase es arreglar todo lo que se encuentre. Separar lo que
   molesta de verdad en el uso diario de lo que es preferencia: lo segundo va a
-  `DEUDA.md`.
+  `MEJORAS.md`.
