@@ -131,6 +131,26 @@ export const services = pgTable('services', {
 // ============================================
 // NEWS — noticias
 // ============================================
+/**
+ * Migración `009` (Fase 4 del plan CMS) tocó tres columnas de la plantilla:
+ *
+ * - **`publishedAt` es opcional y sin valor por defecto.** La plantilla la
+ *   dejaba `NOT NULL DEFAULT now()`, así que toda noticia nacía «publicada» y
+ *   no había forma de guardar un borrador. Ahora **sin fecha = borrador**, una
+ *   fecha futura = programada, y una fecha de hoy o pasada = publicada. El
+ *   panel deriva ese estado (`cms-admin/lib/news-status.ts`); el backend solo
+ *   guarda la fecha o su ausencia.
+ * - **`author` es texto**, no `{ name, avatar }`. La plantilla traía un avatar
+ *   por autor que nunca tuvo archivos reales (rutas `/assets/authors/*.jpg`
+ *   que no existen), así que se simplificó al mismo criterio que ya se usó con
+ *   `service-point` y `service`: no cargar una estructura que nadie va a
+ *   llenar. Si algún día hace falta una foto de autor, se puede reintroducir.
+ * - **`image` es texto**, no `{ main, thumbnail, alt }`. El pipeline de
+ *   medios (Fase 1) ya normaliza toda foto subida a un único WebP de hasta
+ *   1600 px; no genera una miniatura aparte, así que guardar `thumbnail` era
+ *   guardar un campo que el panel nunca iba a poder llenar de verdad. Mismo
+ *   campo que `service.image`.
+ */
 export const news = pgTable('news', {
   id: uuid('id')
     .primaryKey()
@@ -138,13 +158,19 @@ export const news = pgTable('news', {
   slug: varchar('slug', { length: 255 }).notNull().unique(),
   title: varchar('title', { length: 500 }).notNull(),
   excerpt: text('excerpt'),
+  /**
+   * HTML generado por el editor enriquecido del panel (Tiptap), ya saneado
+   * por `news.service` antes de guardarse. Ver «Editor de contenido» en
+   * `backend/CLAUDE.md`.
+   */
   content: text('content'),
-  author: jsonb('author').$type<{ name: string; avatar?: string }>(),
+  author: varchar('author', { length: 255 }),
   category: varchar('category', { length: 100 }),
-  publishedAt: timestamp('published_at').notNull().defaultNow(),
+  /** `NULL` = borrador. Ver la nota de la migración `009` arriba. */
+  publishedAt: timestamp('published_at'),
   featured: boolean('featured').notNull().default(false),
   tags: jsonb('tags').$type<string[]>().default([]),
-  image: jsonb('image').$type<{ main: string; thumbnail?: string; alt?: string }>(),
+  image: text('image'),
   readTime: varchar('read_time', { length: 20 }),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),

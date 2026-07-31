@@ -163,6 +163,7 @@ componente.
 | `useFichaState` | [`lib/use-ficha-state.ts`](../../cms-admin/lib/use-ficha-state.ts) | El estado de la ficha entero: formulario plano, sección abierta, errores, «sucio» y el guardado que valida y salta al primer error. Extraído en la Fase 3 (ver §4). |
 | `SeccionFicha` · `seccionDeCampo` · `erroresPorSeccion` | [`lib/form-sections.ts`](../../cms-admin/lib/form-sections.ts) | La forma de una sección y cómo se ubica un error en ella. |
 | `erroresDeZod` · `listaDesdeTexto` · `textoDesdeLista` · `textoOpcional` | [`lib/form-state.ts`](../../cms-admin/lib/form-state.ts) | Un error por campo; texto separado por comas ⇄ arreglo; `""` → `undefined`. |
+| `RichTextEditor` | [`components/admin/rich-text-editor.tsx`](../../cms-admin/components/admin/rich-text-editor.tsx) | Editor de contenido enriquecido (Tiptap: negrita, encabezados, listas, cita, enlace), guarda HTML. Extraído en la Fase 4 para `news.content`. |
 
 **Ya existían y se siguen usando**: `page-header.tsx`, `states.tsx` (vacío,
 error, esqueletos), `status-pill.tsx`, `thumb.tsx`, `lib/errors.ts`,

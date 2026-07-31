@@ -27,6 +27,10 @@ const BUSCADORES: Record<string, { placeholder: string; aria: string }> = {
     placeholder: 'Buscar por nombre o categoría',
     aria: 'Buscar servicios por nombre o categoría',
   },
+  '/noticias': {
+    placeholder: 'Buscar por título o autor',
+    aria: 'Buscar noticias por título o autor',
+  },
   '/medios': {
     placeholder: 'Buscar por nombre de archivo',
     aria: 'Buscar imágenes por nombre de archivo',

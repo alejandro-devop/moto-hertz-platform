@@ -119,6 +119,25 @@ export const createMockService = (overrides = {}) => ({
   ...overrides,
 });
 
+export const createMockNews = (overrides = {}) => ({
+  id: '019c7d42-15dc-7000-8000-000000000301',
+  slug: 'yamaha-mt-10-2024-lanzamiento',
+  title: 'Yamaha presenta la nueva MT-10 2024',
+  excerpt: 'La icónica naked japonesa llega con mejoras en electrónica.',
+  content: '<p>Yamaha Motor Corporation ha revelado la nueva generación.</p>',
+  author: 'Carlos Rodríguez',
+  category: 'Lanzamientos',
+  publishedAt: new Date('2024-11-10T10:00:00Z'),
+  featured: true,
+  tags: ['MT-10', 'Naked', 'Lanzamiento'],
+  image: 'https://example.com/mt-10.jpg',
+  readTime: '5 min',
+  createdAt: new Date('2024-11-10T10:00:00Z'),
+  updatedAt: new Date('2024-11-10T10:00:00Z'),
+  deletedAt: null,
+  ...overrides,
+});
+
 export const resetAllMocks = () => {
   jest.clearAllMocks();
   mockDbPool.query.mockReset();

@@ -29,6 +29,18 @@ export function urlPublicaDeServicio(slug?: string): string {
   return slug ? `${SITIO_PUBLICO}/servicios#${slug}` : `${SITIO_PUBLICO}/servicios`;
 }
 
+/**
+ * A diferencia de servicios y puntos de atención, una noticia **sí tiene**
+ * página propia: `/noticias/<slug>` (ver `web/src/app/noticias/[slug]`). Una
+ * noticia en borrador o programada no existe todavía para el sitio (ver
+ * `backend/CLAUDE.md`, sección `news`), así que el enlace puede llevar a un
+ * 404 hasta que se publique — el menú de la fila no lo esconde por eso, la
+ * fila ya lo dice con la píldora de estado.
+ */
+export function urlPublicaDeNoticia(slug: string): string {
+  return `${SITIO_PUBLICO}/noticias/${slug}`;
+}
+
 /** El enlace de chat que arma el sitio con un número de WhatsApp. */
 export function urlWhatsApp(numero?: string | null): string | null {
   const digitos = (numero ?? '').replace(/\D/g, '');

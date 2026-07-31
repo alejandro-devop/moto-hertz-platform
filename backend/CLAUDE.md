@@ -32,10 +32,10 @@ Registrar en `src/graphql/schema.ts` y `src/graphql/resolvers.ts`.
 | motorcycle | ✅ completo (referencia) | `motorcycle/` | `motorcycle.service.ts` |
 | service-point | ✅ completo (puntos de atención) | `service-point/` | `service-point.service.ts` |
 | service | ✅ completo (servicios del taller) | `service/` | `service.service.ts` |
-| news | ⏳ solo tabla en `schema.ts` + migración | — | — |
+| news | ✅ completo (noticias) | `news/` | `news.service.ts` |
 | media | ✅ completo (biblioteca de imágenes) | `media/` | `media.service.ts` |
 
-`motorcycle` es la referencia de patrón completa (schema Drizzle, migración, service, tipos, validadores Zod, módulo GraphQL con query/mutations). `news` ya tiene tabla y migración, pero su capa de servicio/GraphQL queda pendiente para su fase, siguiendo el mismo patrón.
+`motorcycle` es la referencia de patrón completa (schema Drizzle, migración, service, tipos, validadores Zod, módulo GraphQL con query/mutations).
 
 ### `service-point` (Fase 2 del plan CMS)
 
@@ -57,6 +57,25 @@ Tres decisiones que hay que respetar antes de tocarlo:
 
 `features` y `benefits` son **listas ordenadas**: el orden en que llegan es el que se editó en el panel y el que pinta el sitio. Los renglones en blanco se descartan (en el Zod y otra vez en el service), nunca hacen fallar el guardado.
 
+### `news` (Fase 4 del plan CMS)
+
+Es el primer dominio del proyecto donde **la lectura pública y la del panel devuelven cosas distintas con los mismos argumentos**. Todo lo demás en el proyecto —motos, sedes, servicios— muestra al sitio y al panel exactamente la misma lista (menos la papelera, que nunca es pública). `news` no: el sitio nunca puede ver un borrador ni algo programado para el futuro.
+
+- **`publishedAt` es opcional, sin valor por defecto** (migración `009`; la plantilla la traía `NOT NULL DEFAULT now()`, así que toda noticia nacía «publicada»). La regla, que vive en `news.service.ts`: `publishedAt` ausente = **borrador**; en el futuro = **programada**; hoy o antes = **publicada**. El panel deriva esas tres etiquetas (`cms-admin/lib/news-status.ts`); el backend solo guarda la fecha o su ausencia, nunca un campo `status`.
+- **Quién decide si se aplica la regla es el resolver, nunca el cliente.** `newsList` y `news(slug)` (`news.resolvers.ts`) miran `context.user`: sin sesión, se fuerza `onlyPublished: true` y `trashed: false` **sin importar lo que pida quien pregunta** — un `curl` sin `Authorization` no puede pedir un borrador ni la papelera cambiando argumentos. Con sesión, se ven todas (`onlyPublished: false`) y `trashed` se respeta tal cual llega. Cubierto con un test explícito en `tests/unit/graphql/news.resolvers.test.ts`, porque el service por sí solo no decide esto: solo obedece la opción que le llega.
+- **`author` es texto** (el nombre, nada más) y **`image` es texto** (la URL de la portada, mismo campo que `service.image`). La plantilla traía `author: { name, avatar }` e `image: { main, thumbnail, alt }`; se simplificaron en la migración `009` porque el avatar nunca tuvo archivos reales y el pipeline de medios (Fase 1) no genera una miniatura aparte de la foto principal — guardar esos campos era guardar algo que el panel nunca iba a poder llenar de verdad. Mismo criterio que ya se usó para recortar `service-point`.
+- **`category` es texto libre con sugerencias**, igual que en `service` y por la misma razón: el panel sugiere las que ya existen, no fuerza un catálogo.
+
+**Editor de contenido: HTML de un editor enriquecido (Tiptap), no Markdown.** Se acordó con el usuario al construir esta fase (el documento la dejaba abierta). `content` guarda el HTML que produce `editor.getHTML()` — el formato nativo de Tiptap, sin una conversión intermedia que pudiera perder formato. Dos razones para HTML sobre JSON: `web` lo renderiza sin traer Tiptap ni su esquema al bundle público, y el campo sigue siendo `content: String` como cualquier otro texto largo del proyecto, sin un tipo GraphQL nuevo.
+
+**El HTML se sanea dos veces, no una, y con la misma librería en las dos capas.** `news.service.ts` limpia `content` con `sanitize-html` **antes de guardar** (`createNews`/`updateNews`), y `web` lo vuelve a sanear **al pintarlo** (`web/src/utils/sanitize-news-content.ts`, también con `sanitize-html`) antes de un `dangerouslySetInnerHTML`. Es cinturón y tirantes: hoy solo el admin único del panel escribe contenido y Tiptap ya restringe lo que su propio editor puede producir, pero `content` sigue siendo un `String` en el input de la mutación — nada impide una llamada hecha a mano con un JWT robado. Las etiquetas permitidas son las mismas en las dos capas y están escritas en los dos archivos porque **son paquetes distintos y ninguno depende del otro** (mismo criterio que el catálogo de iconos de `service`): `p`, `br`, `strong`/`b`, `em`/`i`, `u`, `s`/`del`, `h1`–`h4`, `ul`/`ol`/`li`, `a` (con `href`; `target`/`rel` se fuerzan a `_blank`/`noopener noreferrer`), `blockquote`, `code`, `pre`, `hr`. Si se amplía la lista, hay que tocar los dos sitios.
+
+**`web` usa `sanitize-html`, no `isomorphic-dompurify`, y no por preferencia sino porque el primer intento con DOMPurify se rompió en la práctica.** `isomorphic-dompurify` corre `DOMPurify` sobre `jsdom` cuando no hay `window` (el servidor), y bajo Turbopack (Next 15) esa página —«use client», pero Next igual la renderiza una vez en el servidor— fallaba con `ENOENT … jsdom/lib/jsdom/browser/default-stylesheet.css`: Turbopack no resuelve bien la ruta que `jsdom` usa para leer un CSS de su propio paquete. `sanitize-html` no toca el DOM (parsea con `htmlparser2`), así que no depende de eso y corre igual en servidor y navegador. Ambas librerías dependen de `htmlparser2`; el backend fija `sanitize-html` en `2.13.0` porque versiones más nuevas (`2.14+`) suben a `htmlparser2` v12, que se distribuye solo en ESM y rompe a Jest (`ts-jest` en modo CommonJS) con «Cannot use import statement outside a module» — anotado también donde se fija la versión, en `package.json`.
+
+`tags` es una **lista sin orden relevante** (a diferencia de `features`/`benefits` de `service`): son etiquetas, no pasos ni beneficios, así que el panel las edita con `ListaEditable` igual, pero mover una no cambia nada en el sitio.
+
+`readTime` es texto libre, editable a mano; el panel sugiere un valor calculado del contenido (`cms-admin/lib/news-status.ts`) pero no lo impone.
+
 ## Autenticación
 
 Un solo rol admin (sin tabla de usuarios ni roles diferenciados, decisión de Fase 3): las credenciales viven en `ADMIN_EMAIL` / `ADMIN_PASSWORD_HASH` (bcrypt) por variable de entorno. La mutation `login(email, password)` (`src/graphql/modules/auth/`) verifica contra esas variables y devuelve un JWT (`src/shared/auth/jwt.ts`, secreto en `JWT_SECRET`). `getGraphQLContext` (`src/graphql/server.ts`) valida el header `Authorization: Bearer <token>` en cada request y expone `context.user` si es válido. Las queries de catálogo siguen siendo públicas; las mutaciones de escritura llaman a `requireAuth(context, operationName)` (`src/graphql/utils/error-handler.ts`) para exigir sesión — ver `motorcycle.resolvers.ts` como referencia a replicar en los demás dominios.
@@ -73,13 +92,13 @@ Al subir, `src/shared/images/process.ts` (sharp) reduce el lado mayor a 1600 px 
 
 ## Papelera (soft delete)
 
-`media`, `motorcycles`, `service_points`, `services` y `news` tienen `deleted_at` (migración `006`). En los dominios que ya tienen capa de servicio (`motorcycle` y `media`):
+`media`, `motorcycles`, `service_points`, `services` y `news` tienen `deleted_at` (migración `006`). Todos los dominios de contenido ya tienen su capa de servicio (`motorcycle`, `service-point`, `service`, `news`) y `media`:
 
 - Toda lectura filtra `isNull(deletedAt)`; la lista acepta `trashed: Boolean` para pedir la papelera. La búsqueda por **slug** (la que consume el sitio público) nunca devuelve algo borrado; la búsqueda por **id** sí, porque restaurar y purgar trabajan sobre lo borrado.
 - `…Remove` manda a la papelera, `…Restore` la saca, `…Purge` borra de verdad (y falla si no está en la papelera). En `media`, purgar **también borra el archivo** del almacenamiento.
 - Eliminar un registro de contenido **no toca sus imágenes**: los archivos se borran solo desde la biblioteca de medios.
 
-`service_points` estrenó su papelera en la Fase 2 y `services` en la Fase 3, las dos **sin migración nueva** para eso: la columna ya estaba desde la `006`. `news` sigue teniendo solo la columna; su comportamiento llega con su fase. El patrón a seguir está en `../docs/cms-plan/PATRON.md` §1.1.
+`service_points` estrenó su papelera en la Fase 2, `services` en la Fase 3 y `news` en la Fase 4, las tres **sin migración nueva** para eso: la columna ya estaba desde la `006`. En `news`, además, `trashed` **solo tiene efecto con sesión**: sin ella el resolver lo ignora y siempre fuerza `false` (ver «`news` (Fase 4 del plan CMS)» arriba). El patrón a seguir está en `../docs/cms-plan/PATRON.md` §1.1.
 
 ## Patrones obligatorios
 

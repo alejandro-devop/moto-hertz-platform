@@ -54,6 +54,7 @@ Piezas compartidas de módulo, extraídas de `motos` en la Fase 0 del plan CMS (
 | `useFiltrosUrl` | `lib/use-url-filters.ts` | `{ filtros, actualizar, limpiarTodo }`; **`actualizar` vuelve a la página 1**. |
 | `SeccionFicha`, `seccionDeCampo`, `erroresPorSeccion` | `lib/form-sections.ts` | La forma de una sección de ficha y dónde cae cada error. |
 | `erroresDeZod`, `listaDesdeTexto`, `textoDesdeLista`, `textoOpcional` | `lib/form-state.ts` | Plomería del estado de la ficha. |
+| `RichTextEditor` | `components/admin/rich-text-editor.tsx` | Editor de contenido enriquecido (Tiptap): negrita, cursiva, encabezados, listas, cita y enlace, con barra de 44 px en móvil. Guarda HTML. Extraído en la Fase 4 para `news.content`; la próxima sección con contenido largo lo reusa tal cual. |
 
 **Lo que quedó sin abstraer a propósito**: la fila/tarjeta de cada dominio (`<x>-row.tsx`) y el diálogo de precio rápido. Lo de la fila **se revisó en la Fase 3 con tres copias sobre la mesa y se confirmó**: solo comparten el botón que abre la ficha. El `GalleryEditor` de fotos sí se extrajo (Fase 1, `components/admin/image-picker.tsx`), y **el estado de la ficha también, en la Fase 3** (`lib/use-ficha-state.ts`): las tres copias eran idénticas salvo los nombres de las variables. El razonamiento está en `../docs/cms-plan/PATRON.md`, sección «Lo que no se abstrajo, y por qué».
 
@@ -133,7 +134,27 @@ Las mutaciones de escritura requieren sesión (`requireAuth` en el backend); el 
 
 **La categoría es texto libre con sugerencias**, no un catálogo cerrado como el tipo de un punto de atención: el usuario está inventando su lista y no puede depender de un despliegue para nombrar una categoría nueva. La ficha sugiere las que ya existen (`datalist`) y el filtro de la lista se arma con ellas.
 
-El módulo `medios` (biblioteca de imágenes) sigue el mismo patrón de lista, con la papelera dentro del filtro de estado. El módulo `noticias` sigue como placeholder "próximamente" — se completa siguiendo este mismo patrón una vez el backend implemente su capa de servicio/GraphQL (ver `backend/CLAUDE.md`, tabla de dominios).
+El módulo `medios` (biblioteca de imágenes) sigue el mismo patrón de lista, con la papelera dentro del filtro de estado.
+
+### Decisiones del módulo `noticias`
+
+> Construido en la **Fase 4 del plan CMS** (`../docs/cms-plan/phases/04-noticias.md`), la sección con contenido largo y fecha de publicación.
+
+**El estado no lo guarda el backend: se deriva de `publishedAt`**, igual criterio que `lib/motorcycle-status.ts`. `lib/news-status.ts` (`getNewsStatus`) calcula tres estados — **borrador** (sin fecha), **programada** (fecha futura) y **publicada** (fecha de hoy o antes) — comparando contra el instante real (`Date.now()`), la misma regla exacta que aplica el resolver del backend (`publishedAt <= now()`). El filtro de estado de la lista tiene estos tres valores más «Todas» y, como en el resto de los módulos, «En papelera» como un cuarto valor que dispara otra consulta (PATRON.md §1.1) — aquí son **cinco** valores en vez de dos, porque a diferencia de `service`/`service-point` la fecha sí importa para saber si algo está en el sitio.
+
+**El editor de contenido es enriquecido (Tiptap), no Markdown en textarea.** Se acordó con el usuario al construir la fase — el documento la dejaba como decisión abierta. `components/admin/rich-text-editor.tsx` envuelve `@tiptap/react` + `@tiptap/starter-kit` (que ya trae negrita, cursiva, subrayado, tachado, encabezados, listas, cita, enlace y deshacer/rehacer) con una barra de herramientas propia de 44 px en móvil. Guarda **HTML**, tal como lo produce `editor.getHTML()` — el formato nativo de la librería, sin una capa de conversión intermedia. El propio esquema de Tiptap ya limita lo que puede producirse (pegar HTML de otro sitio no cuela un `<script>`: ProseMirror lo descarta al convertir el HTML pegado a su documento interno), y el backend sanea otra vez al guardar — ver `backend/CLAUDE.md`, sección `news`.
+
+**El slug sigue al título y el tiempo de lectura sigue al contenido**, los dos mientras nadie los haya tocado a mano (mismo gesto que el slug en `motos`/`servicios`, vía el parámetro `derivar` de `useFichaState`). `lib/news-status.ts` también trae `tiempoDeLecturaSugerido`: cuenta palabras del HTML (quitando etiquetas) a 200 palabras por minuto y redondea a un mínimo de 1 minuto. Es solo una sugerencia — el campo sigue siendo de texto libre y editable.
+
+**`author` es solo el nombre** (texto libre) e **`image` es solo la URL de la portada** (`ImagePicker`, como cualquier imagen única del panel). La plantilla original traía `author: { name, avatar }` e `image: { main, thumbnail, alt }`; se simplificaron en el backend (migración `009`) porque el avatar nunca tuvo archivos reales y el pipeline de medios no genera una miniatura aparte — ver el detalle en `backend/CLAUDE.md`.
+
+**`category` es texto libre con sugerencias**, mismo criterio que `service` y por la misma razón: el usuario inventa su lista y una categoría nueva no puede depender de un despliegue.
+
+**`tags` se edita con `ListaEditable`**, pero a diferencia de `features`/`benefits` de `service` el orden no significa nada — son etiquetas sueltas, no pasos ni beneficios. Se reusa el mismo componente porque agregar/quitar renglones cortos es exactamente lo mismo; mover uno arriba o abajo simplemente no cambia nada en el sitio.
+
+**La ficha guarda `publishedAt` como fecha de calendario** (`<input type="date">`, igual que las fechas de SOAT/tecnomecánica de `motos`), convertida a medianoche UTC al guardar (`"${fecha}T00:00:00.000Z"`). Una fecha en blanco viaja como `null` explícito en la edición, no como «sin cambios»: es lo que permite devolver una noticia publicada a borrador sin tocar ningún otro campo. **Toda lectura de esa fecha tiene que forzar `timeZone: 'UTC'`** al formatearla (`lib/format.ts` ya lo hace) — sin eso, alguien en una zona detrás de UTC (Colombia, UTC-5) ve la fecha un día antes de la que eligió. Se encontró y se corrigió el mismo bug en `web` al verificar esta fase (`web/src/app/noticias/page.tsx` y `.../[slug]/page.tsx`).
+
+**A diferencia de `servicios` y `puntos-de-atencion`, una noticia sí tiene página propia** (`/noticias/<slug>`), así que `urlPublicaDeNoticia` en `lib/site.ts` no necesita un `#slug` de ancla. El menú de la fila la ofrece igual estando en borrador o programada — el enlace puede llevar a un 404 hasta que se publique, y eso ya lo dice la píldora de estado de la fila, no hay que escondérselo a quien administra.
 
 ## Dev
 

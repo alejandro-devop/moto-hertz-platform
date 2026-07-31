@@ -4,9 +4,10 @@ import { authResolvers } from './modules/auth/auth.resolvers';
 import { motorcycleResolvers } from './modules/motorcycle/motorcycle.resolvers';
 import { servicePointResolvers } from './modules/service-point/service-point.resolvers';
 import { serviceResolvers } from './modules/service/service.resolvers';
+import { newsResolvers } from './modules/news/news.resolvers';
 import { mediaResolvers } from './modules/media/media.resolvers';
 
-// Nuevos dominios (news) siguen el mismo patrón que motorcycle:
+// Nuevos dominios siguen el mismo patrón que motorcycle:
 // agregar su <domain>.resolvers.ts aquí.
 export const resolvers: any = mergeResolvers([
   healthResolvers,
@@ -14,5 +15,6 @@ export const resolvers: any = mergeResolvers([
   motorcycleResolvers,
   servicePointResolvers,
   serviceResolvers,
+  newsResolvers,
   mediaResolvers,
 ]);

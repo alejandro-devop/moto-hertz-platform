@@ -1,21 +1,26 @@
 'use client';
 
 import { useState } from 'react';
-import { Bike, ImageOff } from 'lucide-react';
+import { Bike, ImageOff, type LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 /**
- * Miniatura de la moto. Es lo primero que se mira para identificarla, así que
- * cuando falta —o la URL está rota— lo dice en vez de dejar un hueco.
+ * Miniatura de un registro con foto. Es lo primero que se mira para
+ * identificarlo, así que cuando falta —o la URL está rota— lo dice en vez de
+ * dejar un hueco. Nació para `motos` (de ahí que el icono por defecto sea una
+ * moto); `noticias` la reusa pasando el suyo (`icon`, Fase 4).
  */
 export function Thumb({
   src,
   alt,
   className,
+  icon: Icon = Bike,
 }: {
   src?: string | null;
   alt: string;
   className?: string;
+  /** El icono cuando no hay foto. Por defecto, la moto original. */
+  icon?: LucideIcon;
 }) {
   const [roto, setRoto] = useState(false);
   const base = cn(
@@ -27,14 +32,14 @@ export function Thumb({
     return (
       <span
         className={base}
-        title={src ? 'La imagen no cargó' : 'Sin foto de portada'}
-        aria-label={src ? 'La imagen no cargó' : 'Sin foto de portada'}
+        title={src ? 'La imagen no cargó' : 'Sin imagen'}
+        aria-label={src ? 'La imagen no cargó' : 'Sin imagen'}
         role="img"
       >
         {src ? (
           <ImageOff className="size-4 text-muted-foreground" />
         ) : (
-          <Bike className="size-4 text-muted-foreground" strokeWidth={1.7} />
+          <Icon className="size-4 text-muted-foreground" strokeWidth={1.7} />
         )}
       </span>
     );

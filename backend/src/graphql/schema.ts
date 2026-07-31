@@ -5,6 +5,7 @@ import { authTypeDefs } from './modules/auth/auth.schema';
 import { motorcycleTypeDefs } from './modules/motorcycle/motorcycle.schema';
 import { servicePointTypeDefs } from './modules/service-point/service-point.schema';
 import { serviceTypeDefs } from './modules/service/service.schema';
+import { newsTypeDefs } from './modules/news/news.schema';
 import { mediaTypeDefs } from './modules/media/media.schema';
 
 // Base Query and Mutation types
@@ -19,7 +20,7 @@ const baseTypeDefs = gql`
 `;
 
 // Combine all type definitions.
-// Nuevos dominios (news) siguen el mismo patrón que motorcycle:
+// Nuevos dominios siguen el mismo patrón que motorcycle:
 // agregar su <domain>.schema.ts aquí.
 export const typeDefs = [
   baseTypeDefs,
@@ -29,5 +30,6 @@ export const typeDefs = [
   motorcycleTypeDefs,
   servicePointTypeDefs,
   serviceTypeDefs,
+  newsTypeDefs,
   mediaTypeDefs,
 ];
