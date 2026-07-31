@@ -8,6 +8,39 @@ leyendo del backend.
 ## Prerrequisitos
 
 - Fase 2 completada (el patrón ya se validó con una sección real).
+- `services` **ya tiene la columna `deleted_at`** (migración `006` de la Fase 1).
+  La papelera se implementa aquí siguiendo `PATRON.md` §1.1, igual que en la
+  Fase 2; **no hay migración nueva para eso**.
+
+## Alcance acordado con el usuario
+
+> Decidido **antes** de construir. Reemplaza lo que diga el resto del documento
+> donde haya conflicto.
+
+**1. `pricing` soporta tres modalidades**, elegidas con un selector en la ficha:
+`DESDE` (monto), `FIJO` (monto) y `A_CONVENIR` (sin monto). Moneda fija en COP.
+Una nota libre opcional para lo que hoy es `frequency` («cada 5.000 km», «una
+vez al año»). La forma se define en el validador Zod y se documenta, porque las
+tres capas la leen.
+
+**2. `image`, `featured` e `icon` se quedan los tres.** A diferencia de la Fase
+2, aquí no se recorta nada: imagen elegida con el selector de la Fase 1, filtro
+por destacado en la lista, e icono de catálogo cerrado.
+
+**3. El icono sale de `lucide-react`**, que ya usan `cms-admin` y `web`. Una
+lista acotada de iconos relevantes para taller y servicio, con vista previa en
+el selector. Dónde se amplía la lista queda documentado en el código. **Los
+emojis del mock no se conservan.**
+
+**4. NO se siembran datos.** El sitio de referencia
+<https://www.incolmotos-yamaha.com.co/servicios-yamaha> se usa para **derivar
+qué campos y qué estructura tiene un servicio de verdad**, no como fuente de
+carga. Los seis servicios del mock son de plantilla y **no se cargan**. La
+sección arranca vacía y el usuario carga los servicios reales desde el panel.
+
+Consecuencia directa: **`/servicios` tiene que verse bien sin datos.** Un estado
+vacío explícito en el sitio público, no una página rota ni una rejilla en
+blanco. Lo mismo en la lista del panel.
 
 ## Contexto: los datos que ya existen
 
@@ -38,9 +71,12 @@ Lo que distingue esta sección de la anterior son **las listas anidadas**
      de texto separado por comas), **Precio y duración** (`pricing`, `duration`).
    - `icon` viene de un catálogo cerrado: ofrecer un selector con vista previa
      del icono, no un campo de texto donde haya que acertar el nombre.
-3. **web.** Servicio, tipos y `/servicios` consumiendo el backend. Borrar
-   `web/src/data/services-mock.json`.
-4. **Datos.** Cargar los servicios reales del mock antes de borrarlo.
+3. **web.** Servicio, tipos y `/servicios` consumiendo el backend, **con estado
+   vacío digno**. Borrar `web/src/data/services-mock.json`.
+4. **Referencia de estructura.** Revisar
+   <https://www.incolmotos-yamaha.com.co/servicios-yamaha> para contrastar los
+   campos de la ficha contra cómo se presenta un servicio de verdad, y reportar
+   al cerrar qué se ajustó a raíz de eso. **Sin sembrar datos.**
 
 ## Entregables
 
@@ -72,7 +108,12 @@ Lo que distingue esta sección de la anterior son **las listas anidadas**
       separado por comas.
 - [ ] El icono se elige de un catálogo con vista previa.
 - [ ] `services-mock.json` ya no existe y `/servicios` no lo importa.
-- [ ] Los servicios que estaban en el mock están cargados en la base.
+- [ ] Sin ningún servicio en la base, `/servicios` y la lista del panel muestran
+      un estado vacío explícito, no una página rota.
+- [ ] `pricing` soporta desde / fijo / a convenir, y las tres se ven bien en el
+      sitio.
+- [ ] La papelera funciona completa: eliminar → restaurar → eliminar
+      definitivamente, desde el filtro de estado.
 - [ ] Tests del service de `service` pasan.
 - [ ] `backend/CLAUDE.md` actualiza la tabla de dominios (`service` ✅).
 

@@ -11,6 +11,7 @@ import type {
   MotorcycleCondition,
   MotorcycleFormInput,
 } from '@/lib/graphql/motorcycles';
+import type { ResultadoValidacion } from '@/lib/use-ficha-state';
 import { seccionDeCampo, type SeccionId } from './form-sections';
 
 /**
@@ -266,13 +267,7 @@ const esquema = z.object({
   technicalInspectionExpiresAt: fecha('La fecha de la tecnomecánica'),
 });
 
-export interface ResultadoValidacion {
-  errores: Record<string, string>;
-  /** Primera sección con un error, para llevar al usuario hasta él. */
-  primeraSeccion?: SeccionId;
-}
-
-export function validar(form: FormState): ResultadoValidacion {
+export function validar(form: FormState): ResultadoValidacion<SeccionId> {
   const errores = erroresDeZod(esquema.safeParse(form));
 
   /* La galería sin portada no se puede guardar: el backend exige `main`. */

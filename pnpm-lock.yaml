@@ -235,6 +235,9 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.90.6
         version: 5.101.2(react@19.1.0)
+      lucide-react:
+        specifier: ^1.23.0
+        version: 1.23.0(react@19.1.0)
       next:
         specifier: 15.5.9
         version: 15.5.9(@babel/core@7.29.7)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.101.0)

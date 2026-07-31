@@ -1,31 +1,33 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Menu from "@/components/menu";
+import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
 import Footer from "@/components/footer";
+import Menu from "@/components/menu";
 import { useInView } from "@/hooks";
-import servicesData from "@/data/services-mock.json";
+import { getServices } from "@/services/services";
+import type { Service } from "@/types/service";
+import { ServiceIcon } from "@/utils/service-icons";
+import { partesDePrecio, PRECIO_A_CONVENIR } from "@/utils/service-pricing";
 import styles from "./Servicios.module.scss";
 
-type Service = {
-  id: string;
-  slug: string;
-  name: string;
-  category: string;
-  shortDescription: string;
-  fullDescription: string;
-  icon: string;
-  features: string[];
-  benefits: string[];
-  pricing: {
-    from: number;
-    currency: string;
-    frequency: string;
-  };
-  duration: string;
-  featured: boolean;
-  image: string;
-};
+/**
+ * El precio de la tarjeta y del modal. Con `A_CONVENIR` no se pinta un monto
+ * vacío: se dice «A convenir», que es lo que de verdad pasa.
+ */
+function Precio({ service }: { service: Service }) {
+  const { rotulo, monto } = partesDePrecio(service.pricing);
+  const nota = service.pricing?.note?.trim();
+
+  return (
+    <div className={styles.priceInfo}>
+      <span className={styles.from}>{rotulo}</span>
+      <span className={styles.amount}>{monto ?? PRECIO_A_CONVENIR}</span>
+      {nota && <span className={styles.frequency}>{nota}</span>}
+    </div>
+  );
+}
 
 function ServiceCard({
   service,
@@ -43,6 +45,7 @@ function ServiceCard({
 
   return (
     <article
+      id={service.slug}
       ref={ref}
       className={`${styles.serviceCard} ${isInView ? styles.visible : ""}`}
       style={{ animationDelay: `${index * 0.1}s` }}
@@ -50,31 +53,44 @@ function ServiceCard({
       {service.featured && (
         <span className={styles.featuredBadge}>Destacado</span>
       )}
+
+      {/* La imagen es opcional: sin ella la tarjeta se ve igual, solo sin foto. */}
+      {service.image && (
+        <div className={styles.cardImage}>
+          {/* URL de texto libre (puede ser externa): no pasa por next/image. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={service.image} alt={service.name} loading="lazy" />
+        </div>
+      )}
+
       <div className={styles.cardHeader}>
-        <span className={styles.icon}>{service.icon}</span>
+        <span className={styles.icon}>
+          <ServiceIcon name={service.icon} />
+        </span>
         <div className={styles.headerContent}>
           <h3>{service.name}</h3>
-          <span className={styles.category}>{service.category}</span>
+          {service.category && (
+            <span className={styles.category}>{service.category}</span>
+          )}
         </div>
       </div>
 
-      <p className={styles.shortDescription}>{service.shortDescription}</p>
+      {service.shortDescription && (
+        <p className={styles.shortDescription}>{service.shortDescription}</p>
+      )}
 
       <div className={styles.pricing}>
-        <div className={styles.priceInfo}>
-          <span className={styles.from}>Desde</span>
-          <span className={styles.amount}>
-            ${service.pricing.from.toLocaleString()}
-          </span>
-          <span className={styles.frequency}>{service.pricing.frequency}</span>
-        </div>
-        <div className={styles.duration}>
-          <span className={styles.label}>Duración:</span>
-          <span className={styles.value}>{service.duration}</span>
-        </div>
+        <Precio service={service} />
+        {service.duration && (
+          <div className={styles.duration}>
+            <span className={styles.label}>Duración:</span>
+            <span className={styles.value}>{service.duration}</span>
+          </div>
+        )}
       </div>
 
       <button
+        type="button"
         className={styles.toggleButton}
         onClick={() => onShowDetails(service)}
       >
@@ -108,56 +124,72 @@ function ServiceModal({
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-        <button className={styles.closeButton} onClick={onClose}>
+        <button
+          type="button"
+          className={styles.closeButton}
+          onClick={onClose}
+          aria-label="Cerrar"
+        >
           ✕
         </button>
 
         <div className={styles.modalHeader}>
-          <span className={styles.modalIcon}>{service.icon}</span>
+          <span className={styles.modalIcon}>
+            <ServiceIcon name={service.icon} />
+          </span>
           <div>
             <h2>{service.name}</h2>
-            <span className={styles.modalCategory}>{service.category}</span>
+            {service.category && (
+              <span className={styles.modalCategory}>{service.category}</span>
+            )}
           </div>
         </div>
 
         <div className={styles.modalBody}>
-          <p className={styles.fullDescription}>{service.fullDescription}</p>
+          {service.fullDescription ? (
+            <p className={styles.fullDescription}>{service.fullDescription}</p>
+          ) : service.shortDescription ? (
+            <p className={styles.fullDescription}>{service.shortDescription}</p>
+          ) : null}
 
           <div className={styles.modalPricing}>
-            <div className={styles.priceInfo}>
-              <span className={styles.from}>Desde</span>
-              <span className={styles.amount}>
-                ${service.pricing.from.toLocaleString()}
-              </span>
-              <span className={styles.frequency}>
-                {service.pricing.frequency}
-              </span>
+            <Precio service={service} />
+            {service.duration && (
+              <div className={styles.duration}>
+                <span className={styles.label}>Duración:</span>
+                <span className={styles.value}>{service.duration}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Las listas van en el orden en que se editaron en el panel. */}
+          {service.features.length > 0 && (
+            <div className={styles.detailSection}>
+              <h4>Características incluidas</h4>
+              <ul className={styles.featureList}>
+                {service.features.map((feature) => (
+                  <li key={feature}>{feature}</li>
+                ))}
+              </ul>
             </div>
-            <div className={styles.duration}>
-              <span className={styles.label}>Duración:</span>
-              <span className={styles.value}>{service.duration}</span>
+          )}
+
+          {service.benefits.length > 0 && (
+            <div className={styles.detailSection}>
+              <h4>Beneficios</h4>
+              <ul className={styles.benefitList}>
+                {service.benefits.map((benefit) => (
+                  <li key={benefit}>{benefit}</li>
+                ))}
+              </ul>
             </div>
-          </div>
+          )}
 
-          <div className={styles.detailSection}>
-            <h4>Características incluidas</h4>
-            <ul className={styles.featureList}>
-              {service.features.map((feature, idx) => (
-                <li key={idx}>{feature}</li>
-              ))}
-            </ul>
-          </div>
-
-          <div className={styles.detailSection}>
-            <h4>Beneficios</h4>
-            <ul className={styles.benefitList}>
-              {service.benefits.map((benefit, idx) => (
-                <li key={idx}>{benefit}</li>
-              ))}
-            </ul>
-          </div>
-
-          <button className={styles.contactButton}>Solicitar servicio</button>
+          {/* El botón lleva a algún lado: antes no hacía nada. Se pide en un
+              punto de atención, que es donde se presta el servicio. */}
+          <Link href="/puntos-atencion" className={styles.contactButton}>
+            Solicitar en un punto de atención
+          </Link>
         </div>
       </div>
     </div>
@@ -167,19 +199,27 @@ function ServiceModal({
 export default function ServiciosPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedService, setSelectedService] = useState<Service | null>(null);
-  const services = servicesData.services as Service[];
 
-  // Extraer categorías únicas
-  const categories = Array.from(
-    new Set(services.map((service) => service.category))
-  ).sort();
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["services"],
+    queryFn: () => getServices({ page: 1, limit: 100 }),
+  });
+
+  const services = useMemo(() => data?.services ?? [], [data]);
+
+  const categories = useMemo(() => {
+    const nombres = new Set<string>();
+    for (const service of services) {
+      if (service.category) nombres.add(service.category);
+    }
+    return [...nombres].sort((a, b) => a.localeCompare(b, "es"));
+  }, [services]);
 
   const filteredServices =
     selectedCategory === "all"
       ? services
       : services.filter((service) => service.category === selectedCategory);
 
-  // Servicios destacados
   const featuredServices = services.filter((service) => service.featured);
 
   return (
@@ -191,7 +231,7 @@ export default function ServiciosPage() {
             <h1>Nuestros Servicios</h1>
             <p>
               Mantenimiento, reparación y personalización con los más altos
-              estándares de calidad. Tu Yamaha en manos expertas.
+              estándares de calidad. Tu moto en manos expertas.
             </p>
           </div>
         </section>
@@ -214,51 +254,93 @@ export default function ServiciosPage() {
           </section>
         )}
 
-        <section className={styles.filters}>
-          <div className={styles.filterContainer}>
-            <h2>Filtrar por categoría</h2>
-            <div className={styles.filterButtons}>
-              <button
-                className={
-                  selectedCategory === "all" ? styles.active : undefined
-                }
-                onClick={() => setSelectedCategory("all")}
-              >
-                Todos
-              </button>
-              {categories.map((category) => (
+        {/* Con una sola categoría el filtro no filtra nada: no se muestra. */}
+        {categories.length > 1 && (
+          <section className={styles.filters}>
+            <div className={styles.filterContainer}>
+              <h2>Filtrar por categoría</h2>
+              <div className={styles.filterButtons}>
                 <button
-                  key={category}
+                  type="button"
                   className={
-                    selectedCategory === category ? styles.active : undefined
+                    selectedCategory === "all" ? styles.active : undefined
                   }
-                  onClick={() => setSelectedCategory(category)}
+                  onClick={() => setSelectedCategory("all")}
                 >
-                  {category}
+                  Todos
                 </button>
-              ))}
+                {categories.map((category) => (
+                  <button
+                    type="button"
+                    key={category}
+                    className={
+                      selectedCategory === category ? styles.active : undefined
+                    }
+                    onClick={() => setSelectedCategory(category)}
+                  >
+                    {category}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
-        <section className={styles.servicesGrid}>
-          <div className={styles.gridContainer}>
-            {filteredServices.map((service, index) => (
-              <ServiceCard
-                key={service.id}
-                service={service}
-                index={index}
-                onShowDetails={setSelectedService}
-              />
-            ))}
-          </div>
-        </section>
-
-        {filteredServices.length === 0 && (
+        {isLoading && (
           <div className={styles.noResults}>
-            <p>No se encontraron servicios en esta categoría.</p>
+            <p>Cargando servicios...</p>
           </div>
         )}
+
+        {/* Si el backend no responde, la página sigue en pie: el resto del
+            sitio no se cae por esta sección. */}
+        {isError && (
+          <div className={styles.noResults}>
+            <p>
+              No pudimos cargar los servicios. Intenta de nuevo en un momento.
+            </p>
+          </div>
+        )}
+
+        {!isLoading && !isError && services.length > 0 && (
+          <section className={styles.servicesGrid}>
+            <div className={styles.gridContainer}>
+              {filteredServices.map((service, index) => (
+                <ServiceCard
+                  key={service.id}
+                  service={service}
+                  index={index}
+                  onShowDetails={setSelectedService}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Sin ningún servicio cargado la página no queda en blanco: dice que
+            todavía no hay y para dónde ir mientras tanto. */}
+        {!isLoading && !isError && services.length === 0 && (
+          <div className={styles.emptyState}>
+            <h2>Estamos organizando nuestros servicios</h2>
+            <p>
+              Muy pronto vas a ver aquí todo lo que hacemos en el taller.
+              Mientras tanto, escríbenos o pásate por el punto de atención más
+              cercano y te contamos.
+            </p>
+            <Link href="/puntos-atencion" className={styles.emptyAction}>
+              Ver puntos de atención
+            </Link>
+          </div>
+        )}
+
+        {!isLoading &&
+          !isError &&
+          services.length > 0 &&
+          filteredServices.length === 0 && (
+            <div className={styles.noResults}>
+              <p>No se encontraron servicios en esta categoría.</p>
+            </div>
+          )}
       </main>
       <Footer />
       <ServiceModal

@@ -23,6 +23,10 @@ const BUSCADORES: Record<string, { placeholder: string; aria: string }> = {
     placeholder: 'Buscar por nombre o dirección',
     aria: 'Buscar puntos de atención por nombre o dirección',
   },
+  '/servicios': {
+    placeholder: 'Buscar por nombre o categoría',
+    aria: 'Buscar servicios por nombre o categoría',
+  },
   '/medios': {
     placeholder: 'Buscar por nombre de archivo',
     aria: 'Buscar imágenes por nombre de archivo',

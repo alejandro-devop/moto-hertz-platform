@@ -145,6 +145,13 @@ componente.
 | `BarraFiltros` · `SelectFiltro` · `FilterChip` · `opcionesDe` | [`components/admin/filter-bar.tsx`](../../cms-admin/components/admin/filter-bar.tsx) | Fila de filtros en escritorio, hoja inferior en móvil. |
 | `RowActions` · `AccionFila` | [`components/admin/row-actions.tsx`](../../cms-admin/components/admin/row-actions.tsx) | Menú de fila en escritorio y hoja inferior en móvil, con la misma lista de acciones. |
 
+> **Filtros de valores abiertos.** `leerClave` sirve para catálogos cerrados. Si
+> el filtro es texto libre —la categoría de un servicio— se lee con `leerTexto`
+> y las opciones del desplegable se derivan de los datos que ya hay
+> (`categoriasDe` en `servicios/filters.ts`). Así el filtro crece solo, sin
+> tocar código, y una categoría que dejó de existir sigue apareciendo mientras
+> esté en la URL para que no se pierda en silencio.
+
 **Fichas** — `lib/form-sections.ts`, `lib/form-state.ts`, `components/admin/`:
 
 | Pieza | Archivo | Para qué |
@@ -152,6 +159,8 @@ componente.
 | `FormSheet` | [`components/admin/form-sheet.tsx`](../../cms-admin/components/admin/form-sheet.tsx) | Hoja lateral, pestañas por sección con contador de errores, barra de guardado fija y el aviso de «¿Descartar los cambios?». |
 | `Field` · `ToggleRow` · `Grid` · `ALTO_CAMPO` | [`components/admin/form-fields.tsx`](../../cms-admin/components/admin/form-fields.tsx) | Los controles de la ficha. `ALTO_CAMPO` es `h-11 md:h-9`. |
 | `ImagePicker` · `GaleriaImagenes` | [`components/admin/image-picker.tsx`](../../cms-admin/components/admin/image-picker.tsx) | **Todo campo de imagen usa uno de los dos.** Nunca un `<Input>` de URL a pelo. |
+| `ListaEditable` | [`components/admin/list-editor.tsx`](../../cms-admin/components/admin/list-editor.tsx) | Una lista de renglones cortos **con orden**: agregar, quitar, subir y bajar. Extraída en la Fase 3 para `features`/`benefits`; la van a necesitar las viñetas de una noticia y los enlaces de un banner. |
+| `useFichaState` | [`lib/use-ficha-state.ts`](../../cms-admin/lib/use-ficha-state.ts) | El estado de la ficha entero: formulario plano, sección abierta, errores, «sucio» y el guardado que valida y salta al primer error. Extraído en la Fase 3 (ver §4). |
 | `SeccionFicha` · `seccionDeCampo` · `erroresPorSeccion` | [`lib/form-sections.ts`](../../cms-admin/lib/form-sections.ts) | La forma de una sección y cómo se ubica un error en ella. |
 | `erroresDeZod` · `listaDesdeTexto` · `textoDesdeLista` · `textoOpcional` | [`lib/form-state.ts`](../../cms-admin/lib/form-state.ts) | Un error por campo; texto separado por comas ⇄ arreglo; `""` → `undefined`. |
 
@@ -209,28 +218,36 @@ sitio» del menú de fila sale de ahí, nunca de una plantilla escrita a mano.
    sea anidado (así el «sin guardar» se calcula con una comparación y cada campo
    tiene una sola fuente de verdad), más `…ToForm`, `formToInput` y `validar`.
 
-9. **`<x>-form-sheet.tsx`** — el estado de la ficha y un `<TabsContent>` por
-   sección dentro de `FormSheet`. El esqueleto que se repite es este:
+9. **`<x>-form-sheet.tsx`** — un `<TabsContent>` por sección dentro de
+   `FormSheet`. El estado **no se escribe a mano**: sale de `useFichaState`,
+   que se extrajo en la Fase 3 cuando las tres copias resultaron idénticas
+   (ver §4).
 
    ```tsx
-   const [form, setForm] = useState<FormState>(EMPTY_FORM);
-   const [seccion, setSeccion] = useState<SeccionId>('identidad');
-   const [errores, setErrores] = useState<Record<string, string>>({});
-   const inicial = useRef<FormState>(EMPTY_FORM);
-
-   useEffect(() => {
-     if (!open) return;
-     const base = registro ? registroToForm(registro) : EMPTY_FORM;
-     setForm(base);
-     inicial.current = base;      // la referencia contra la que se mide «sucio»
-     setErrores({});
-     setSeccion(seccionInicial ?? 'identidad');
-   }, [open, registro, seccionInicial]);
-
-   const sucio = JSON.stringify(form) !== JSON.stringify(inicial.current);
+   const { form, setForm, set, seccion, setSeccion, errores, setErrores, sucio, handleSubmit } =
+     useFichaState<FormState, SeccionId, Registro>({
+       open,
+       registro,
+       seccionInicial,
+       seccionPorDefecto: 'identidad',
+       vacio: EMPTY_FORM,
+       aForm: registroToForm,
+       /* Derivaciones del dominio: el slug que sigue al nombre. */
+       derivar: (siguiente, campo) =>
+         campo === 'name' && !siguiente.slugManual
+           ? { ...siguiente, slug: slugSugerido(siguiente) }
+           : siguiente,
+       validar,
+       /* Errores que no salen del Zod, como el slug repetido. */
+       validarExtra: (actual): Record<string, string> =>
+         slugRepetido(actual) ? { slug: 'Ya hay otro con este slug. Cámbialo.' } : {},
+       seccionDeCampo,
+       onSubmit: (actual) => onSubmit(formToInput(actual)),
+     });
    ```
 
-   Está **duplicado a propósito** (ver «Lo que no se abstrajo»).
+   Lo del dominio se queda afuera: el mapeo, `formToInput`, la validación Zod y
+   las secciones visibles (motos las calcula según la condición).
 
 ### 2.4 Campos de imagen
 
@@ -298,16 +315,29 @@ El sitio público lee del mismo backend, sin sesión.
 5. Comprobar la página en el navegador con el backend arriba **y** con el
    backend caído: el sitio no puede quedar en blanco por una sección.
 
-Los `jsonb` (`hours`, `location`, `address`) **se documentan en las tres capas
-o cada una asumirá una forma distinta**: la regla «un día ausente está cerrado»
+Los `jsonb` (`hours`, `location`, `address`, `pricing`) **se documentan en las
+tres capas o cada una asumirá una forma distinta**: la regla «un día ausente está cerrado»
 de `service-point` vive escrita en el tipo del backend, en el Zod, en el SDL y
 en las dos utilidades de formato (`cms-admin/lib/service-point-hours.ts` y
 `web/src/utils/service-point-hours.ts`, que sí están duplicadas: son paquetes
-distintos y ninguno de los dos depende del otro).
+distintos y ninguno de los dos depende del otro). En la Fase 3 se repitió el
+gesto con `pricing` de `service`: la regla «`A_CONVENIR` no lleva monto y un
+`pricing` en `null` se lee como `A_CONVENIR`» está escrita en el tipo del
+backend, en el Zod, en el SDL y en las dos utilidades de formato
+(`cms-admin/lib/service-pricing.ts` y `web/src/utils/service-pricing.ts`), y el
+catálogo de iconos de lucide vive duplicado por la misma razón
+(`cms-admin/lib/service-icons.ts` y `web/src/utils/service-icons.tsx`).
 
 Pendientes en `web`: ~~`service-points-mock.json`~~ (borrado en la Fase 2),
-`services-mock.json`, `news-mock.json` y `home-mock.json` (este último vía
-`web/src/services/contentful.ts`).
+~~`services-mock.json`~~ (borrado en la Fase 3), `news-mock.json` y
+`home-mock.json` (este último vía `web/src/services/contentful.ts`).
+
+**Una sección sin datos no es un error.** Desde la Fase 3, toda página pública
+que lea una lista tiene que verse bien con la lista vacía: un bloque que dice
+qué pasa y ofrece a dónde ir (`/servicios` → «Estamos organizando nuestros
+servicios» + enlace a los puntos de atención), nunca una rejilla en blanco. Lo
+mismo en el panel, que ya tenía sus dos vacíos («no hay nada» y «nada
+coincide»).
 
 ---
 
@@ -322,11 +352,21 @@ porque abstraerlo mal cuesta más que escribirlo dos veces:
   terminado con un `render` por celda, que es la misma fila con más ceremonia.
   Lo que sí se comparte es el **contenedor** (`ListaResponsive`), que es donde
   vive la regla de paridad escritorio/móvil.
-- **El estado de la ficha** (el `useState` + `useRef` + `useEffect` de arriba).
-  Son 15 líneas, pero un `useFichaState` genérico tendría que aceptar el mapeo,
-  la validación y las derivaciones propias del dominio (en motos, el slug que se
-  sigue del nombre hasta que alguien lo escribe). Cuando dos secciones más lo
-  hayan escrito igual, se extrae con evidencia.
+
+  **Revisado en la Fase 3, con tres copias sobre la mesa: se queda duplicado.**
+  Al comparar `motorcycle-row` con `service-point-row` y `service-row` lo único
+  que comparten es el botón que abre la ficha (con su `focus-visible`); todo lo
+  demás es distinto —miniatura contra icono, precio y papeles contra horario
+  contra modalidad de precio, y cada una con sus píldoras derivadas—. La
+  decisión de la Fase 0 fue correcta.
+- ~~**El estado de la ficha**~~ — **extraído en la Fase 3** a
+  [`lib/use-ficha-state.ts`](../../cms-admin/lib/use-ficha-state.ts). Aquí sí
+  había evidencia: al comparar las dos copias existentes (motos y puntos de
+  atención) las ~50 líneas eran **idénticas salvo los nombres de las
+  variables**, un `useMemo` de secciones que solo tiene motos, qué campo
+  arrastra el slug y una palabra del mensaje de slug repetido. El hook toma
+  esas tres diferencias como parámetros (`derivar`, `validarExtra`,
+  `seccionDeCampo`) y las tres fichas lo usan.
 - ~~**`GalleryEditor`**~~ — **resuelto en la Fase 1**: se reescribió como
   `components/admin/image-picker.tsx` (`GaleriaImagenes` e `ImagePicker`), con
   subida real. Ya no vive en `motos/`.

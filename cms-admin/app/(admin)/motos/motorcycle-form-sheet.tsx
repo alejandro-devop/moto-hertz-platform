@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo } from 'react';
 import { TriangleAlert } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import {
@@ -17,9 +17,10 @@ import { FormSheet } from '@/components/admin/form-sheet';
 import { GaleriaImagenes } from '@/components/admin/image-picker';
 import { StatusPill, paperTone } from '@/components/admin/status-pill';
 import { daysUntil, formatCop, formatDate, groupDigits, humanizeDays, onlyDigits } from '@/lib/format';
+import { useFichaState } from '@/lib/use-ficha-state';
 import { cn } from '@/lib/utils';
 import type { Motorcycle, MotorcycleFormInput } from '@/lib/graphql/motorcycles';
-import { seccionesVisibles, type SeccionId } from './form-sections';
+import { seccionDeCampo, seccionesVisibles, type SeccionId } from './form-sections';
 import {
   EMPTY_FORM,
   formToInput,
@@ -52,59 +53,38 @@ export function MotorcycleFormSheet({
   onSubmit,
   submitting,
 }: Props) {
-  const [form, setForm] = useState<FormState>(EMPTY_FORM);
-  const [seccion, setSeccion] = useState<SeccionId>('identidad');
-  const [errores, setErrores] = useState<Record<string, string>>({});
-  const inicial = useRef<FormState>(EMPTY_FORM);
+  const slugDuplicadoDe = (actual: FormState) =>
+    actual.slug.trim().length > 0 &&
+    slugsEnUso.includes(actual.slug.trim()) &&
+    actual.slug.trim() !== motorcycle?.slug;
 
-  useEffect(() => {
-    if (!open) return;
-    const base = motorcycle ? motorcycleToForm(motorcycle) : EMPTY_FORM;
-    setForm(base);
-    inicial.current = base;
-    setErrores({});
-    setSeccion(seccionInicial ?? 'identidad');
-  }, [open, motorcycle, seccionInicial]);
+  /* El estado de la ficha vive en `lib/use-ficha-state.ts` desde la Fase 3:
+     era idéntico aquí, en puntos de atención y en servicios. Aquí solo va lo
+     del dominio. */
+  const { form, setForm, set, seccion, setSeccion, errores, setErrores, sucio, handleSubmit } =
+    useFichaState<FormState, SeccionId, Motorcycle>({
+      open,
+      registro: motorcycle,
+      seccionInicial,
+      seccionPorDefecto: 'identidad',
+      vacio: EMPTY_FORM,
+      aForm: motorcycleToForm,
+      /* El slug se sigue derivando del nombre hasta que alguien lo escriba. */
+      derivar: (siguiente, campo) =>
+        (campo === 'name' || campo === 'year') && !siguiente.slugManual
+          ? { ...siguiente, slug: slugSugerido(siguiente) }
+          : siguiente,
+      validar,
+      validarExtra: (actual): Record<string, string> =>
+        slugDuplicadoDe(actual) ? { slug: 'Ya hay otra moto con este slug. Cámbialo.' } : {},
+      seccionDeCampo,
+      onSubmit: (actual) => onSubmit(formToInput(actual)),
+    });
 
   /* Una moto nueva no tiene papeles: la sección desaparece y `FormSheet` mueve
      la pestaña abierta si era esa. */
   const secciones = useMemo(() => seccionesVisibles(form.condition), [form.condition]);
-  const sucio = JSON.stringify(form) !== JSON.stringify(inicial.current);
-
-  function set<K extends keyof FormState>(key: K, value: FormState[K]) {
-    setForm((prev) => {
-      const next = { ...prev, [key]: value };
-      /* El slug se sigue derivando del nombre hasta que alguien lo escriba. */
-      if ((key === 'name' || key === 'year') && !next.slugManual) {
-        next.slug = slugSugerido(next);
-      }
-      return next;
-    });
-    setErrores((prev) => {
-      if (!(key in prev)) return prev;
-      const next = { ...prev };
-      delete next[key as string];
-      return next;
-    });
-  }
-
-  const slugDuplicado =
-    form.slug.trim().length > 0 &&
-    slugsEnUso.includes(form.slug.trim()) &&
-    form.slug.trim() !== motorcycle?.slug;
-
-  async function handleSubmit(event: React.FormEvent) {
-    event.preventDefault();
-    const { errores: nuevos, primeraSeccion } = validar(form);
-    if (slugDuplicado) nuevos.slug = 'Ya hay otra moto con este slug. Cámbialo.';
-    setErrores(nuevos);
-    if (Object.keys(nuevos).length > 0) {
-      setSeccion(primeraSeccion ?? (nuevos.slug ? 'identidad' : seccion));
-      return;
-    }
-    await onSubmit(formToInput(form));
-  }
-
+  const slugDuplicado = slugDuplicadoDe(form);
   const fotos = [form.imagesMain, ...form.imagesGallery].filter(Boolean);
 
   const soatDias = daysUntil(form.soatExpiresAt);

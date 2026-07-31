@@ -31,11 +31,11 @@ Registrar en `src/graphql/schema.ts` y `src/graphql/resolvers.ts`.
 |---|---|---|---|
 | motorcycle | ✅ completo (referencia) | `motorcycle/` | `motorcycle.service.ts` |
 | service-point | ✅ completo (puntos de atención) | `service-point/` | `service-point.service.ts` |
-| service | ⏳ solo tabla en `schema.ts` + migración | — | — |
+| service | ✅ completo (servicios del taller) | `service/` | `service.service.ts` |
 | news | ⏳ solo tabla en `schema.ts` + migración | — | — |
 | media | ✅ completo (biblioteca de imágenes) | `media/` | `media.service.ts` |
 
-`motorcycle` es la referencia de patrón completa (schema Drizzle, migración, service, tipos, validadores Zod, módulo GraphQL con query/mutations). `service` y `news` ya tienen tabla y migración, pero su capa de servicio/GraphQL queda pendiente para su fase, siguiendo el mismo patrón.
+`motorcycle` es la referencia de patrón completa (schema Drizzle, migración, service, tipos, validadores Zod, módulo GraphQL con query/mutations). `news` ya tiene tabla y migración, pero su capa de servicio/GraphQL queda pendiente para su fase, siguiendo el mismo patrón.
 
 ### `service-point` (Fase 2 del plan CMS)
 
@@ -46,6 +46,16 @@ Tres decisiones que hay que respetar antes de tocarlo:
 - **La ubicación se guarda como el enlace de Google Maps que se pegó**, y `lat`/`lng` las **deriva el service** con `shared/geo/maps-url.ts` (`@lat,lng`, `!3d…!4d…`, `q=lat,lng`). No se aceptan coordenadas de afuera: así no puede haber un punto cuyas coordenadas no correspondan a su enlace. Los enlaces cortos `maps.app.goo.gl` no traen coordenadas y se guardan sin ellas — el sitio muestra «Cómo llegar» sin mapa.
 
 `hours` es `{ monday: { open: "09:15", close: "17:00" }, … }` y **un día ausente está cerrado**: no hay bandera `closed`, para que no haya dos formas de decir lo mismo.
+
+### `service` (Fase 3 del plan CMS)
+
+Tres decisiones que hay que respetar antes de tocarlo:
+
+- **`pricing` tiene tres modalidades y una sola forma**: `{ mode, amount?, currency: 'COP', note? }` con `mode` en `DESDE` | `FIJO` | `A_CONVENIR`. **`DESDE` y `FIJO` exigen monto; `A_CONVENIR` no lo lleva** —si llega uno, se descarta en vez de rechazarse, porque la modalidad es lo que el usuario eligió a propósito y el monto es lo que quedó escrito de antes—. Y **un `pricing` en `null` se lee como `A_CONVENIR`**: es la única equivalencia permitida y existe para que un registro creado a mano no deje la tarjeta del sitio en blanco. La moneda no se acepta de afuera: la fija el service. Agregar una modalidad toca cuatro sitios (tipo TS, Zod, enum del SDL y las etiquetas del panel).
+- **`icon` guarda el nombre de un icono de `lucide-react` en kebab-case** (`wrench`, `shield-check`), no un emoji. El backend valida la **forma** (minúsculas y guiones, ≤ 60), **no la pertenencia al catálogo**: quién puede elegirse vive en `cms-admin/lib/service-icons.ts` y en su espejo `web/src/utils/service-icons.tsx`, y un nombre desconocido cae en el icono por defecto. Así, ampliar la lista no obliga a desplegar el backend. La migración `008` ensanchó la columna de `VARCHAR(10)` —que solo daba para un emoji— a `VARCHAR(60)`.
+- **`category` es texto libre, no un catálogo cerrado** como el `type` de `service-point`. Es deliberado: el usuario está inventando su lista de servicios y una categoría nueva no puede exigir un despliegue. El panel sugiere las que ya existen (`datalist`) y arma el filtro con ellas, así convergen solas.
+
+`features` y `benefits` son **listas ordenadas**: el orden en que llegan es el que se editó en el panel y el que pinta el sitio. Los renglones en blanco se descartan (en el Zod y otra vez en el service), nunca hacen fallar el guardado.
 
 ## Autenticación
 
@@ -69,7 +79,7 @@ Al subir, `src/shared/images/process.ts` (sharp) reduce el lado mayor a 1600 px 
 - `…Remove` manda a la papelera, `…Restore` la saca, `…Purge` borra de verdad (y falla si no está en la papelera). En `media`, purgar **también borra el archivo** del almacenamiento.
 - Eliminar un registro de contenido **no toca sus imágenes**: los archivos se borran solo desde la biblioteca de medios.
 
-`service_points` estrenó su papelera en la Fase 2, **sin migración nueva**: la columna ya estaba. `services` y `news` siguen teniendo solo la columna; su comportamiento llega con su fase. El patrón a seguir está en `../docs/cms-plan/PATRON.md` §1.1.
+`service_points` estrenó su papelera en la Fase 2 y `services` en la Fase 3, las dos **sin migración nueva** para eso: la columna ya estaba desde la `006`. `news` sigue teniendo solo la columna; su comportamiento llega con su fase. El patrón a seguir está en `../docs/cms-plan/PATRON.md` §1.1.
 
 ## Patrones obligatorios
 

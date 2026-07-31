@@ -25,6 +25,7 @@ import type {
   ServicePointLocation,
   ServicePointType,
 } from '../../types/services/service-point.types';
+import type { ServicePricing } from '../../types/services/service.types';
 
 // ============================================
 // MOTORCYCLES — catálogo de motos
@@ -99,6 +100,12 @@ export const servicePoints = pgTable('service_points', {
 // ============================================
 // SERVICES — servicios ofrecidos (mantenimiento, garantía, etc.)
 // ============================================
+/**
+ * `icon` guarda el **nombre de un icono de `lucide-react` en kebab-case**
+ * (`wrench`, `shield-check`), no un emoji: la plantilla original guardaba
+ * emojis y por eso la columna nacía en `VARCHAR(10)`. La migración `008` la
+ * ensanchó a 60. Ver `../../types/services/service.types.ts`.
+ */
 export const services = pgTable('services', {
   id: uuid('id')
     .primaryKey()
@@ -108,10 +115,11 @@ export const services = pgTable('services', {
   category: varchar('category', { length: 100 }),
   shortDescription: text('short_description'),
   fullDescription: text('full_description'),
-  icon: varchar('icon', { length: 10 }),
+  icon: varchar('icon', { length: 60 }),
   features: jsonb('features').$type<string[]>().default([]),
   benefits: jsonb('benefits').$type<string[]>().default([]),
-  pricing: jsonb('pricing').$type<{ from: number; currency: string; frequency: string }>(),
+  /** Tres modalidades: `DESDE`, `FIJO`, `A_CONVENIR`. Ver `ServicePricing`. */
+  pricing: jsonb('pricing').$type<ServicePricing>(),
   duration: varchar('duration', { length: 100 }),
   featured: boolean('featured').notNull().default(false),
   image: text('image'),

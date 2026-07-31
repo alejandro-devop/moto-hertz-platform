@@ -99,6 +99,26 @@ export const createMockServicePoint = (overrides = {}) => ({
   ...overrides,
 });
 
+export const createMockService = (overrides = {}) => ({
+  id: '019c7d42-15dc-7000-8000-000000000201',
+  slug: 'mantenimiento-preventivo',
+  name: 'Mantenimiento preventivo',
+  category: 'Mantenimiento',
+  shortDescription: 'Revisión programada para que la moto no se quede tirada.',
+  fullDescription: null,
+  icon: 'wrench',
+  features: ['Cambio de aceite y filtro', 'Revisión de frenos'],
+  benefits: ['Previene averías costosas'],
+  pricing: { mode: 'DESDE', amount: 150000, currency: 'COP', note: 'cada 5.000 km' },
+  duration: '2-3 horas',
+  featured: true,
+  image: null,
+  createdAt: new Date('2026-01-01'),
+  updatedAt: new Date('2026-01-01'),
+  deletedAt: null,
+  ...overrides,
+});
+
 export const resetAllMocks = () => {
   jest.clearAllMocks();
   mockDbPool.query.mockReset();

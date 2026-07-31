@@ -14,7 +14,7 @@ delega el trabajo en el subagente **`cms-seccion`**. El estado vive en
 | Sección del sitio | Backend | cms-admin | web |
 |---|---|---|---|
 | Motos | ✅ completo | ✅ completo | ✅ consume el backend |
-| Puntos de atención | ⏳ solo tabla y migración | ⏳ placeholder | ❌ `service-points-mock.json` |
+| Puntos de atención | ✅ completo | ✅ completo | ✅ consume el backend |
 | Servicios | ⏳ solo tabla y migración | ⏳ placeholder | ❌ `services-mock.json` |
 | Noticias | ⏳ solo tabla y migración | ⏳ placeholder | ❌ `news-mock.json` |
 | Home / banners | ❌ no existe tabla | ❌ no existe | ❌ `home-mock.json` vía `contentful.ts` |
@@ -32,7 +32,7 @@ patrón en las tres capas.
 |---|------|-----------|--------|
 | 0 | Cimientos del patrón | [00-cimientos-patron.md](phases/00-cimientos-patron.md) | completed |
 | 1 | Medios: subida de imágenes | [01-medios.md](phases/01-medios.md) | completed |
-| 2 | Puntos de atención | [02-puntos-de-atencion.md](phases/02-puntos-de-atencion.md) | pending |
+| 2 | Puntos de atención | [02-puntos-de-atencion.md](phases/02-puntos-de-atencion.md) | completed |
 | 3 | Servicios | [03-servicios.md](phases/03-servicios.md) | pending |
 | 4 | Noticias | [04-noticias.md](phases/04-noticias.md) | pending |
 | 5 | Home y banners | [05-home-y-banners.md](phases/05-home-y-banners.md) | pending |

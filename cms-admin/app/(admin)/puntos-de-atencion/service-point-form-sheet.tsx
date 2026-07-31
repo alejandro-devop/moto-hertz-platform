@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
 import { ExternalLink, MapPin, TriangleAlert } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import {
@@ -14,10 +13,11 @@ import { TabsContent } from '@/components/ui/tabs';
 import { ALTO_CAMPO, Field, Grid } from '@/components/admin/form-fields';
 import { FormSheet } from '@/components/admin/form-sheet';
 import { coordenadasDeMapsUrl, formatCoordenadas } from '@/lib/maps-url';
+import { useFichaState } from '@/lib/use-ficha-state';
 import { cn } from '@/lib/utils';
 import type { ServicePoint, ServicePointFormInput, ServicePointType } from '@/lib/graphql/service-points';
 import { ETIQUETA_DE_TIPO } from './filters';
-import { SECCIONES, type SeccionId } from './form-sections';
+import { SECCIONES, seccionDeCampo, type SeccionId } from './form-sections';
 import { HoursEditor } from './hours-editor';
 import {
   EMPTY_FORM,
@@ -47,56 +47,34 @@ export function ServicePointFormSheet({
   onSubmit,
   submitting,
 }: Props) {
-  const [form, setForm] = useState<FormState>(EMPTY_FORM);
-  const [seccion, setSeccion] = useState<SeccionId>('identidad');
-  const [errores, setErrores] = useState<Record<string, string>>({});
-  const inicial = useRef<FormState>(EMPTY_FORM);
+  const slugDuplicadoDe = (actual: FormState) =>
+    actual.slug.trim().length > 0 &&
+    slugsEnUso.includes(actual.slug.trim()) &&
+    actual.slug.trim() !== punto?.slug;
 
-  useEffect(() => {
-    if (!open) return;
-    const base = punto ? servicePointToForm(punto) : EMPTY_FORM;
-    setForm(base);
-    inicial.current = base;
-    setErrores({});
-    setSeccion(seccionInicial ?? 'identidad');
-  }, [open, punto, seccionInicial]);
-
-  const sucio = JSON.stringify(form) !== JSON.stringify(inicial.current);
-
-  function set<K extends keyof FormState>(key: K, value: FormState[K]) {
-    setForm((prev) => {
-      const next = { ...prev, [key]: value };
+  /* El estado de la ficha vive en `lib/use-ficha-state.ts` desde la Fase 3:
+     era idéntico aquí, en motos y en servicios. Aquí solo va lo del dominio. */
+  const { form, setForm, set, seccion, setSeccion, errores, setErrores, sucio, handleSubmit } =
+    useFichaState<FormState, SeccionId, ServicePoint>({
+      open,
+      registro: punto,
+      seccionInicial,
+      seccionPorDefecto: 'identidad',
+      vacio: EMPTY_FORM,
+      aForm: servicePointToForm,
       /* El slug se sigue derivando del nombre hasta que alguien lo escriba. */
-      if (key === 'name' && !next.slugManual) {
-        next.slug = slugSugerido(next);
-      }
-      return next;
+      derivar: (siguiente, campo) =>
+        campo === 'name' && !siguiente.slugManual
+          ? { ...siguiente, slug: slugSugerido(siguiente) }
+          : siguiente,
+      validar,
+      validarExtra: (actual): Record<string, string> =>
+        slugDuplicadoDe(actual) ? { slug: 'Ya hay otro punto con este slug. Cámbialo.' } : {},
+      seccionDeCampo,
+      onSubmit: (actual) => onSubmit(formToInput(actual)),
     });
-    setErrores((prev) => {
-      if (!(key in prev)) return prev;
-      const next = { ...prev };
-      delete next[key as string];
-      return next;
-    });
-  }
 
-  const slugDuplicado =
-    form.slug.trim().length > 0 &&
-    slugsEnUso.includes(form.slug.trim()) &&
-    form.slug.trim() !== punto?.slug;
-
-  async function handleSubmit(event: React.FormEvent) {
-    event.preventDefault();
-    const { errores: nuevos, primeraSeccion } = validar(form);
-    if (slugDuplicado) nuevos.slug = 'Ya hay otro punto con este slug. Cámbialo.';
-    setErrores(nuevos);
-    if (Object.keys(nuevos).length > 0) {
-      setSeccion(primeraSeccion ?? (nuevos.slug ? 'identidad' : seccion));
-      return;
-    }
-    await onSubmit(formToInput(form));
-  }
-
+  const slugDuplicado = slugDuplicadoDe(form);
   const coords = coordenadasDeMapsUrl(form.mapsUrl);
 
   return (

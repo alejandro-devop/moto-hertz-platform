@@ -20,6 +20,15 @@ export function urlPublicaDePunto(slug?: string): string {
   return slug ? `${SITIO_PUBLICO}/puntos-atencion#${slug}` : `${SITIO_PUBLICO}/puntos-atencion`;
 }
 
+/**
+ * Los servicios tampoco tienen página propia: viven todos en `/servicios`, y
+ * cada tarjeta lleva el `id` de su slug para poder enlazar directo al que se
+ * está editando.
+ */
+export function urlPublicaDeServicio(slug?: string): string {
+  return slug ? `${SITIO_PUBLICO}/servicios#${slug}` : `${SITIO_PUBLICO}/servicios`;
+}
+
 /** El enlace de chat que arma el sitio con un número de WhatsApp. */
 export function urlWhatsApp(numero?: string | null): string | null {
   const digitos = (numero ?? '').replace(/\D/g, '');

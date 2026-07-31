@@ -112,6 +112,17 @@ ir a `/medios`, copiar la URL y volver. Es el hueco más visible que dejó la
 Fase 1; un diálogo "Elegir de la biblioteca" dentro de
 `components/admin/image-picker.tsx` es trabajo de una tarde.
 
+### `motos` sigue editando sus listas con comas
+
+Desde la Fase 3 existe `components/admin/list-editor.tsx` (`ListaEditable`), que
+edita una lista con orden: agregar, quitar, subir y bajar. `motos` todavía usa
+`listaDesdeTexto`/`textoDesdeLista` para `features` y `colors`, es decir un
+campo de texto separado por comas — donde una coma dentro de un renglón lo parte
+en dos sin avisar y reordenar obliga a reescribir la línea.
+
+Cambiarlo es sustituir dos campos en `motorcycle-form-sheet.tsx` y ajustar el
+estado plano para que guarde `string[]` en vez de `string`.
+
 ### Los desplegables de filtro miden 32 px, no 44
 
 `cms-admin/CLAUDE.md` manda objetivos de 44 px en móvil (`h-11 md:h-9`), pero la
@@ -132,6 +143,23 @@ espere, más módulos hay que volver a verificar.
 No devuelve 404 ni dice "no encontrada": pinta el armazón sin contenido. Se
 destapó al construir la papelera en la Fase 1, pero es comportamiento previo de
 `web`. Hay que revisar el resto de rutas de detalle por lo mismo.
+
+### Los servicios no tienen página propia
+
+`/servicios` los muestra en tarjetas y abre el detalle en un modal, que fue como
+lo dejó la plantilla. No hay `/servicios/[slug]`, así que **un servicio no se
+puede enlazar ni indexar**: el panel enlaza a `/servicios#<slug>`, que lleva a
+la tarjeta pero no abre el detalle. La query `service(slug:)` ya existe en el
+backend y en `web/src/services/services.ts`, sin usar — la página sería lo único
+que falta. Lo mismo aplica a los puntos de atención (Fase 2).
+
+### El botón «Solicitar» de un servicio lleva a los puntos de atención
+
+En el modal de un servicio, el botón de la plantilla no hacía **nada**. La Fase 3
+lo convirtió en un enlace a `/puntos-atencion`, que es lo honesto mientras no
+haya un número de WhatsApp ni un agendamiento del negocio. Cuando la Fase 6
+(configuración del sitio) traiga el contacto general, ese botón debería abrir el
+chat o el agendamiento con el servicio ya nombrado.
 
 ### `motorcycle` no tiene campo de placa
 
@@ -156,6 +184,7 @@ el sitio legacy no publica todo:
 
 | Punto | Qué falta |
 |---|---|
+| Sede la 80 | **casi todo**: teléfono, correo, dirección de la calle, horarios y enlace de Maps. Solo se pudo confirmar que existe y que está en Medellín |
 | Sede San Diego | correo, enlace de Maps, barrio |
 | Sede Belén La Palma | correo, enlace de Maps |
 | Yamaha Moto Hertz (El Retiro) | correo, horarios, barrio |
@@ -224,10 +253,3 @@ El MIME está aceptado y sharp trae libheif, pero en la Fase 1 no había un HEIC
 de verdad. Si un iPhone sube en ese formato y falla, el mensaje que verá el
 usuario es el genérico de "formato que el servidor no entiende".
 
-### Dos abstracciones pospuestas a propósito
-
-La Fase 0 dejó sin extraer, con razón, la fila/tarjeta de cada dominio
-(`<x>-row.tsx`) y el estado de la ficha (los ~15 `useState`/`useRef`/`useEffect`
-con el cálculo de "sucio"). El acuerdo fue **reconsiderarlas en la Fase 3**,
-cuando ya existan dos copias reales que comparar. Si al llegar ahí las dos
-copias resultaron distintas, la decisión fue correcta y esto se borra.

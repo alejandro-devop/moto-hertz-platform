@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { slugify } from '@/lib/format';
 import { erroresDeZod, textoOpcional } from '@/lib/form-state';
+import type { ResultadoValidacion } from '@/lib/use-ficha-state';
 import { DIAS, ETIQUETAS_DIA, type Dia } from '@/lib/service-point-hours';
 import type {
   ServicePoint,
@@ -157,13 +158,7 @@ const esquema = z.object({
     ),
 });
 
-export interface ResultadoValidacion {
-  errores: Record<string, string>;
-  /** Primera sección con un error, para llevar al usuario hasta él. */
-  primeraSeccion?: SeccionId;
-}
-
-export function validar(form: FormState): ResultadoValidacion {
+export function validar(form: FormState): ResultadoValidacion<SeccionId> {
   const errores = erroresDeZod(esquema.safeParse(form));
 
   /* Un día abierto sin horas, o que cierra antes de abrir, no se puede guardar:

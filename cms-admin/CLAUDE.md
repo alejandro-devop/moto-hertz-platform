@@ -34,7 +34,7 @@ Next.js 15 (App Router) · TypeScript · React 19 · Tailwind v4 · shadcn/ui es
 | `admin-tabbar.tsx` | oculta | barra inferior de 5 destinos + hoja «Más» |
 | `admin-topbar.tsx` | buscador visible + tema + sitio público | marca, sección y lupa que despliega el buscador |
 
-El buscador (`admin-search.tsx`) escribe en `?q=` de `/motos`; `⌘K` lo enfoca desde cualquier pantalla.
+El buscador (`admin-search.tsx`) escribe en `?q=` **de la sección donde uno está** (mapa `BUSCADORES`); `⌘K` lo enfoca desde cualquier pantalla.
 
 Piezas compartidas de presentación: `page-header`, `states` (vacío, error, esqueletos), `status-pill`, `thumb`, `proximamente`.
 
@@ -47,13 +47,15 @@ Piezas compartidas de módulo, extraídas de `motos` en la Fase 0 del plan CMS (
 | `BarraFiltros`, `SelectFiltro`, `FilterChip`, `opcionesDe` | `components/admin/filter-bar.tsx` | Fila de filtros en escritorio y hoja inferior en móvil, con el contador de filtros puestos. |
 | `RowActions`, `AccionFila` | `components/admin/row-actions.tsx` | La misma lista de acciones como menú de fila (escritorio) y como hoja inferior (móvil). |
 | `FormSheet` | `components/admin/form-sheet.tsx` | Armazón de la ficha: pestañas por sección con contador de errores, barra de guardado fija y aviso antes de descartar. |
+| `ListaEditable` | `components/admin/list-editor.tsx` | Una lista de renglones **con orden**: agregar, quitar, subir y bajar. Extraída en la Fase 3 (`features`/`benefits`). |
+| `useFichaState` | `lib/use-ficha-state.ts` | Todo el estado de una ficha: formulario plano, sección abierta, errores, «sucio» y el guardado que valida y salta al primer error. Extraído en la Fase 3. |
 | `Field`, `ToggleRow`, `Grid`, `ALTO_CAMPO` | `components/admin/form-fields.tsx` | Los controles de la ficha. `ALTO_CAMPO` = `h-11 md:h-9`. |
 | `leerOpcion`, `escribirParams`, `paginar`, comparadores | `lib/list-params.ts` | Filtros en la URL (solo se serializa lo que se desvía del valor por defecto), orden y paginación. |
 | `useFiltrosUrl` | `lib/use-url-filters.ts` | `{ filtros, actualizar, limpiarTodo }`; **`actualizar` vuelve a la página 1**. |
 | `SeccionFicha`, `seccionDeCampo`, `erroresPorSeccion` | `lib/form-sections.ts` | La forma de una sección de ficha y dónde cae cada error. |
 | `erroresDeZod`, `listaDesdeTexto`, `textoDesdeLista`, `textoOpcional` | `lib/form-state.ts` | Plomería del estado de la ficha. |
 
-**Lo que quedó sin abstraer a propósito**: la fila/tarjeta de cada dominio (`<x>-row.tsx`), el estado de la ficha (15 líneas de `useState`/`useRef`/`useEffect`) y el diálogo de precio rápido. El `GalleryEditor` de fotos sí se extrajo: la Fase 1 lo reescribió como `components/admin/image-picker.tsx` con subida real. El razonamiento está en `../docs/cms-plan/PATRON.md`, sección «Lo que no se abstrajo, y por qué».
+**Lo que quedó sin abstraer a propósito**: la fila/tarjeta de cada dominio (`<x>-row.tsx`) y el diálogo de precio rápido. Lo de la fila **se revisó en la Fase 3 con tres copias sobre la mesa y se confirmó**: solo comparten el botón que abre la ficha. El `GalleryEditor` de fotos sí se extrajo (Fase 1, `components/admin/image-picker.tsx`), y **el estado de la ficha también, en la Fase 3** (`lib/use-ficha-state.ts`): las tres copias eran idénticas salvo los nombres de las variables. El razonamiento está en `../docs/cms-plan/PATRON.md`, sección «Lo que no se abstrajo, y por qué».
 
 ## Autenticación
 
@@ -117,7 +119,21 @@ Las mutaciones de escritura requieren sesión (`requireAuth` en el backend); el 
 
 **El buscador de la barra superior ya no manda siempre a `/motos`.** Escribe en `?q=` de la sección donde uno está, con su propio placeholder (`components/admin/admin-search.tsx`, mapa `BUSCADORES`). **Toda lista nueva con búsqueda tiene que agregarse a ese mapa**, o su buscador saca al usuario de la sección.
 
-El módulo `medios` (biblioteca de imágenes) sigue el mismo patrón de lista, con la papelera dentro del filtro de estado. Los módulos `servicios` y `noticias` están como placeholders "próximamente" — se completan siguiendo este mismo patrón una vez el backend implemente su capa de servicio/GraphQL (ver `backend/CLAUDE.md`, tabla de dominios).
+### Decisiones del módulo `servicios`
+
+> Construido en la **Fase 3 del plan CMS** (`../docs/cms-plan/phases/03-servicios.md`).
+
+**La sección arranca vacía a propósito.** Los seis servicios del mock eran de plantilla y **no se cargaron**: los reales los escribe el usuario. Por eso el vacío importa tanto como la lista — el panel invita a crear el primero y `/servicios` en el sitio dice «Estamos organizando nuestros servicios» con un enlace a los puntos de atención, en vez de una rejilla en blanco.
+
+**El precio tiene tres modalidades**, elegidas con un desplegable en la ficha: *desde un monto*, *precio fijo* y *a convenir*. Con «a convenir» el campo del monto **se apaga en vez de esconderse**, para que no parezca que el campo se perdió, y lo que quede escrito no se guarda. La nota libre («cada 5.000 km», «según el daño») es lo que en el mock se llamaba `frequency`. La moneda es COP y no se pregunta. El formato de lectura vive en `lib/service-pricing.ts`.
+
+**El icono se elige de una rejilla con vista previa** (`servicios/icon-picker.tsx`), nunca se escribe: son 26 iconos de `lucide-react` con etiquetas de taller («Frenos», no «Disco»). **Los emojis del mock no se conservaron.** El catálogo está en `lib/service-icons.ts` y ahí mismo dice cómo se amplía — hay que tocar también el espejo del sitio, `web/src/utils/service-icons.tsx`.
+
+**`features` y `benefits` se editan con `ListaEditable`, no con texto separado por comas.** El orden es el dato: es el que ve el cliente en el sitio, y con comas mover el tercer renglón al primer lugar obliga a reescribir la línea entera (además, una coma dentro de un renglón lo parte en dos sin avisar). Motos todavía usa el campo con comas para sus `features`; migrarlo está anotado en `MEJORAS.md`.
+
+**La categoría es texto libre con sugerencias**, no un catálogo cerrado como el tipo de un punto de atención: el usuario está inventando su lista y no puede depender de un despliegue para nombrar una categoría nueva. La ficha sugiere las que ya existen (`datalist`) y el filtro de la lista se arma con ellas.
+
+El módulo `medios` (biblioteca de imágenes) sigue el mismo patrón de lista, con la papelera dentro del filtro de estado. El módulo `noticias` sigue como placeholder "próximamente" — se completa siguiendo este mismo patrón una vez el backend implemente su capa de servicio/GraphQL (ver `backend/CLAUDE.md`, tabla de dominios).
 
 ## Dev
 
