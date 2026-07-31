@@ -101,7 +101,23 @@ Las mutaciones de escritura requieren sesión (`requireAuth` en el backend); el 
 
 **Nombre en la interfaz.** El paquete se sigue llamando `yamaha-oriente-cms-admin` (herencia de la plantilla), pero la interfaz dice «Motos Hot Wheels» porque el catálogo es multimarca. Renombrar el paquete es aparte.
 
-El módulo `medios` (biblioteca de imágenes) sigue el mismo patrón de lista, con la papelera dentro del filtro de estado. Los módulos `puntos-de-atencion`, `servicios`, `noticias` están como placeholders "próximamente" — se completan siguiendo este mismo patrón una vez el backend implemente su capa de servicio/GraphQL (ver `backend/CLAUDE.md`, tabla de dominios).
+### Decisiones del módulo `puntos-de-atencion`
+
+> Construido en la **Fase 2 del plan CMS** (`../docs/cms-plan/phases/02-puntos-de-atencion.md`), la primera sección hecha entera sobre `PATRON.md`.
+
+**Un punto de atención tiene siete campos**, y ni uno más: nombre, dirección, teléfono, correo, WhatsApp, horarios y ubicación (más `slug` y `type`). **`services`, `image` y `featured` se descartaron** —eran de la plantilla Yamaha— y por eso tampoco salen en la página pública. Las columnas siguen en la tabla, sin usar.
+
+**El tipo es un catálogo cerrado** (`SEDE`, `CONCESIONARIO`, `DISTRIBUIDOR`): desplegable en la ficha y filtro fiable en la lista. Los valores salen de lo que publica el sitio legacy. Agregar uno toca `ETIQUETAS_TIPO` en `app/(admin)/puntos-de-atencion/filters.ts` y tres sitios del backend (ver `backend/CLAUDE.md`).
+
+**La ubicación se captura pegando el enlace de Google Maps**, no escribiendo coordenadas. La ficha avisa mientras se escribe si el enlace trae coordenadas (`lib/maps-url.ts`, una copia del extractor del backend **solo para el aviso**: quien las guarda es el backend). Los enlaces cortos `maps.app.goo.gl` no las traen y el sitio queda con «Cómo llegar» sin mapa.
+
+**Los horarios se editan día por día** (`hours-editor.tsx`): un interruptor y dos `<input type="time">` por día, con «Copiar a los demás» para no escribir seis veces lo mismo. **Un día apagado está cerrado**; no se guarda ninguna bandera. `lib/service-point-hours.ts` tiene el formato y el resumen de una línea que usa la lista.
+
+**La papelera es un valor del filtro de estado** (`En el sitio` / `En papelera`), igual que en motos y en medios. En la papelera la fila muestra la píldora y el menú se reduce a *Restaurar al sitio* / *Eliminar definitivamente*.
+
+**El buscador de la barra superior ya no manda siempre a `/motos`.** Escribe en `?q=` de la sección donde uno está, con su propio placeholder (`components/admin/admin-search.tsx`, mapa `BUSCADORES`). **Toda lista nueva con búsqueda tiene que agregarse a ese mapa**, o su buscador saca al usuario de la sección.
+
+El módulo `medios` (biblioteca de imágenes) sigue el mismo patrón de lista, con la papelera dentro del filtro de estado. Los módulos `servicios` y `noticias` están como placeholders "próximamente" — se completan siguiendo este mismo patrón una vez el backend implemente su capa de servicio/GraphQL (ver `backend/CLAUDE.md`, tabla de dominios).
 
 ## Dev
 

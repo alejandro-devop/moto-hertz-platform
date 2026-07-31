@@ -31,7 +31,7 @@ Estos siguen sirviendo datos mock locales, sin cambios en esta fase:
 
 - `web/src/services/contentful.ts` — sigue devolviendo `src/data/home-mock.json` para la home (`/`). El modelo de "layout" de la home (banners, secciones tipo Contentful) no tiene equivalente en el backend todavía; construirlo requeriría diseñar un modelo de contenido genérico o una entidad "banners de home" (mencionada como alcance en la Fase 3, `docs/architecture/cms-admin.md`) que aún no existe en `backend/src/shared/database/schema.ts` más allá de las tablas de servicio/puntos/noticias.
 - `web/src/app/servicios/page.tsx` — sigue usando `src/data/services-mock.json`.
-- `web/src/app/puntos-atencion/page.tsx` — sigue usando `src/data/service-points-mock.json`.
+- ~~`web/src/app/puntos-atencion/page.tsx`~~ — **resuelto en la Fase 2 del plan CMS**: consume `web/src/services/service-points.ts` contra el backend y `src/data/service-points-mock.json` está eliminado.
 - `web/src/app/noticias/page.tsx` — sigue usando `src/data/news-mock.json`.
 
 **Por qué**: el `backend` ya tiene las tablas Drizzle y migraciones para `service_points`, `services` y `news` (Fase 2), pero les falta la capa GraphQL (schema + resolvers + service + validadores Zod), siguiendo el mismo patrón que `motorcycle`. Construir esas 3 capas GraphQL, más un módulo de administración en `cms-admin` para cada una, y luego migrar sus páginas en `web`, es un esfuerzo comparable al de esta misma fase repetido 3 veces — se decidió no expandir el alcance de la Fase 5 y tratarlo como trabajo futuro.

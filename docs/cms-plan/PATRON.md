@@ -36,7 +36,7 @@ Referencia completa: el dominio `motorcycle`.
 | Paso | Archivo | Qué va ahí |
 | --- | --- | --- |
 | 1 | [`src/shared/database/schema.ts`](../../backend/src/shared/database/schema.ts) | La tabla en Drizzle. Las tres tablas pendientes (`service_points`, `services`, `news`) **ya existen**; solo hay que agregar columnas si faltan. |
-| 2 | `migrations/00N_*.sql` | Una migración por cambio, numerada. Se aplica con `npm run migrate`. Nunca se edita una migración ya aplicada: se agrega otra. |
+| 2 | `migrations/00N_*.sql` | Una migración por cambio, numerada. Se aplica con `npm run migrate`. Nunca se edita una migración ya aplicada: se agrega otra. **Que la tabla ya exista no quiere decir que no haya migración**: un dominio nuevo suele traer restricciones que la plantilla no tenía (en `service-point`, la `007` hizo `type` obligatorio con su índice). |
 | 3 | [`src/types/services/<dominio>.types.ts`](../../backend/src/types/services/motorcycle.types.ts) | Los tipos del dominio: la entidad, `Create…Input`, `Update…Input`, `…Collection`. |
 | 4 | [`src/services/<dominio>.service.ts`](../../backend/src/services/motorcycle.service.ts) | El acceso a datos. Funciones sueltas (`list…`, `get…BySlug`, `get…ById`, `create…`, `update…`, `delete…`) y un objeto `…Service` al final que las agrupa. Aquí no entra nada de GraphQL. |
 | 5 | [`src/validators/schemas/<dominio>.schemas.ts`](../../backend/src/validators/schemas/motorcycle.schemas.ts) | Zod para **todo** lo que llega de afuera: args de query, input de alta, input de edición. El de edición es el de alta en `.partial()` más el `id`. |
@@ -111,9 +111,22 @@ app/(admin)/<ruta>/<x>-form-sheet.tsx     ← el contenido de cada sección
 app/(admin)/<ruta>/<x>-form-state.ts      ← estado plano, mapeo y validación Zod
 ```
 
-Y una línea en [`app/(admin)/nav-links.ts`](<../../cms-admin/app/(admin)/nav-links.ts>).
-Los cinco primeros destinos salen en la barra inferior del móvil, así que el
-orden de ese arreglo es una decisión de producto, no de código.
+Y **dos líneas fuera del módulo**:
+
+- [`app/(admin)/nav-links.ts`](<../../cms-admin/app/(admin)/nav-links.ts>) — el
+  destino. Los cinco primeros salen en la barra inferior del móvil, así que el
+  orden de ese arreglo es una decisión de producto, no de código.
+- El mapa `BUSCADORES` de
+  [`components/admin/admin-search.tsx`](../../cms-admin/components/admin/admin-search.tsx)
+  — **el buscador de la barra superior escribe en `?q=` de la sección donde uno
+  está**, y si la sección no está en ese mapa, escribir ahí saca al usuario de
+  la pantalla que estaba mirando. Hasta la Fase 2 el buscador mandaba siempre a
+  `/motos`; se arregló al construir el segundo módulo con búsqueda.
+
+Si el dominio tiene reglas propias que la lista *y* la ficha necesitan (estados
+derivados, horarios, vencimientos), van en un `lib/<dominio>-<tema>.ts` —
+`lib/motorcycle-status.ts`, `lib/service-point-hours.ts`— y no dentro de un
+componente.
 
 ### 2.2 Las piezas compartidas (no las reescribas)
 
@@ -145,7 +158,9 @@ orden de ese arreglo es una decisión de producto, no de código.
 **Ya existían y se siguen usando**: `page-header.tsx`, `states.tsx` (vacío,
 error, esqueletos), `status-pill.tsx`, `thumb.tsx`, `lib/errors.ts`,
 `lib/format.ts` (`formatCop`, `formatDate`, `daysUntil`, `slugify`,
-`textoBuscable`…).
+`textoBuscable`…) y `lib/site.ts`, donde vive **la URL pública de cada dominio**
+(`urlPublicaDeMoto`, `urlPublicaDePunto`, `urlWhatsApp`) — la acción «Ver en el
+sitio» del menú de fila sale de ahí, nunca de una plantilla escrita a mano.
 
 ### 2.3 El orden en que se escribe un módulo
 
@@ -283,7 +298,14 @@ El sitio público lee del mismo backend, sin sesión.
 5. Comprobar la página en el navegador con el backend arriba **y** con el
    backend caído: el sitio no puede quedar en blanco por una sección.
 
-Pendientes en `web` al cerrar la Fase 0: `service-points-mock.json`,
+Los `jsonb` (`hours`, `location`, `address`) **se documentan en las tres capas
+o cada una asumirá una forma distinta**: la regla «un día ausente está cerrado»
+de `service-point` vive escrita en el tipo del backend, en el Zod, en el SDL y
+en las dos utilidades de formato (`cms-admin/lib/service-point-hours.ts` y
+`web/src/utils/service-point-hours.ts`, que sí están duplicadas: son paquetes
+distintos y ninguno de los dos depende del otro).
+
+Pendientes en `web`: ~~`service-points-mock.json`~~ (borrado en la Fase 2),
 `services-mock.json`, `news-mock.json` y `home-mock.json` (este último vía
 `web/src/services/contentful.ts`).
 
@@ -331,4 +353,7 @@ porque abstraerlo mal cuesta más que escribirlo dos veces:
 - [ ] Todo funciona a 390 px de ancho y en tema oscuro.
 - [ ] La página pública correspondiente ya no lee un mock y el JSON está
       borrado.
-- [ ] `cms-admin/CLAUDE.md` menciona las decisiones nuevas del módulo.
+- [ ] El buscador de la barra superior busca **en la sección**, no en `/motos`
+      (mapa `BUSCADORES` de `admin-search.tsx`).
+- [ ] `backend/CLAUDE.md` (tabla de dominios + decisiones) y
+      `cms-admin/CLAUDE.md` (decisiones del módulo) actualizados.

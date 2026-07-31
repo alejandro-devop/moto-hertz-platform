@@ -30,12 +30,22 @@ Registrar en `src/graphql/schema.ts` y `src/graphql/resolvers.ts`.
 | Dominio | Estado | GraphQL module | Service |
 |---|---|---|---|
 | motorcycle | ✅ completo (referencia) | `motorcycle/` | `motorcycle.service.ts` |
-| service-point | ⏳ solo tabla en `schema.ts` + migración | — | — |
+| service-point | ✅ completo (puntos de atención) | `service-point/` | `service-point.service.ts` |
 | service | ⏳ solo tabla en `schema.ts` + migración | — | — |
 | news | ⏳ solo tabla en `schema.ts` + migración | — | — |
 | media | ✅ completo (biblioteca de imágenes) | `media/` | `media.service.ts` |
 
-`motorcycle` es la referencia de patrón completa (schema Drizzle, migración, service, tipos, validadores Zod, módulo GraphQL con query/mutations). Los otros 3 dominios confirmados con el usuario ya tienen tabla y migración, pero su capa de servicio/GraphQL queda pendiente para una fase posterior siguiendo el mismo patrón.
+`motorcycle` es la referencia de patrón completa (schema Drizzle, migración, service, tipos, validadores Zod, módulo GraphQL con query/mutations). `service` y `news` ya tienen tabla y migración, pero su capa de servicio/GraphQL queda pendiente para su fase, siguiendo el mismo patrón.
+
+### `service-point` (Fase 2 del plan CMS)
+
+Tres decisiones que hay que respetar antes de tocarlo:
+
+- **`services`, `featured` e `image` quedaron sin usar.** Venían de la plantilla Yamaha y el usuario los descartó: no están en el SDL ni en el panel. Las columnas siguen en la tabla —borrarlas era una migración por nada— y así está anotado en `schema.ts`.
+- **`type` es un catálogo cerrado**, no texto libre: `SEDE`, `CONCESIONARIO`, `DISTRIBUIDOR` (migración `007`, que además lo hizo `NOT NULL`). No es un ENUM de Postgres a propósito: los valores los manda el dominio (enum del SDL + Zod + tipo TS + etiquetas del panel), no la base.
+- **La ubicación se guarda como el enlace de Google Maps que se pegó**, y `lat`/`lng` las **deriva el service** con `shared/geo/maps-url.ts` (`@lat,lng`, `!3d…!4d…`, `q=lat,lng`). No se aceptan coordenadas de afuera: así no puede haber un punto cuyas coordenadas no correspondan a su enlace. Los enlaces cortos `maps.app.goo.gl` no traen coordenadas y se guardan sin ellas — el sitio muestra «Cómo llegar» sin mapa.
+
+`hours` es `{ monday: { open: "09:15", close: "17:00" }, … }` y **un día ausente está cerrado**: no hay bandera `closed`, para que no haya dos formas de decir lo mismo.
 
 ## Autenticación
 
@@ -59,7 +69,7 @@ Al subir, `src/shared/images/process.ts` (sharp) reduce el lado mayor a 1600 px 
 - `…Remove` manda a la papelera, `…Restore` la saca, `…Purge` borra de verdad (y falla si no está en la papelera). En `media`, purgar **también borra el archivo** del almacenamiento.
 - Eliminar un registro de contenido **no toca sus imágenes**: los archivos se borran solo desde la biblioteca de medios.
 
-`service_points`, `services` y `news` solo tienen la columna; su comportamiento llega con su fase. El patrón a seguir está en `../docs/cms-plan/PATRON.md` §1.1.
+`service_points` estrenó su papelera en la Fase 2, **sin migración nueva**: la columna ya estaba. `services` y `news` siguen teniendo solo la columna; su comportamiento llega con su fase. El patrón a seguir está en `../docs/cms-plan/PATRON.md` §1.1.
 
 ## Patrones obligatorios
 

@@ -10,3 +10,18 @@ export const SITIO_PUBLICO = (
 export function urlPublicaDeMoto(slug: string): string {
   return `${SITIO_PUBLICO}/motos/${slug}`;
 }
+
+/**
+ * Los puntos de atención **no tienen página propia** en el sitio: viven todos
+ * en `/puntos-atencion`, y cada tarjeta lleva el `id` de su slug para poder
+ * enlazar directo al que se está editando.
+ */
+export function urlPublicaDePunto(slug?: string): string {
+  return slug ? `${SITIO_PUBLICO}/puntos-atencion#${slug}` : `${SITIO_PUBLICO}/puntos-atencion`;
+}
+
+/** El enlace de chat que arma el sitio con un número de WhatsApp. */
+export function urlWhatsApp(numero?: string | null): string | null {
+  const digitos = (numero ?? '').replace(/\D/g, '');
+  return digitos.length >= 7 ? `https://wa.me/${digitos}` : null;
+}

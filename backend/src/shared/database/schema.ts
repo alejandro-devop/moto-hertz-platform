@@ -19,6 +19,12 @@ import type {
   MotorcyclePaperwork,
   MotorcycleSpecs,
 } from '../../types/services/motorcycle.types';
+import type {
+  ServicePointAddress,
+  ServicePointHours,
+  ServicePointLocation,
+  ServicePointType,
+} from '../../types/services/service-point.types';
 
 // ============================================
 // MOTORCYCLES — catálogo de motos
@@ -60,21 +66,30 @@ export const motorcycles = pgTable('motorcycles', {
 // ============================================
 // SERVICE POINTS — puntos de atención/talleres
 // ============================================
+/**
+ * `services`, `featured` e `image` **quedaron sin usar** en la Fase 2 del plan
+ * CMS: el usuario descartó esos tres campos (venían de la plantilla Yamaha). Se
+ * dejan en la tabla para no migrar por nada, pero no se exponen en GraphQL ni
+ * se editan en el panel. Ver `../../types/services/service-point.types.ts`.
+ */
 export const servicePoints = pgTable('service_points', {
   id: uuid('id')
     .primaryKey()
     .$defaultFn(() => generateUuidV7()),
   slug: varchar('slug', { length: 255 }).notNull().unique(),
   name: varchar('name', { length: 255 }).notNull(),
-  type: varchar('type', { length: 100 }),
-  address: jsonb('address').$type<Record<string, string>>(),
+  type: varchar('type', { length: 100 }).$type<ServicePointType>().notNull().default('SEDE'),
+  address: jsonb('address').$type<ServicePointAddress>(),
   phone: varchar('phone', { length: 50 }),
   whatsapp: varchar('whatsapp', { length: 50 }),
   email: varchar('email', { length: 255 }),
-  location: jsonb('location').$type<{ lat: number; lng: number }>(),
-  hours: jsonb('hours').$type<Record<string, string>>(),
+  location: jsonb('location').$type<ServicePointLocation>(),
+  hours: jsonb('hours').$type<ServicePointHours>(),
+  /** Sin usar (ver arriba). */
   services: jsonb('services').$type<string[]>().default([]),
+  /** Sin usar (ver arriba). */
   featured: boolean('featured').notNull().default(false),
+  /** Sin usar (ver arriba). */
   image: text('image'),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),

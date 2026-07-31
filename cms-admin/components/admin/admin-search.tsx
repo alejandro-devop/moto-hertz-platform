@@ -5,11 +5,36 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Search, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-const DESTINO = '/motos';
+/**
+ * Las listas que leen `?q=` de la URL, con lo que se busca en cada una. El
+ * buscador escribe sobre **la sección donde uno está**; fuera de ellas cae en
+ * `/motos`, que es el catálogo y lo que se busca el 90 % de las veces.
+ *
+ * Hasta la Fase 2 escribía siempre en `/motos`: estando en Medios o en Puntos
+ * de atención, escribir en la barra te sacaba de la sección que estabas
+ * mirando. **Al agregar una lista con búsqueda hay que agregarla aquí.**
+ */
+const BUSCADORES: Record<string, { placeholder: string; aria: string }> = {
+  '/motos': {
+    placeholder: 'Buscar por nombre o matrícula',
+    aria: 'Buscar motos por nombre o matrícula',
+  },
+  '/puntos-de-atencion': {
+    placeholder: 'Buscar por nombre o dirección',
+    aria: 'Buscar puntos de atención por nombre o dirección',
+  },
+  '/medios': {
+    placeholder: 'Buscar por nombre de archivo',
+    aria: 'Buscar imágenes por nombre de archivo',
+  },
+};
+
+const DESTINO_POR_DEFECTO = '/motos';
 
 /**
- * Buscador global. Escribe en `?q=` de `/motos`, que es de donde la lista lee
- * su filtro — así la búsqueda queda en la URL y el botón de atrás funciona.
+ * Buscador global. Escribe en `?q=` de la lista de la sección actual, que es de
+ * donde esa lista lee su filtro — así la búsqueda queda en la URL y el botón de
+ * atrás funciona.
  */
 export function AdminSearch({
   className,
@@ -24,6 +49,12 @@ export function AdminSearch({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const destino =
+    Object.keys(BUSCADORES).find(
+      (ruta) => pathname === ruta || pathname.startsWith(`${ruta}/`)
+    ) ?? DESTINO_POR_DEFECTO;
+  const textos = BUSCADORES[destino];
 
   const q = searchParams.get('q') ?? '';
   const [value, setValue] = useState(q);
@@ -46,12 +77,12 @@ export function AdminSearch({
       else next.delete('q');
       /* Cambiar la búsqueda siempre vuelve a la primera página. */
       next.delete('pagina');
-      const url = next.size > 0 ? `${DESTINO}?${next}` : DESTINO;
-      if (pathname === DESTINO) router.replace(url, { scroll: false });
+      const url = next.size > 0 ? `${destino}?${next}` : destino;
+      if (pathname === destino) router.replace(url, { scroll: false });
       else router.push(url);
     }, 250);
     return () => clearTimeout(timer);
-  }, [value, pathname, router, searchParams]);
+  }, [value, pathname, destino, router, searchParams]);
 
   /* ⌘K / Ctrl+K enfoca el buscador desde cualquier parte del panel. */
   useEffect(() => {
@@ -87,8 +118,8 @@ export function AdminSearch({
             else onClose?.();
           }
         }}
-        placeholder="Buscar por nombre o matrícula"
-        aria-label="Buscar motos por nombre o matrícula"
+        placeholder={textos.placeholder}
+        aria-label={textos.aria}
         className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground [&::-webkit-search-cancel-button]:hidden"
       />
       {value ? (

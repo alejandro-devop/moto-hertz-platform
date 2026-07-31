@@ -224,54 +224,36 @@
   }
 }
 
-.featuredBadge {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: #d10e10;
-  color: white;
-  padding: 0.375rem 0.875rem;
-  border-radius: 50px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  z-index: 2;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.imageContainer {
+/* El mapa reemplazó a la foto de plantilla: lo que ubica una sede es dónde
+   queda, no una imagen de stock. Solo aparece cuando el punto tiene
+   coordenadas (ver `location.lat/lng`). */
+.mapContainer {
   position: relative;
   width: 100%;
-  padding-top: 50%;
-  overflow: hidden;
+  padding-top: 45%;
   background: #f5f5f5;
 
-  img {
+  iframe {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-  }
-
-  &:hover img {
-    transform: scale(1.05);
+    border: 0;
   }
 }
 
 .typeBadge {
-  position: absolute;
-  bottom: 1rem;
-  left: 1rem;
-  background: rgba(255, 255, 255, 0.95);
-  color: #333;
-  padding: 0.375rem 0.875rem;
+  display: inline-block;
+  align-self: flex-start;
+  margin-bottom: 0.625rem;
+  background: #f2f2f2;
+  color: #444;
+  padding: 0.25rem 0.75rem;
   border-radius: 50px;
   font-size: 0.75rem;
   font-weight: 600;
-  z-index: 1;
+  letter-spacing: 0.3px;
 }
 
 .cardContent {
@@ -282,6 +264,9 @@
 }
 
 .cardHeader {
+  display: flex;
+  flex-direction: column;
+
   h3 {
     font-size: 1.375rem;
     font-weight: 700;
@@ -378,43 +363,6 @@
   span:first-child {
     font-weight: 500;
     color: #555;
-  }
-}
-
-.services {
-  padding-top: 1rem;
-  border-top: 1px solid #f0f0f0;
-
-  strong {
-    display: block;
-    font-size: 0.9375rem;
-    color: #333;
-    margin-bottom: 0.75rem;
-    font-weight: 600;
-  }
-
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-
-    li {
-      font-size: 0.875rem;
-      color: #666;
-      padding-left: 1.25rem;
-      position: relative;
-
-      &::before {
-        content: "✓";
-        position: absolute;
-        left: 0;
-        color: #d10e10;
-        font-weight: 700;
-      }
-    }
   }
 }
 

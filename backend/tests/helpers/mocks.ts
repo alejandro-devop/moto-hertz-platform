@@ -77,6 +77,28 @@ export const createMockMotorcycle = (overrides = {}) => ({
   ...overrides,
 });
 
+export const createMockServicePoint = (overrides = {}) => ({
+  id: '019c7d42-15dc-7000-8000-000000000101',
+  slug: 'san-diego',
+  name: 'Sede San Diego',
+  type: 'SEDE',
+  address: {
+    street: 'Carrera 46 No 36-16',
+    neighborhood: 'San Diego',
+    city: 'Medellín',
+    state: 'Antioquia',
+  },
+  phone: '+57 604 262 85 41',
+  whatsapp: '+57 318 716 66 13',
+  email: null,
+  location: { mapsUrl: 'https://www.google.com/maps/@6.2400,-75.5700,17z', lat: 6.24, lng: -75.57 },
+  hours: { monday: { open: '09:15', close: '17:00' } },
+  createdAt: new Date('2026-01-01'),
+  updatedAt: new Date('2026-01-01'),
+  deletedAt: null,
+  ...overrides,
+});
+
 export const resetAllMocks = () => {
   jest.clearAllMocks();
   mockDbPool.query.mockReset();
