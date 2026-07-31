@@ -12,7 +12,7 @@ import {
 import type { Motorcycle } from '@/lib/graphql/motorcycles';
 import { getPaperwork, getPublication } from '@/lib/motorcycle-status';
 
-export type Estado = 'todas' | 'publicadas' | 'incompletas' | 'fuera';
+export type Estado = 'todas' | 'publicadas' | 'incompletas' | 'fuera' | 'papelera';
 export type Condicion = 'todas' | 'NEW' | 'USED';
 export type Papeles = 'todos' | 'atencion';
 export type Orden = 'nombre' | 'precio-desc' | 'precio-asc' | 'anio-desc' | 'anio-asc';
@@ -54,6 +54,10 @@ export const ETIQUETAS_ESTADO: Record<Estado, string> = {
   publicadas: 'Publicadas',
   incompletas: 'Incompletas',
   fuera: 'Fuera del sitio',
+  /* La papelera no es un estado de publicación sino otra lista: se pide al
+     backend con `trashed`. Vive en el mismo desplegable porque es donde se
+     busca «¿dónde quedó la moto que borré?». */
+  papelera: 'En papelera',
 };
 
 export const ETIQUETAS_CONDICION: Record<Condicion, string> = {
@@ -119,7 +123,9 @@ export function aplicarFiltros(motorcycles: Motorcycle[], filtros: Filtros): Mot
     if (filtros.marca !== TODAS && motorcycle.brand !== filtros.marca) return false;
     if (filtros.sede !== TODAS && motorcycle.location?.name !== filtros.sede) return false;
 
-    if (filtros.estado !== 'todas') {
+    /* En la papelera no hay estado de publicación que valga: la lista entera
+       viene de otra consulta. */
+    if (filtros.estado !== 'todas' && filtros.estado !== 'papelera') {
       const { level } = getPublication(motorcycle);
       if (filtros.estado === 'publicadas' && level !== 'publicada') return false;
       if (filtros.estado === 'incompletas' && level !== 'incompleta') return false;

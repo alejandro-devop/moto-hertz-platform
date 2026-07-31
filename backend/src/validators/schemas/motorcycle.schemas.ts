@@ -78,6 +78,7 @@ export const motorcyclesListArgsSchema = z.object({
   available: z.boolean().optional(),
   page: z.number().int().min(1).optional(),
   limit: z.number().int().min(1).max(100).optional(),
+  trashed: z.boolean().optional(),
 });
 
 export const motorcycleAddInputSchema = z.object({

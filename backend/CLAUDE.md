@@ -23,6 +23,8 @@ src/validators/schemas/<dominio>.schemas.ts
 
 Registrar en `src/graphql/schema.ts` y `src/graphql/resolvers.ts`.
 
+**Única excepción vigente**: `POST /api/media` (subida de archivos, `src/routes/media.ts`). GraphQL no transporta binarios — base64 infla un 33 % y obliga a bufferizar el JSON entero. Todo lo demás de medios (listar, papelera, restaurar, purgar) sí es GraphQL.
+
 ## Dominios
 
 | Dominio | Estado | GraphQL module | Service |
@@ -31,12 +33,33 @@ Registrar en `src/graphql/schema.ts` y `src/graphql/resolvers.ts`.
 | service-point | ⏳ solo tabla en `schema.ts` + migración | — | — |
 | service | ⏳ solo tabla en `schema.ts` + migración | — | — |
 | news | ⏳ solo tabla en `schema.ts` + migración | — | — |
+| media | ✅ completo (biblioteca de imágenes) | `media/` | `media.service.ts` |
 
 `motorcycle` es la referencia de patrón completa (schema Drizzle, migración, service, tipos, validadores Zod, módulo GraphQL con query/mutations). Los otros 3 dominios confirmados con el usuario ya tienen tabla y migración, pero su capa de servicio/GraphQL queda pendiente para una fase posterior siguiendo el mismo patrón.
 
 ## Autenticación
 
 Un solo rol admin (sin tabla de usuarios ni roles diferenciados, decisión de Fase 3): las credenciales viven en `ADMIN_EMAIL` / `ADMIN_PASSWORD_HASH` (bcrypt) por variable de entorno. La mutation `login(email, password)` (`src/graphql/modules/auth/`) verifica contra esas variables y devuelve un JWT (`src/shared/auth/jwt.ts`, secreto en `JWT_SECRET`). `getGraphQLContext` (`src/graphql/server.ts`) valida el header `Authorization: Bearer <token>` en cada request y expone `context.user` si es válido. Las queries de catálogo siguen siendo públicas; las mutaciones de escritura llaman a `requireAuth(context, operationName)` (`src/graphql/utils/error-handler.ts`) para exigir sesión — ver `motorcycle.resolvers.ts` como referencia a replicar en los demás dominios.
+
+**Dos excepciones a «las queries son públicas»**, ambas de la Fase 1: `mediaList` exige sesión (la biblioteca es una herramienta del panel, no contenido del sitio) y el endpoint REST `POST /api/media` va protegido por el middleware `requireAdmin` (`src/shared/middleware/require-admin.ts`), que valida el mismo JWT que las mutaciones.
+
+## Medios y almacenamiento
+
+> Fase 1 del plan CMS. Detalle en `src/shared/storage/README.md`.
+
+Los archivos que suben del panel **nunca se escriben a disco directamente**: pasan por `getStorage()` (`src/shared/storage/`), una interfaz (`put`/`delete`/`url`/`exists`) con el driver elegido por `STORAGE_DRIVER`. Hoy solo existe **`local`** (carpeta `MEDIA_ROOT`, volumen Docker `media_data`, servida en `/media/**` desde `app.ts`). Agregar S3 o GCS es escribir `<nombre>.driver.ts` y registrarlo en el mapa `DRIVERS` — sin tocar services ni resolvers.
+
+Al subir, `src/shared/images/process.ts` (sharp) reduce el lado mayor a 1600 px y convierte a **WebP**; el original no se conserva. La clave es `AAAA/MM/<32 hex>.webp`: no adivinable y sin colisiones. `sharp` es dependencia **nativa**: cambiar deps obliga a reconstruir la imagen de Docker (`docker compose rm -sfv app && docker compose build app && docker compose up -d app`).
+
+## Papelera (soft delete)
+
+`media`, `motorcycles`, `service_points`, `services` y `news` tienen `deleted_at` (migración `006`). En los dominios que ya tienen capa de servicio (`motorcycle` y `media`):
+
+- Toda lectura filtra `isNull(deletedAt)`; la lista acepta `trashed: Boolean` para pedir la papelera. La búsqueda por **slug** (la que consume el sitio público) nunca devuelve algo borrado; la búsqueda por **id** sí, porque restaurar y purgar trabajan sobre lo borrado.
+- `…Remove` manda a la papelera, `…Restore` la saca, `…Purge` borra de verdad (y falla si no está en la papelera). En `media`, purgar **también borra el archivo** del almacenamiento.
+- Eliminar un registro de contenido **no toca sus imágenes**: los archivos se borran solo desde la biblioteca de medios.
+
+`service_points`, `services` y `news` solo tienen la columna; su comportamiento llega con su fase. El patrón a seguir está en `../docs/cms-plan/PATRON.md` §1.1.
 
 ## Patrones obligatorios
 

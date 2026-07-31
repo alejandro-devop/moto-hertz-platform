@@ -52,3 +52,6 @@ Thumbs.db
 
 # docker
 docker-compose.override.yml
+
+# Medios subidos por el panel con el driver local de almacenamiento
+backend/uploads/

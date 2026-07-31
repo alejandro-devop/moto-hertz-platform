@@ -44,11 +44,31 @@ export function MotorcycleActions({
   motorcycle: Motorcycle;
   onEdit: (motorcycle: Motorcycle, seccion?: SeccionId) => void;
 }) {
-  const { patch, remove } = useMotorcycleMutations();
+  const { patch, remove, restore, purge } = useMotorcycleMutations();
   const [precioAbierto, setPrecioAbierto] = useState(false);
   const [borradoAbierto, setBorradoAbierto] = useState(false);
+  const [purgaAbierta, setPurgaAbierta] = useState(false);
 
   const fotos = (motorcycle.images?.gallery?.length ?? 0) + (motorcycle.images?.main ? 1 : 0);
+  const enPapelera = Boolean(motorcycle.deletedAt);
+
+  /* En la papelera solo hay dos caminos: traerla de vuelta o borrarla de
+     verdad. Editar precio o publicar una moto borrada no significa nada. */
+  const accionesPapelera: AccionFila[] = [
+    {
+      id: 'restaurar',
+      label: 'Restaurar al catálogo',
+      icon: Undo2,
+      onSelect: () => restore.mutate({ id: motorcycle.id, name: motorcycle.name }),
+    },
+    {
+      id: 'purgar',
+      label: 'Eliminar definitivamente',
+      icon: Trash2,
+      danger: true,
+      onSelect: () => setPurgaAbierta(true),
+    },
+  ];
 
   const acciones: AccionFila[] = [
     {
@@ -103,7 +123,7 @@ export function MotorcycleActions({
     },
     {
       id: 'eliminar',
-      label: 'Eliminar',
+      label: 'Mover a la papelera',
       icon: Trash2,
       danger: true,
       onSelect: () => setBorradoAbierto(true),
@@ -113,7 +133,7 @@ export function MotorcycleActions({
   return (
     <>
       <RowActions
-        acciones={acciones}
+        acciones={enPapelera ? accionesPapelera : acciones}
         etiqueta={`Acciones para ${motorcycle.name}`}
         encabezado={
           <>
@@ -144,11 +164,12 @@ export function MotorcycleActions({
       <AlertDialog open={borradoAbierto} onOpenChange={setBorradoAbierto}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>¿Eliminar “{motorcycle.name}”?</AlertDialogTitle>
+            <AlertDialogTitle>¿Mandar “{motorcycle.name}” a la papelera?</AlertDialogTitle>
             <AlertDialogDescription>
-              La ficha y sus fotos se borran del catálogo y no se pueden recuperar. Si la moto se
-              vendió, mejor usa <strong>Marcar como vendida</strong>: sale del sitio y el registro
-              queda.
+              Sale del sitio y del catálogo, pero se puede recuperar desde el filtro{' '}
+              <strong>En papelera</strong>. Sus fotos no se tocan: siguen en{' '}
+              <strong>Medios</strong>. Si la moto se vendió, mejor usa{' '}
+              <strong>Marcar como vendida</strong>: sale del sitio y el registro queda a la vista.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -163,7 +184,34 @@ export function MotorcycleActions({
                 )
               }
             >
-              {remove.isPending ? 'Eliminando…' : 'Eliminar la moto'}
+              {remove.isPending ? 'Moviendo…' : 'Mover a la papelera'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={purgaAbierta} onOpenChange={setPurgaAbierta}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Eliminar “{motorcycle.name}” para siempre?</AlertDialogTitle>
+            <AlertDialogDescription>
+              La ficha se borra de la base de datos y no se puede recuperar. Sus fotos quedan en{' '}
+              <strong>Medios</strong>: si tampoco las quieres, elimínalas desde allá.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Conservar en la papelera</AlertDialogCancel>
+            <AlertDialogAction
+              variant="destructive"
+              disabled={purge.isPending}
+              onClick={() =>
+                purge.mutate(
+                  { id: motorcycle.id, name: motorcycle.name },
+                  { onSuccess: () => setPurgaAbierta(false) }
+                )
+              }
+            >
+              {purge.isPending ? 'Eliminando…' : 'Eliminar definitivamente'}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

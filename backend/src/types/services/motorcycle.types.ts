@@ -96,6 +96,8 @@ export interface Motorcycle {
   featured: boolean;
   createdAt: Date;
   updatedAt: Date;
+  /** Papelera: con valor, la moto está borrada y no sale en ningún listado normal. */
+  deletedAt?: Date | null;
 }
 
 export interface MotorcycleCollection {
@@ -113,6 +115,8 @@ export interface ListMotorcyclesOptions {
   available?: boolean;
   page?: number;
   limit?: number;
+  /** `true` = solo la papelera. Por defecto, solo lo no borrado. */
+  trashed?: boolean;
 }
 
 export interface CreateMotorcycleInput {

@@ -67,6 +67,8 @@ export interface Motorcycle {
   location?: MotorcycleLocation | null;
   available: boolean;
   featured: boolean;
+  /** Con valor, la moto está en la papelera. */
+  deletedAt?: string | null;
 }
 
 export interface MotorcycleFormInput {
@@ -147,11 +149,12 @@ const MOTORCYCLE_FIELDS = /* GraphQL */ `
   }
   available
   featured
+  deletedAt
 `;
 
 export const MOTORCYCLES_QUERY = /* GraphQL */ `
-  query Motorcycles($page: Int, $limit: Int) {
-    motorcycles(page: $page, limit: $limit) {
+  query Motorcycles($page: Int, $limit: Int, $trashed: Boolean) {
+    motorcycles(page: $page, limit: $limit, trashed: $trashed) {
       total
       page
       limit
@@ -178,9 +181,26 @@ export const MOTORCYCLE_EDIT_MUTATION = /* GraphQL */ `
   }
 `;
 
+/** Manda a la papelera; las fotos de la moto no se tocan. */
 export const MOTORCYCLE_REMOVE_MUTATION = /* GraphQL */ `
   mutation MotorcycleRemove($id: ID!) {
     motorcycleRemove(id: $id)
+  }
+`;
+
+export const MOTORCYCLE_RESTORE_MUTATION = /* GraphQL */ `
+  mutation MotorcycleRestore($id: ID!) {
+    motorcycleRestore(id: $id) {
+      id
+      deletedAt
+    }
+  }
+`;
+
+/** Definitivo. Solo desde la papelera. */
+export const MOTORCYCLE_PURGE_MUTATION = /* GraphQL */ `
+  mutation MotorcyclePurge($id: ID!) {
+    motorcyclePurge(id: $id)
   }
 `;
 

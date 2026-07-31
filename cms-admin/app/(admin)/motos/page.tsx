@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { Bike, Plus, SearchX, TriangleAlert } from 'lucide-react';
+import { Bike, Plus, SearchX, Trash2, TriangleAlert } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PageHeader } from '@/components/admin/page-header';
 import { ListaResponsive, type ColumnaLista } from '@/components/admin/responsive-list';
@@ -35,7 +35,10 @@ export default function MotosPage() {
     escribir: escribirFiltros,
   });
 
-  const { data, isLoading, isError, error, refetch, isFetching } = useMotorcyclesQuery();
+  /* «En papelera» no es un filtro sobre la lista: es otra consulta. */
+  const enPapelera = filtros.estado === 'papelera';
+  const { data, isLoading, isError, error, refetch, isFetching } =
+    useMotorcyclesQuery(enPapelera);
   const { add, edit } = useMotorcycleMutations();
 
   const [fichaAbierta, setFichaAbierta] = useState(false);
@@ -71,6 +74,8 @@ export default function MotosPage() {
     <InlineSkeleton />
   ) : isError ? (
     'No se pudo cargar el catálogo'
+  ) : enPapelera ? (
+    `${motos.length} ${motos.length === 1 ? 'moto' : 'motos'} en la papelera`
   ) : (
     `${motos.length} en catálogo · ${disponibles} en el sitio · ${motos.length - disponibles} fuera`
   );
@@ -89,7 +94,7 @@ export default function MotosPage() {
       />
 
       {/* Lo único que caduca solo en el catálogo va arriba de todo. */}
-      {porVencer > 0 && filtros.papeles !== 'atencion' ? (
+      {porVencer > 0 && filtros.papeles !== 'atencion' && !enPapelera ? (
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border border-warning/30 border-l-[3px] border-l-warning bg-warning-surface px-3 py-2.5 text-[13px]">
           <TriangleAlert className="size-4 shrink-0 text-warning" />
           <span className="min-w-0">
@@ -117,6 +122,13 @@ export default function MotosPage() {
         sedes={facetas.sedes}
       />
 
+      {enPapelera && motos.length > 0 ? (
+        <p className="rounded-lg border border-border bg-muted/40 px-3 py-2 text-[13px] text-muted-foreground">
+          Estas motos no salen en el sitio. Se pueden restaurar desde el menú de cada fila; sus
+          fotos siguen guardadas en <strong>Medios</strong>.
+        </p>
+      ) : null}
+
       {isError ? (
         <ErrorState
           description={`${mensajeDeError(error)} El detalle completo está en la consola del navegador.`}
@@ -128,17 +140,30 @@ export default function MotosPage() {
           <TableSkeleton />
         </div>
       ) : motos.length === 0 ? (
-        <EmptyState
-          icon={Bike}
-          title="El catálogo está vacío"
-          description="Publica la primera moto: con el nombre y el precio ya queda visible en el sitio."
-          action={
-            <Button onClick={() => abrirFicha(null)}>
-              <Plus />
-              Publicar la primera moto
-            </Button>
-          }
-        />
+        enPapelera ? (
+          <EmptyState
+            icon={Trash2}
+            title="La papelera está vacía"
+            description="Aquí llegan las motos que elimines. Se pueden restaurar mientras estén acá."
+            action={
+              <Button variant="outline" onClick={() => actualizar({ estado: 'todas' })}>
+                Volver al catálogo
+              </Button>
+            }
+          />
+        ) : (
+          <EmptyState
+            icon={Bike}
+            title="El catálogo está vacío"
+            description="Publica la primera moto: con el nombre y el precio ya queda visible en el sitio."
+            action={
+              <Button onClick={() => abrirFicha(null)}>
+                <Plus />
+                Publicar la primera moto
+              </Button>
+            }
+          />
+        )
       ) : pagina.total === 0 ? (
         <EmptyState
           icon={SearchX}

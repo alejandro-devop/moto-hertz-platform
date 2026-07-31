@@ -66,6 +66,14 @@ services:
       CORS_ORIGIN: '*'
       LOG_LEVEL: debug
 
+      # Medios: driver de almacenamiento y carpeta del driver local. `media_data`
+      # es un volumen nombrado, así que las imágenes sobreviven a recrear el
+      # contenedor. Ver src/shared/storage/README.md.
+      STORAGE_DRIVER: local
+      MEDIA_ROOT: /app/uploads
+      MEDIA_PUBLIC_BASE_URL: http://localhost:8080/media
+      MEDIA_MAX_UPLOAD_MB: 15
+
       # Nota: "$$" escapa el "$" para que docker compose no lo interprete
       # como interpolación de variable (el hash bcrypt empieza con "$2b$").
       JWT_SECRET: dev-secret-change-me
@@ -78,6 +86,7 @@ services:
       - ./migrations:/app/migrations
       - ./tsconfig.json:/app/tsconfig.json
       - /app/node_modules
+      - media_data:/app/uploads
     depends_on:
       postgres:
         condition: service_healthy
@@ -88,3 +97,4 @@ services:
 volumes:
   postgres_data:
   redis_data:
+  media_data:

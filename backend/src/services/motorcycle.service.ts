@@ -1,7 +1,7 @@
-import { and, count, desc, eq, SQL } from 'drizzle-orm';
+import { and, count, desc, eq, isNotNull, isNull, SQL } from 'drizzle-orm';
 import { getDb } from '../shared/database/drizzle';
 import { motorcycles } from '../shared/database/schema';
-import { NotFoundError } from '../shared/errors';
+import { BadRequestError, NotFoundError } from '../shared/errors';
 import type {
   CreateMotorcycleInput,
   ListMotorcyclesOptions,
@@ -11,7 +11,11 @@ import type {
 } from '../types/services/motorcycle.types';
 
 function buildFilters(options: ListMotorcyclesOptions): SQL | undefined {
-  const conditions: SQL[] = [];
+  /* Papelera: toda lectura la excluye salvo que se pida explícitamente.
+     Ver «Soft delete» en `docs/cms-plan/PATRON.md`. */
+  const conditions: SQL[] = [
+    options.trashed ? isNotNull(motorcycles.deletedAt) : isNull(motorcycles.deletedAt),
+  ];
 
   if (options.category) {
     conditions.push(eq(motorcycles.category, options.category));
@@ -58,13 +62,22 @@ async function listMotorcycles(options: ListMotorcyclesOptions = {}): Promise<Mo
   };
 }
 
+/** El sitio público consulta por slug: una moto en la papelera no existe. */
 async function getMotorcycleBySlug(slug: string): Promise<Motorcycle> {
   const db = getDb();
-  const [row] = await db.select().from(motorcycles).where(eq(motorcycles.slug, slug)).limit(1);
+  const [row] = await db
+    .select()
+    .from(motorcycles)
+    .where(and(eq(motorcycles.slug, slug), isNull(motorcycles.deletedAt)))
+    .limit(1);
   if (!row) throw new NotFoundError('Motorcycle not found');
   return row as Motorcycle;
 }
 
+/**
+ * Por id **sí alcanza la papelera**: restaurar y eliminar definitivamente
+ * trabajan justamente sobre registros borrados.
+ */
 async function getMotorcycleById(id: string): Promise<Motorcycle> {
   const db = getDb();
   const [row] = await db.select().from(motorcycles).where(eq(motorcycles.id, id)).limit(1);
@@ -89,8 +102,43 @@ async function updateMotorcycle(id: string, input: UpdateMotorcycleInput): Promi
   return row as Motorcycle;
 }
 
-async function deleteMotorcycle(id: string): Promise<boolean> {
+/**
+ * A la papelera, no al vacío. Sus fotos **no se tocan**: los archivos viven en
+ * la biblioteca de medios y se borran solo desde ahí (decisión de la Fase 1).
+ */
+async function trashMotorcycle(id: string): Promise<boolean> {
+  const actual = await getMotorcycleById(id);
+  if (actual.deletedAt) return true;
+
+  const db = getDb();
+  await db
+    .update(motorcycles)
+    .set({ deletedAt: new Date(), updatedAt: new Date() })
+    .where(eq(motorcycles.id, id))
+    .returning();
+  return true;
+}
+
+async function restoreMotorcycle(id: string): Promise<Motorcycle> {
   await getMotorcycleById(id);
+  const db = getDb();
+  const [row] = await db
+    .update(motorcycles)
+    .set({ deletedAt: null, updatedAt: new Date() })
+    .where(eq(motorcycles.id, id))
+    .returning();
+  return row as Motorcycle;
+}
+
+/** Definitivo. Solo desde la papelera: hay que decidirlo dos veces. */
+async function purgeMotorcycle(id: string): Promise<boolean> {
+  const actual = await getMotorcycleById(id);
+  if (!actual.deletedAt) {
+    throw new BadRequestError(
+      'Antes de eliminar definitivamente hay que mandar la moto a la papelera.'
+    );
+  }
+
   const db = getDb();
   await db.delete(motorcycles).where(eq(motorcycles.id, id));
   return true;
@@ -102,5 +150,9 @@ export const motorcycleService = {
   getMotorcycleById,
   createMotorcycle,
   updateMotorcycle,
-  deleteMotorcycle,
+  /** Nombre viejo, comportamiento nuevo: manda a la papelera. */
+  deleteMotorcycle: trashMotorcycle,
+  trashMotorcycle,
+  restoreMotorcycle,
+  purgeMotorcycle,
 };

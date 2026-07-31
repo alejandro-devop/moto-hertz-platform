@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowDown, ArrowUp, Star, Trash2, TriangleAlert } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { TriangleAlert } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -15,7 +14,7 @@ import { TabsContent } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { ALTO_CAMPO, Field, Grid, ToggleRow } from '@/components/admin/form-fields';
 import { FormSheet } from '@/components/admin/form-sheet';
-import { Thumb } from '@/components/admin/thumb';
+import { GaleriaImagenes } from '@/components/admin/image-picker';
 import { StatusPill, paperTone } from '@/components/admin/status-pill';
 import { daysUntil, formatCop, formatDate, groupDigits, humanizeDays, onlyDigits } from '@/lib/format';
 import { cn } from '@/lib/utils';
@@ -31,151 +30,6 @@ import {
 } from './motorcycle-form-state';
 
 const ETIQUETAS_CONDICION = { NEW: 'Nueva', USED: 'Usada' } as const;
-
-/* -------------------------------------------------------------- galería --- */
-
-/**
- * La portada es el primer elemento de la lista, no un campo aparte: mover una
- * foto al frente es lo mismo que hacerla portada.
- */
-function GalleryEditor({
-  fotos,
-  onChange,
-  error,
-}: {
-  fotos: string[];
-  onChange: (fotos: string[]) => void;
-  error?: string;
-}) {
-  const [pegado, setPegado] = useState('');
-
-  const nuevas = useMemo(
-    () =>
-      pegado
-        .split(/[\s,]+/)
-        .map((url) => url.trim())
-        .filter((url) => url.length > 0 && !fotos.includes(url)),
-    [pegado, fotos]
-  );
-
-  function mover(index: number, delta: number) {
-    const destino = index + delta;
-    if (destino < 0 || destino >= fotos.length) return;
-    const next = [...fotos];
-    [next[index], next[destino]] = [next[destino], next[index]];
-    onChange(next);
-  }
-
-  function hacerPortada(index: number) {
-    const next = [...fotos];
-    const [foto] = next.splice(index, 1);
-    onChange([foto, ...next]);
-  }
-
-  return (
-    <div className="flex flex-col gap-3">
-      {error ? <p className="text-xs font-medium text-destructive">{error}</p> : null}
-
-      {fotos.length === 0 ? (
-        <p className="rounded-lg border border-dashed border-border px-4 py-6 text-center text-sm text-muted-foreground">
-          Todavía no hay fotos. Pega las URLs abajo — la primera queda como portada.
-        </p>
-      ) : (
-        <ul className="flex flex-col gap-2">
-          {fotos.map((url, index) => (
-            <li
-              key={`${url}-${index}`}
-              className="flex items-center gap-3 rounded-lg border border-border bg-card p-2"
-            >
-              <Thumb src={url} alt={`Foto ${index + 1}`} className="size-12" />
-              <span className="min-w-0 flex-1">
-                {index === 0 ? (
-                  <StatusPill tone="ok" dot={false} className="mb-1">
-                    Portada
-                  </StatusPill>
-                ) : null}
-                <span className="block truncate font-mono text-[11px] text-muted-foreground">
-                  {url}
-                </span>
-              </span>
-              <span className="flex shrink-0 items-center gap-0.5">
-                {index !== 0 ? (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon-sm"
-                    aria-label={`Hacer portada la foto ${index + 1}`}
-                    onClick={() => hacerPortada(index)}
-                  >
-                    <Star />
-                  </Button>
-                ) : null}
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon-sm"
-                  aria-label={`Subir la foto ${index + 1}`}
-                  disabled={index === 0}
-                  onClick={() => mover(index, -1)}
-                >
-                  <ArrowUp />
-                </Button>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon-sm"
-                  aria-label={`Bajar la foto ${index + 1}`}
-                  disabled={index === fotos.length - 1}
-                  onClick={() => mover(index, 1)}
-                >
-                  <ArrowDown />
-                </Button>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon-sm"
-                  aria-label={`Quitar la foto ${index + 1}`}
-                  onClick={() => onChange(fotos.filter((_, i) => i !== index))}
-                >
-                  <Trash2 className="text-destructive" />
-                </Button>
-              </span>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      <Field
-        label="Agregar fotos"
-        htmlFor="fotos-pegar"
-        hint="Pega varias URLs de una vez, separadas por espacios, comas o saltos de línea. Todavía no hay subida de archivos desde el panel."
-      >
-        <Textarea
-          id="fotos-pegar"
-          rows={3}
-          value={pegado}
-          onChange={(event) => setPegado(event.target.value)}
-          placeholder={'https://…/moto-1.jpg\nhttps://…/moto-2.jpg'}
-          className="font-mono text-xs"
-        />
-      </Field>
-      <Button
-        type="button"
-        variant="outline"
-        disabled={nuevas.length === 0}
-        onClick={() => {
-          onChange([...fotos, ...nuevas]);
-          setPegado('');
-        }}
-        className="h-10 self-start"
-      >
-        {nuevas.length === 0
-          ? 'Agregar fotos'
-          : `Agregar ${nuevas.length} ${nuevas.length === 1 ? 'foto' : 'fotos'}`}
-      </Button>
-    </div>
-  );
-}
 
 /* ------------------------------------------------------------ formulario --- */
 
@@ -682,7 +536,7 @@ export function MotorcycleFormSheet({
 
       {/* ----------------------------------------------- fotos --- */}
       <TabsContent value="fotos">
-        <GalleryEditor
+        <GaleriaImagenes
           fotos={fotos}
           error={errores.imagesMain}
           onChange={(next) =>

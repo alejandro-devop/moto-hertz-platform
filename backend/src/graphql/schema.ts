@@ -3,6 +3,7 @@ import { scalarsTypeDefs } from './modules/common/scalars.schema';
 import { healthTypeDefs } from './modules/common/health.schema';
 import { authTypeDefs } from './modules/auth/auth.schema';
 import { motorcycleTypeDefs } from './modules/motorcycle/motorcycle.schema';
+import { mediaTypeDefs } from './modules/media/media.schema';
 
 // Base Query and Mutation types
 const baseTypeDefs = gql`
@@ -24,4 +25,5 @@ export const typeDefs = [
   healthTypeDefs,
   authTypeDefs,
   motorcycleTypeDefs,
+  mediaTypeDefs,
 ];

@@ -47,7 +47,43 @@ Referencia completa: el dominio `motorcycle`.
 
 Nombres de las operaciones, tal como los espera el panel:
 `<dominio>s(page, limit, …)`, `<dominio>(slug)`, `<dominio>Add`, `<dominio>Edit`,
-`<dominio>Remove`.
+`<dominio>Remove`, `<dominio>Restore`, `<dominio>Purge`.
+
+### 1.1 Soft delete — obligatorio en todo dominio
+
+> Escrito en la **Fase 1**, que puso `deleted_at` en `media` y en las cuatro
+> tablas de contenido. Las columnas **ya existen**: no hay que migrarlas otra
+> vez, hay que *usarlas*. La referencia viva es `motorcycle.service.ts`.
+
+Eliminar desde el panel **nunca borra**: manda a la papelera. Un dominio nuevo
+nace con esto o nace mal.
+
+| Dónde | Qué hace |
+| --- | --- |
+| `schema.ts` | La tabla ya trae `deletedAt: timestamp('deleted_at')`. |
+| `service.ts` · listar | El filtro `options.trashed ? isNotNull(x.deletedAt) : isNull(x.deletedAt)` es la **primera** condición de `buildFilters`, siempre. |
+| `service.ts` · por slug | `and(eq(x.slug, slug), isNull(x.deletedAt))`. Lo borrado no existe para el sitio público. |
+| `service.ts` · por id | **Sin filtro**: restaurar y purgar trabajan justamente sobre lo borrado. |
+| `service.ts` · `trash…` | `set({ deletedAt: new Date() })`. Idempotente: si ya está en la papelera, no hace nada. |
+| `service.ts` · `restore…` | `set({ deletedAt: null })`, devuelve el registro. |
+| `service.ts` · `purge…` | `BadRequestError` si no está en la papelera; si está, `delete` de verdad. |
+| SDL | `deletedAt: DateTime` en el tipo, `trashed: Boolean` en la query de lista, y las mutaciones `…Restore` / `…Purge`. |
+| Resolvers | Las tres mutaciones con `requireAuth`. `…Remove` sigue llamándose igual (el panel ya lo usa), pero ahora manda a la papelera. |
+
+En `cms-admin`:
+
+- La papelera **no es una pantalla aparte**: es un valor más del filtro `estado`
+  («En papelera»), que dispara **otra consulta** (`trashed: true`) con su propia
+  entrada de caché. Ver `motos/filters.ts` y `use-motorcycles.ts`.
+- Cuando el filtro está en papelera, la fila muestra una píldora «En papelera» en
+  vez del estado de publicación, y `<x>-actions.tsx` devuelve **otra lista de
+  acciones**: restaurar y eliminar definitivamente, nada más.
+- Los dos borrados se confirman, y cada diálogo dice exactamente qué pasa: el
+  primero que se puede recuperar, el segundo que no y que las fotos quedan en
+  la biblioteca.
+
+Lo que **no** hace el soft delete: tocar archivos. Eliminar un registro no borra
+sus imágenes — se borran desde `/medios`, y solo desde ahí.
 
 Comprobación de la capa, sin tocar el navegador:
 
@@ -102,6 +138,7 @@ orden de ese arreglo es una decisión de producto, no de código.
 | --- | --- | --- |
 | `FormSheet` | [`components/admin/form-sheet.tsx`](../../cms-admin/components/admin/form-sheet.tsx) | Hoja lateral, pestañas por sección con contador de errores, barra de guardado fija y el aviso de «¿Descartar los cambios?». |
 | `Field` · `ToggleRow` · `Grid` · `ALTO_CAMPO` | [`components/admin/form-fields.tsx`](../../cms-admin/components/admin/form-fields.tsx) | Los controles de la ficha. `ALTO_CAMPO` es `h-11 md:h-9`. |
+| `ImagePicker` · `GaleriaImagenes` | [`components/admin/image-picker.tsx`](../../cms-admin/components/admin/image-picker.tsx) | **Todo campo de imagen usa uno de los dos.** Nunca un `<Input>` de URL a pelo. |
 | `SeccionFicha` · `seccionDeCampo` · `erroresPorSeccion` | [`lib/form-sections.ts`](../../cms-admin/lib/form-sections.ts) | La forma de una sección y cómo se ubica un error en ella. |
 | `erroresDeZod` · `listaDesdeTexto` · `textoDesdeLista` · `textoOpcional` | [`lib/form-state.ts`](../../cms-admin/lib/form-state.ts) | Un error por campo; texto separado por comas ⇄ arreglo; `""` → `undefined`. |
 
@@ -180,7 +217,39 @@ error, esqueletos), `status-pill.tsx`, `thumb.tsx`, `lib/errors.ts`,
 
    Está **duplicado a propósito** (ver «Lo que no se abstrajo»).
 
-### 2.4 Reglas que no se negocian
+### 2.4 Campos de imagen
+
+Desde la **Fase 1** no se escribe una URL de imagen a mano en ninguna ficha.
+Hay dos componentes y se elige por cardinalidad:
+
+```tsx
+/* Una sola imagen (portada de una noticia, foto de una sede, banner). */
+<Field label="Imagen">
+  <ImagePicker value={form.image} onChange={(url) => set('image', url)} />
+</Field>
+
+/* Varias, con portada y orden (fotos de una moto). */
+<GaleriaImagenes
+  fotos={fotos}
+  error={errores.imagesMain}
+  onChange={(next) => setForm((p) => ({ ...p, imagesMain: next[0] ?? '', imagesGallery: next.slice(1) }))}
+/>
+```
+
+Lo que traen de fábrica y no hay que reimplementar: arrastrar y soltar, subida
+de a una con barra de progreso, `accept="image/*"` (en el teléfono ofrece
+cámara), el campo de **pegar URLs externas** —el catálogo legacy vive fuera y no
+se puede romper— y, en la galería, portada y reordenamiento.
+
+En el estado plano de la ficha, una imagen es **un `string` con la URL**. Lo que
+guarda el backend es la URL, no el id del archivo: así una URL externa y una
+subida son el mismo campo.
+
+La subida no pasa por `/api/graphql` (tiene su propio límite de body): va por
+`/api/media/upload`, que adjunta el JWT server-side igual que el proxy de
+GraphQL.
+
+### 2.5 Reglas que no se negocian
 
 - **Paridad escritorio/móvil.** Toda acción alcanzable en las dos pantallas. Se
   comprueba a 390 px de ancho, no imaginando.
@@ -236,9 +305,9 @@ porque abstraerlo mal cuesta más que escribirlo dos veces:
   la validación y las derivaciones propias del dominio (en motos, el slug que se
   sigue del nombre hasta que alguien lo escribe). Cuando dos secciones más lo
   hayan escrito igual, se extrae con evidencia.
-- **`GalleryEditor`** (la lista de fotos con portada y reordenamiento) sigue en
-  `motos/motorcycle-form-sheet.tsx`. La **Fase 1 (medios)** lo va a reescribir
-  con subida real de archivos; moverlo ahora sería mudarlo dos veces.
+- ~~**`GalleryEditor`**~~ — **resuelto en la Fase 1**: se reescribió como
+  `components/admin/image-picker.tsx` (`GaleriaImagenes` e `ImagePicker`), con
+  subida real. Ya no vive en `motos/`.
 - **El diálogo de precio rápido** (`PrecioDialog`) es de motos. Cuando otra
   sección necesite un «editar un solo campo desde la lista», ahí se verá si vale
   un `CampoRapidoDialog`.
@@ -252,6 +321,9 @@ porque abstraerlo mal cuesta más que escribirlo dos veces:
 - [ ] `cd backend && npm test` pasa.
 - [ ] `pnpm --filter yamaha-oriente-cms-admin build` compila.
 - [ ] `npx tsc --noEmit` limpio en `cms-admin`.
+- [ ] El dominio tiene papelera completa (§1.1) y la lista la deja alcanzar.
+- [ ] Ningún campo de imagen es un `<Input>` de texto: todos usan `ImagePicker`
+      o `GaleriaImagenes` (§2.4).
 - [ ] La lista carga, busca, filtra, ordena y pagina; los filtros sobreviven a
       un `F5` y al botón de atrás.
 - [ ] La ficha guarda, valida, avisa antes de descartar y salta a la pestaña del

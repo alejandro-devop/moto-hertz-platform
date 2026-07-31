@@ -53,7 +53,7 @@ Piezas compartidas de módulo, extraídas de `motos` en la Fase 0 del plan CMS (
 | `SeccionFicha`, `seccionDeCampo`, `erroresPorSeccion` | `lib/form-sections.ts` | La forma de una sección de ficha y dónde cae cada error. |
 | `erroresDeZod`, `listaDesdeTexto`, `textoDesdeLista`, `textoOpcional` | `lib/form-state.ts` | Plomería del estado de la ficha. |
 
-**Lo que quedó sin abstraer a propósito**: la fila/tarjeta de cada dominio (`<x>-row.tsx`), el estado de la ficha (15 líneas de `useState`/`useRef`/`useEffect`), el `GalleryEditor` de fotos (lo reescribe la Fase 1 de medios) y el diálogo de precio rápido. El razonamiento está en `../docs/cms-plan/PATRON.md`, sección «Lo que no se abstrajo, y por qué».
+**Lo que quedó sin abstraer a propósito**: la fila/tarjeta de cada dominio (`<x>-row.tsx`), el estado de la ficha (15 líneas de `useState`/`useRef`/`useEffect`) y el diálogo de precio rápido. El `GalleryEditor` de fotos sí se extrajo: la Fase 1 lo reescribió como `components/admin/image-picker.tsx` con subida real. El razonamiento está en `../docs/cms-plan/PATRON.md`, sección «Lo que no se abstrajo, y por qué».
 
 ## Autenticación
 
@@ -97,11 +97,11 @@ Las mutaciones de escritura requieren sesión (`requireAuth` en el backend); el 
 
 **Falta un campo de matrícula.** El tipo `Motorcycle` no tiene placa, aunque el catálogo legacy la lleva dentro del texto libre de `description` (ver `../docs`). Mientras no exista, la lista identifica la moto por miniatura, nombre, marca, año y kilometraje, y el buscador no puede buscar por placa.
 
-**Marcar como vendida, no eliminar.** La acción principal de una moto vendida es apagar `available` — sale del sitio y el registro queda. Eliminar está al final del menú, separada y con confirmación que nombra la moto.
+**Marcar como vendida, no eliminar.** La acción principal de una moto vendida es apagar `available` — sale del sitio y el registro queda. Eliminar está al final del menú, separada y con confirmación que nombra la moto; desde la Fase 1 **manda a la papelera**, no borra (ver «Gestión de medios → Papelera»).
 
 **Nombre en la interfaz.** El paquete se sigue llamando `yamaha-oriente-cms-admin` (herencia de la plantilla), pero la interfaz dice «Motos Hot Wheels» porque el catálogo es multimarca. Renombrar el paquete es aparte.
 
-Los módulos `puntos-de-atencion`, `servicios`, `noticias` están como placeholders "próximamente" — se completan siguiendo este mismo patrón una vez el backend implemente su capa de servicio/GraphQL (ver `backend/CLAUDE.md`, tabla de dominios).
+El módulo `medios` (biblioteca de imágenes) sigue el mismo patrón de lista, con la papelera dentro del filtro de estado. Los módulos `puntos-de-atencion`, `servicios`, `noticias` están como placeholders "próximamente" — se completan siguiendo este mismo patrón una vez el backend implemente su capa de servicio/GraphQL (ver `backend/CLAUDE.md`, tabla de dominios).
 
 ## Dev
 
@@ -113,6 +113,29 @@ Requiere `../backend` corriendo en `http://localhost:8080` (`npm run docker:up` 
 
 ## Gestión de medios
 
-Por ahora no hay upload de imágenes desde el CMS — los campos de imagen son URLs de texto libre (decisión Fase 3: almacenamiento en folder local del servidor, integración de upload pendiente para una fase posterior).
+> Construido en la **Fase 1 del plan CMS** (`../docs/cms-plan/phases/01-medios.md`).
 
-Mientras tanto, la sección **Fotos** de la ficha acepta varias URLs pegadas de una vez (separadas por espacios, comas o saltos de línea) y las administra como una sola lista ordenable, donde el primer elemento es la portada — el `images.main` que el backend exige. Las motos del sitio legacy traen entre 16 y 18 fotos cada una, así que escribirlas de a una no es viable.
+**Sí hay subida de imágenes.** Ningún campo de imagen es un `<Input>` de URL: se usa `components/admin/image-picker.tsx`, que trae dos componentes sobre el mismo motor —`ImagePicker` (una imagen) y `GaleriaImagenes` (varias, con portada y orden)—. Los dos hacen arrastrar y soltar, progreso por foto, `accept="image/*"` (en el teléfono ofrece cámara o galería) y **mantienen el campo de pegar URLs externas**, porque el catálogo legacy tiene fotos alojadas fuera.
+
+| Pieza | Archivo | Qué resuelve |
+| --- | --- | --- |
+| `ImagePicker`, `GaleriaImagenes`, `SubidorMedios` | `components/admin/image-picker.tsx` | Los campos de imagen de toda ficha. |
+| `subirImagen`, `formatBytes`, `formatDimensiones` | `lib/media-upload.ts` | La subida con progreso y los formatos de la biblioteca. |
+| `/api/media/upload` | `app/api/media/upload/route.ts` | Reenvía el multipart al backend con el JWT de la cookie. |
+| Biblioteca | `app/(admin)/medios/` | Listar, buscar, copiar URL, papelera. |
+
+**Tres decisiones que hay que respetar.**
+
+**La subida no pasa por `/api/graphql`.** Ese proxy lee el cuerpo como texto y tiene su propio límite; los binarios van por `/api/media/upload`, que hace lo mismo con el token pero deja el multipart intacto. La subida usa `XMLHttpRequest` y no `fetch` porque `fetch` no informa progreso de subida, y aquí lo que tarda es subir.
+
+**Se sube de a una foto, en el orden en que se eligieron.** Una moto lleva 16–18 y llegan numeradas: en paralelo se desordenan y ponen a `sharp` a procesar varias a la vez en un droplet chico.
+
+**En el estado de la ficha, una imagen es un `string` con la URL** — no el id del archivo. Así una URL externa y una subida son exactamente el mismo campo. Lo que el backend guarda en el contenido es la URL; la tabla `media` es la biblioteca, no una relación.
+
+### Papelera
+
+Eliminar nunca borra de una vez, ni imágenes ni contenido (`deleted_at` en el backend, ver `../docs/cms-plan/PATRON.md` §1.1).
+
+- **Motos**: «En papelera» es un valor del filtro **estado** en la lista de siempre — no una pantalla aparte. Dispara otra consulta (`trashed: true`) con su propia caché, la fila muestra la píldora «En papelera» y el menú cambia a *Restaurar al catálogo* / *Eliminar definitivamente*.
+- **Medios**: la papelera vive dentro de la biblioteca, en el mismo filtro. Una imagen en la papelera **sigue respondiendo su URL**: recién al eliminar definitivamente se borra el archivo del servidor.
+- **Quitar una foto de una ficha solo la desvincula**; el archivo queda en la biblioteca. **Eliminar una moto no toca sus archivos.** No hay rastreo de qué ficha usa qué archivo, a propósito.

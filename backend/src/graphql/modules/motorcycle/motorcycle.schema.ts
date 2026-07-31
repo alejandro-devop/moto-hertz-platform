@@ -81,6 +81,8 @@ export const motorcycleTypeDefs = gql`
     featured: Boolean!
     createdAt: DateTime!
     updatedAt: DateTime!
+    "Con valor = está en la papelera. No sale en ningún listado normal."
+    deletedAt: DateTime
   }
 
   type MotorcycleCollection {
@@ -100,13 +102,19 @@ export const motorcycleTypeDefs = gql`
       available: Boolean
       page: Int
       limit: Int
+      "Con \`true\` devuelve solo la papelera. Por defecto, solo lo no borrado."
+      trashed: Boolean
     ): MotorcycleCollection!
   }
 
   extend type Mutation {
     motorcycleAdd(input: MotorcycleInput!): Motorcycle!
     motorcycleEdit(input: MotorcycleEditInput!): Motorcycle!
+    "A la papelera. Las fotos de la moto no se tocan: viven en la biblioteca."
     motorcycleRemove(id: ID!): Boolean!
+    motorcycleRestore(id: ID!): Motorcycle!
+    "Definitivo. Solo funciona sobre una moto que ya está en la papelera."
+    motorcyclePurge(id: ID!): Boolean!
   }
 
   input MotorcycleEngineInput {

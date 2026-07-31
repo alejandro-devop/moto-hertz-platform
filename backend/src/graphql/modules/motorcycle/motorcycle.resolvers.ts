@@ -57,9 +57,27 @@ export const motorcycleResolvers = {
       motorcycleIdArgSchema,
       async (_: unknown, { id }: { id: string }, context) => {
         requireAuth(context, 'motorcycleRemove');
-        return motorcycleService.deleteMotorcycle(id);
+        return motorcycleService.trashMotorcycle(id);
       },
       'motorcycleRemove'
+    ),
+
+    motorcycleRestore: withValidatedResolver(
+      motorcycleIdArgSchema,
+      async (_: unknown, { id }: { id: string }, context) => {
+        requireAuth(context, 'motorcycleRestore');
+        return motorcycleService.restoreMotorcycle(id);
+      },
+      'motorcycleRestore'
+    ),
+
+    motorcyclePurge: withValidatedResolver(
+      motorcycleIdArgSchema,
+      async (_: unknown, { id }: { id: string }, context) => {
+        requireAuth(context, 'motorcyclePurge');
+        return motorcycleService.purgeMotorcycle(id);
+      },
+      'motorcyclePurge'
     ),
   },
 };

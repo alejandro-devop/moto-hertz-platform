@@ -30,6 +30,13 @@ function subtitulo(motorcycle: Motorcycle): string {
 
 function Publicacion({ motorcycle }: { motorcycle: Motorcycle }) {
   const publicacion = getPublication(motorcycle);
+
+  /* En la papelera el estado de publicación no dice nada: la moto no está en
+     el sitio pase lo que pase. */
+  if (motorcycle.deletedAt) {
+    return <StatusPill tone="muted">En papelera</StatusPill>;
+  }
+
   return (
     <span className="flex flex-col items-start gap-1">
       <span className="flex flex-wrap items-center gap-1">
@@ -114,8 +121,12 @@ export function MotorcycleCard({ motorcycle, onEdit }: Props) {
             {precio ?? <span className="text-muted-foreground">Sin precio</span>}
           </span>
           <span className="flex flex-wrap items-center gap-1">
-            <StatusPill tone={publicationTone(publicacion.level)}>{publicacion.label}</StatusPill>
-            {papeles.needsAttention ? (
+            {motorcycle.deletedAt ? (
+              <StatusPill tone="muted">En papelera</StatusPill>
+            ) : (
+              <StatusPill tone={publicationTone(publicacion.level)}>{publicacion.label}</StatusPill>
+            )}
+            {papeles.needsAttention && !motorcycle.deletedAt ? (
               <StatusPill tone={paperTone(papeles.worst.level)}>{papeles.worst.label}</StatusPill>
             ) : null}
           </span>

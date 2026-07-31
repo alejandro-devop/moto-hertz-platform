@@ -8,7 +8,9 @@ import {
   MOTORCYCLES_QUERY,
   MOTORCYCLE_ADD_MUTATION,
   MOTORCYCLE_EDIT_MUTATION,
+  MOTORCYCLE_PURGE_MUTATION,
   MOTORCYCLE_REMOVE_MUTATION,
+  MOTORCYCLE_RESTORE_MUTATION,
   type Motorcycle,
   type MotorcycleFormInput,
   type MotorcyclesQueryResult,
@@ -27,10 +29,11 @@ export const MOTORCYCLES_KEY = ['motorcycles'] as const;
 const LIMITE_BACKEND = 100; // tope del validador de `motorcycles`
 const MAX_PAGINAS = 40; // freno de mano: 4.000 motos
 
-async function traerTodo(): Promise<MotorcyclesQueryResult> {
+async function traerTodo(trashed: boolean): Promise<MotorcyclesQueryResult> {
   const primera = await graphqlClient.request<MotorcyclesQueryResult>(MOTORCYCLES_QUERY, {
     page: 1,
     limit: LIMITE_BACKEND,
+    trashed,
   });
 
   const total = primera.motorcycles.total;
@@ -41,6 +44,7 @@ async function traerTodo(): Promise<MotorcyclesQueryResult> {
     const siguiente = await graphqlClient.request<MotorcyclesQueryResult>(MOTORCYCLES_QUERY, {
       page,
       limit: LIMITE_BACKEND,
+      trashed,
     });
     motorcycles.push(...siguiente.motorcycles.motorcycles);
   }
@@ -48,8 +52,16 @@ async function traerTodo(): Promise<MotorcyclesQueryResult> {
   return { motorcycles: { ...primera.motorcycles, motorcycles } };
 }
 
-export function useMotorcyclesQuery() {
-  return useQuery({ queryKey: MOTORCYCLES_KEY, queryFn: traerTodo });
+/**
+ * El catálogo o la papelera, según se pida. Son dos consultas distintas al
+ * backend (`trashed`) y dos entradas de caché: cambiar de una a otra no mezcla
+ * las listas ni deja motos borradas en la vista normal.
+ */
+export function useMotorcyclesQuery(trashed = false) {
+  return useQuery({
+    queryKey: [...MOTORCYCLES_KEY, trashed ? 'papelera' : 'activas'],
+    queryFn: () => traerTodo(trashed),
+  });
 }
 
 /** Campos sueltos para las acciones rápidas (precio, publicación). */
@@ -58,6 +70,8 @@ export type MotorcyclePatch = Partial<MotorcycleFormInput> & { id: string };
 export function useMotorcycleMutations() {
   const queryClient = useQueryClient();
 
+  /* Invalida catálogo y papelera: casi todo lo que cambia mueve una moto de
+     una lista a la otra. */
   function refetch() {
     return queryClient.invalidateQueries({ queryKey: MOTORCYCLES_KEY });
   }
@@ -107,7 +121,7 @@ export function useMotorcycleMutations() {
       graphqlClient.request(MOTORCYCLE_REMOVE_MUTATION, { id }),
     onSuccess: async (_data, variables) => {
       await refetch();
-      toast.success(`Se eliminó "${variables.name}"`);
+      toast.success(`"${variables.name}" se movió a la papelera`);
     },
     onError: (error: unknown) => {
       registrarError('motos', error);
@@ -115,7 +129,33 @@ export function useMotorcycleMutations() {
     },
   });
 
-  return { add, edit, patch, remove };
+  const restore = useMutation({
+    mutationFn: ({ id }: { id: string; name: string }) =>
+      graphqlClient.request(MOTORCYCLE_RESTORE_MUTATION, { id }),
+    onSuccess: async (_data, variables) => {
+      await refetch();
+      toast.success(`"${variables.name}" volvió al catálogo`);
+    },
+    onError: (error: unknown) => {
+      registrarError('motos', error);
+      toast.error(mensajeDeError(error));
+    },
+  });
+
+  const purge = useMutation({
+    mutationFn: ({ id }: { id: string; name: string }) =>
+      graphqlClient.request(MOTORCYCLE_PURGE_MUTATION, { id }),
+    onSuccess: async (_data, variables) => {
+      await refetch();
+      toast.success(`Se eliminó "${variables.name}" definitivamente`);
+    },
+    onError: (error: unknown) => {
+      registrarError('motos', error);
+      toast.error(mensajeDeError(error));
+    },
+  });
+
+  return { add, edit, patch, remove, restore, purge };
 }
 
 /** Marcas y sedes presentes en el catálogo, para armar los filtros. */

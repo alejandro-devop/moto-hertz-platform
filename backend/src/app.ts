@@ -5,6 +5,7 @@ import compression from 'compression';
 import { getCorsOptions } from './shared/config/cors';
 import { requestLogger, errorHandler } from './shared/middleware';
 import routes from './routes';
+import { getStorage, LocalStorageDriver } from './shared/storage';
 
 export function createApp(): Application {
   const app = express();
@@ -38,6 +39,23 @@ export function createApp(): Application {
   app.use(compression());
 
   app.use(requestLogger);
+
+  /**
+   * Los archivos subidos. Solo aplica al driver local: un bucket sirve los
+   * suyos. Las claves llevan 16 bytes aleatorios y el contenido nunca cambia
+   * bajo la misma clave, así que se pueden cachear para siempre.
+   */
+  const storage = getStorage();
+  if (storage instanceof LocalStorageDriver) {
+    app.use(
+      '/media',
+      express.static(storage.rootPath, {
+        immutable: true,
+        maxAge: '365d',
+        index: false,
+      })
+    );
+  }
 
   app.use('/api', routes);
 

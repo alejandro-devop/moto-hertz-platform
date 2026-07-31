@@ -1,4 +1,14 @@
-import { pgTable, uuid, integer, varchar, decimal, boolean, timestamp, text, jsonb } from 'drizzle-orm/pg-core';
+import {
+  pgTable,
+  uuid,
+  integer,
+  varchar,
+  decimal,
+  boolean,
+  timestamp,
+  text,
+  jsonb,
+} from 'drizzle-orm/pg-core';
 import { generateUuidV7 } from './uuid';
 import type {
   MotorcycleCommercial,
@@ -43,6 +53,8 @@ export const motorcycles = pgTable('motorcycles', {
   featured: boolean('featured').notNull().default(false),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
+  /** Papelera: ver «Soft delete» en `docs/cms-plan/PATRON.md`. */
+  deletedAt: timestamp('deleted_at'),
 });
 
 // ============================================
@@ -66,6 +78,7 @@ export const servicePoints = pgTable('service_points', {
   image: text('image'),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
+  deletedAt: timestamp('deleted_at'),
 });
 
 // ============================================
@@ -89,6 +102,7 @@ export const services = pgTable('services', {
   image: text('image'),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
+  deletedAt: timestamp('deleted_at'),
 });
 
 // ============================================
@@ -111,4 +125,36 @@ export const news = pgTable('news', {
   readTime: varchar('read_time', { length: 20 }),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
+  deletedAt: timestamp('deleted_at'),
+});
+
+// ============================================
+// MEDIA — biblioteca de archivos subidos desde el panel
+// ============================================
+/**
+ * Un registro por archivo guardado. Existe por la papelera: sin tabla no hay
+ * forma de listar lo borrado ni de saber qué archivo hay que quitar del
+ * almacenamiento al eliminar definitivamente.
+ *
+ * `key` es la ruta dentro del driver de almacenamiento; `url` es la URL pública
+ * tal como quedó guardada en el contenido el día de la subida. Se guardan las
+ * dos: si cambia el dominio o el driver, `key` permite rearmar `url`.
+ */
+export const media = pgTable('media', {
+  id: uuid('id')
+    .primaryKey()
+    .$defaultFn(() => generateUuidV7()),
+  key: varchar('key', { length: 500 }).notNull().unique(),
+  url: text('url').notNull(),
+  /** Qué driver la guardó (`local`, y mañana `s3`/`gcs`). */
+  driver: varchar('driver', { length: 20 }).notNull().default('local'),
+  mimeType: varchar('mime_type', { length: 100 }).notNull(),
+  sizeBytes: integer('size_bytes').notNull(),
+  width: integer('width'),
+  height: integer('height'),
+  /** El nombre del archivo original, solo para reconocerlo en la biblioteca. */
+  originalName: varchar('original_name', { length: 255 }),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+  deletedAt: timestamp('deleted_at'),
 });

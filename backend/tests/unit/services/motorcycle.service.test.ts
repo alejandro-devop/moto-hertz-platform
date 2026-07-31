@@ -24,7 +24,7 @@ jest.mock('../../../src/shared/database/drizzle', () => ({
 }));
 
 import { motorcycleService } from '../../../src/services/motorcycle.service';
-import { NotFoundError } from '../../../src/shared/errors';
+import { BadRequestError, NotFoundError } from '../../../src/shared/errors';
 
 describe('motorcycleService', () => {
   beforeEach(() => {
@@ -86,17 +86,29 @@ describe('motorcycleService', () => {
     });
   });
 
-  describe('deleteMotorcycle', () => {
-    it('deletes an existing motorcycle', async () => {
+  /* Papelera: `deleteMotorcycle` ya no borra, marca. Ver PATRON.md §«Soft delete». */
+  describe('trashMotorcycle', () => {
+    it('marks the motorcycle as deleted instead of removing the row', async () => {
       const motorcycle = createMockMotorcycle();
-      mockDb.select.mockReturnValueOnce(createQueryMock([motorcycle]));
-      mockDb.delete.mockReturnValueOnce({
-        where: jest.fn().mockResolvedValueOnce(undefined),
+      const set = jest.fn().mockReturnValue({
+        where: jest.fn().mockReturnValue({ returning: jest.fn().mockResolvedValue([motorcycle]) }),
       });
+      mockDb.select.mockReturnValueOnce(createQueryMock([motorcycle]));
+      mockDb.update.mockReturnValueOnce({ set });
 
-      const result = await motorcycleService.deleteMotorcycle(motorcycle.id);
+      const result = await motorcycleService.trashMotorcycle(motorcycle.id);
 
       expect(result).toBe(true);
+      expect(mockDb.delete).not.toHaveBeenCalled();
+      expect(set.mock.calls[0][0].deletedAt).toBeInstanceOf(Date);
+    });
+
+    it('is idempotent: trashing what is already in the trash does nothing', async () => {
+      const motorcycle = createMockMotorcycle({ deletedAt: new Date('2026-01-01') });
+      mockDb.select.mockReturnValueOnce(createQueryMock([motorcycle]));
+
+      await expect(motorcycleService.trashMotorcycle(motorcycle.id)).resolves.toBe(true);
+      expect(mockDb.update).not.toHaveBeenCalled();
     });
 
     it('throws NotFoundError when the motorcycle does not exist', async () => {
@@ -105,6 +117,45 @@ describe('motorcycleService', () => {
       await expect(motorcycleService.deleteMotorcycle('missing-id')).rejects.toThrow(
         NotFoundError
       );
+    });
+  });
+
+  describe('restoreMotorcycle', () => {
+    it('clears deletedAt', async () => {
+      const motorcycle = createMockMotorcycle({ deletedAt: new Date('2026-01-01') });
+      const set = jest.fn().mockReturnValue({
+        where: jest.fn().mockReturnValue({
+          returning: jest.fn().mockResolvedValue([{ ...motorcycle, deletedAt: null }]),
+        }),
+      });
+      mockDb.select.mockReturnValueOnce(createQueryMock([motorcycle]));
+      mockDb.update.mockReturnValueOnce({ set });
+
+      const result = await motorcycleService.restoreMotorcycle(motorcycle.id);
+
+      expect(result.deletedAt).toBeNull();
+      expect(set.mock.calls[0][0].deletedAt).toBeNull();
+    });
+  });
+
+  describe('purgeMotorcycle', () => {
+    it('deletes for real when the motorcycle is already in the trash', async () => {
+      const motorcycle = createMockMotorcycle({ deletedAt: new Date('2026-01-01') });
+      mockDb.select.mockReturnValueOnce(createQueryMock([motorcycle]));
+      mockDb.delete.mockReturnValueOnce({ where: jest.fn().mockResolvedValueOnce(undefined) });
+
+      await expect(motorcycleService.purgeMotorcycle(motorcycle.id)).resolves.toBe(true);
+      expect(mockDb.delete).toHaveBeenCalled();
+    });
+
+    it('refuses to skip the trash', async () => {
+      const motorcycle = createMockMotorcycle();
+      mockDb.select.mockReturnValueOnce(createQueryMock([motorcycle]));
+
+      await expect(motorcycleService.purgeMotorcycle(motorcycle.id)).rejects.toThrow(
+        BadRequestError
+      );
+      expect(mockDb.delete).not.toHaveBeenCalled();
     });
   });
 });
