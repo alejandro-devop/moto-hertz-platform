@@ -19,7 +19,7 @@ delega el trabajo en el subagente **`cms-seccion`**. El estado vive en
 | Noticias | ⏳ solo tabla y migración | ⏳ placeholder | ❌ `news-mock.json` |
 | Home / banners | ❌ no existe tabla | ❌ no existe | ❌ `home-mock.json` vía `contentful.ts` |
 | Configuración del sitio | ❌ no existe tabla | ❌ no existe | ❌ valores en el código |
-| Subida de imágenes | ❌ no existe | ❌ campos de URL en texto libre | — |
+| Subida de imágenes | ✅ driver + endpoint | ✅ biblioteca y papelera | — |
 
 Cada sección necesita la misma rebanada vertical: **backend** (service, tipos,
 validadores Zod, módulo GraphQL) → **cms-admin** (módulo de administración) →
@@ -31,7 +31,7 @@ patrón en las tres capas.
 | # | Fase | Documento | Estado |
 |---|------|-----------|--------|
 | 0 | Cimientos del patrón | [00-cimientos-patron.md](phases/00-cimientos-patron.md) | completed |
-| 1 | Medios: subida de imágenes | [01-medios.md](phases/01-medios.md) | pending |
+| 1 | Medios: subida de imágenes | [01-medios.md](phases/01-medios.md) | completed |
 | 2 | Puntos de atención | [02-puntos-de-atencion.md](phases/02-puntos-de-atencion.md) | pending |
 | 3 | Servicios | [03-servicios.md](phases/03-servicios.md) | pending |
 | 4 | Noticias | [04-noticias.md](phases/04-noticias.md) | pending |
