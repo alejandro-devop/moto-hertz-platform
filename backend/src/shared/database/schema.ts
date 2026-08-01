@@ -178,6 +178,40 @@ export const news = pgTable('news', {
 });
 
 // ============================================
+// HOME_BANNERS — carrusel de la portada
+// ============================================
+/**
+ * Primera tabla nueva del plan CMS (Fase 5): las tres anteriores
+ * (`service_points`, `services`, `news`) ya existían de la plantilla, esta no.
+ *
+ * Alcance mínimo acordado con el usuario: **solo el carrusel** es
+ * administrable desde el panel. El segundo banner ancho («Financia tu próxima
+ * Yamaha») y los títulos de las secciones de la home (`Servicios Yamaha`,
+ * `Últimas Noticias`) quedan fijos en el código de `web`.
+ *
+ * `position` es el dato que ordena el carrusel: lo edita el panel (subir/bajar
+ * o arrastrar) y un banner nuevo se agrega al final. Ver `banner.service.ts`.
+ */
+export const homeBanners = pgTable('home_banners', {
+  id: uuid('id')
+    .primaryKey()
+    .$defaultFn(() => generateUuidV7()),
+  title: varchar('title', { length: 255 }).notNull(),
+  subtitle: text('subtitle'),
+  image: text('image').notNull(),
+  imageMobile: text('image_mobile'),
+  link: text('link'),
+  linkLabel: varchar('link_label', { length: 100 }),
+  position: integer('position').notNull().default(0),
+  active: boolean('active').notNull().default(true),
+  startsAt: timestamp('starts_at'),
+  endsAt: timestamp('ends_at'),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+  deletedAt: timestamp('deleted_at'),
+});
+
+// ============================================
 // MEDIA — biblioteca de archivos subidos desde el panel
 // ============================================
 /**

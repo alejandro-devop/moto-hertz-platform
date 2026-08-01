@@ -34,6 +34,7 @@ Registrar en `src/graphql/schema.ts` y `src/graphql/resolvers.ts`.
 | service | ✅ completo (servicios del taller) | `service/` | `service.service.ts` |
 | news | ✅ completo (noticias) | `news/` | `news.service.ts` |
 | media | ✅ completo (biblioteca de imágenes) | `media/` | `media.service.ts` |
+| banner | ✅ completo (carrusel de la portada) | `banner/` | `banner.service.ts` |
 
 `motorcycle` es la referencia de patrón completa (schema Drizzle, migración, service, tipos, validadores Zod, módulo GraphQL con query/mutations).
 
@@ -76,6 +77,18 @@ Es el primer dominio del proyecto donde **la lectura pública y la del panel dev
 
 `readTime` es texto libre, editable a mano; el panel sugiere un valor calculado del contenido (`cms-admin/lib/news-status.ts`) pero no lo impone.
 
+### `banner` (Fase 5 del plan CMS)
+
+Primera tabla nueva que crea el plan CMS (migración `010`, `home_banners`): `service_points`, `services` y `news` ya existían de la plantilla, esta no.
+
+**Alcance mínimo acordado con el usuario.** El documento de la fase dejaba abierto cuánto de la home administrar (mínimo / medio / máximo); se eligió el mínimo, con una corrección: solo el **carrusel de banners** es administrable desde el panel. El segundo banner ancho («Financia tu próxima Yamaha») y los títulos de cada sección de la home (`Servicios Yamaha`, `Últimas Noticias`, sus subtítulos) quedan **fijos en el código de `web`**, no en este dominio. La home tampoco inventa sus propias tarjetas de servicios/noticias: `web/src/app/page.tsx` consulta las mismas `getServices()`/`getNews()` que ya usan `/servicios` y `/noticias` — antes vivían hardcodeadas y duplicadas en `web/src/data/home-mock.json`, borrado en esta fase junto con toda la capa de emulación de Contentful que solo servía a la home (`services/contentful.ts`, `hooks/useHomeData.ts`, `components/contentful/`, `types/contentful.ts`, `utils/contentful-resolver.ts`, `app/api/contentful/home/`).
+
+Segundo dominio del proyecto (después de `news`) donde **la lectura pública y la del panel difieren con los mismos argumentos**: la query `banners` mira `context.user` igual que `newsList` — sin sesión, fuerza `onlyVisible: true` (solo `active: true` y dentro de vigencia) y `trashed: false`, sin importar lo que pida quien pregunta; con sesión, ve todos y `trashed` se respeta tal cual llega.
+
+- **`position` es el dato que ordena el carrusel**, y no se acepta en `bannerAdd`/`bannerEdit`: un banner nuevo se agrega al final (`nextPosition()` cuenta los no borrados) y **solo cambia con `bannerReorder(ids: [ID!]!)`**, que reescribe la posición de todos los banners no borrados como el índice de su id en el arreglo que llega, dentro de una transacción.
+- **Vigencia opcional en las dos puntas**: `startsAt` ausente = ya vigente; `endsAt` ausente = no vence nunca. Los dos aceptan `null` explícito en la edición (igual que `publishedAt` en `news`) para poder volver a "siempre vigente" sin tocar el resto de la ficha. El Zod rechaza `endsAt` anterior a `startsAt` cuando llegan los dos.
+- **`imageMobile` es opcional**: si falta, el sitio usa `image` también en pantallas chicas. A diferencia de las fechas, **no acepta `null`** (mismo criterio que `service.image`/`news.image`: un campo de imagen opcional no se puede limpiar explícitamente desde la ficha, solo se reemplaza por otra URL — es una limitación conocida y pareja en todo el proyecto, no algo nuevo de este dominio).
+
 ## Autenticación
 
 Un solo rol admin (sin tabla de usuarios ni roles diferenciados, decisión de Fase 3): las credenciales viven en `ADMIN_EMAIL` / `ADMIN_PASSWORD_HASH` (bcrypt) por variable de entorno. La mutation `login(email, password)` (`src/graphql/modules/auth/`) verifica contra esas variables y devuelve un JWT (`src/shared/auth/jwt.ts`, secreto en `JWT_SECRET`). `getGraphQLContext` (`src/graphql/server.ts`) valida el header `Authorization: Bearer <token>` en cada request y expone `context.user` si es válido. Las queries de catálogo siguen siendo públicas; las mutaciones de escritura llaman a `requireAuth(context, operationName)` (`src/graphql/utils/error-handler.ts`) para exigir sesión — ver `motorcycle.resolvers.ts` como referencia a replicar en los demás dominios.
@@ -92,13 +105,13 @@ Al subir, `src/shared/images/process.ts` (sharp) reduce el lado mayor a 1600 px 
 
 ## Papelera (soft delete)
 
-`media`, `motorcycles`, `service_points`, `services` y `news` tienen `deleted_at` (migración `006`). Todos los dominios de contenido ya tienen su capa de servicio (`motorcycle`, `service-point`, `service`, `news`) y `media`:
+`media`, `motorcycles`, `service_points`, `services`, `news` y `home_banners` tienen `deleted_at` (migración `006` para las primeras cinco; `home_banners` nace con la columna en su propia migración `010`, porque es tabla nueva). Todos los dominios de contenido ya tienen su capa de servicio (`motorcycle`, `service-point`, `service`, `news`, `banner`) y `media`:
 
-- Toda lectura filtra `isNull(deletedAt)`; la lista acepta `trashed: Boolean` para pedir la papelera. La búsqueda por **slug** (la que consume el sitio público) nunca devuelve algo borrado; la búsqueda por **id** sí, porque restaurar y purgar trabajan sobre lo borrado.
+- Toda lectura filtra `isNull(deletedAt)`; la lista acepta `trashed: Boolean` para pedir la papelera. La búsqueda por **slug** (la que consume el sitio público) nunca devuelve algo borrado; la búsqueda por **id** sí, porque restaurar y purgar trabajan sobre lo borrado. `banner` no tiene slug (no es una página propia), así que ahí la única búsqueda pública es la lista.
 - `…Remove` manda a la papelera, `…Restore` la saca, `…Purge` borra de verdad (y falla si no está en la papelera). En `media`, purgar **también borra el archivo** del almacenamiento.
 - Eliminar un registro de contenido **no toca sus imágenes**: los archivos se borran solo desde la biblioteca de medios.
 
-`service_points` estrenó su papelera en la Fase 2, `services` en la Fase 3 y `news` en la Fase 4, las tres **sin migración nueva** para eso: la columna ya estaba desde la `006`. En `news`, además, `trashed` **solo tiene efecto con sesión**: sin ella el resolver lo ignora y siempre fuerza `false` (ver «`news` (Fase 4 del plan CMS)» arriba). El patrón a seguir está en `../docs/cms-plan/PATRON.md` §1.1.
+`service_points` estrenó su papelera en la Fase 2, `services` en la Fase 3 y `news` en la Fase 4, las tres **sin migración nueva** para eso: la columna ya estaba desde la `006`. En `news` y en `banner`, además, `trashed` **solo tiene efecto con sesión**: sin ella el resolver lo ignora y siempre fuerza `false` (ver «`news` (Fase 4 del plan CMS)» y «`banner` (Fase 5 del plan CMS)» arriba). El patrón a seguir está en `../docs/cms-plan/PATRON.md` §1.1.
 
 ## Patrones obligatorios
 

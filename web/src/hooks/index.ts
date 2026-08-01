@@ -10,7 +10,6 @@ export { useBackgroundParallax } from "./useBackgroundParallax";
 export { useSimpleParallax } from "./useSimpleParallax";
 export { useVisibleParallax } from "./useVisibleParallax";
 export { useSmartParallax } from "./useSmartParallax";
-export { useHomeData, useHomeDataSimple } from "./useHomeData";
 export { useInView } from "./useInView";
 
 // API hooks

@@ -1,4 +1,4 @@
-import { Bike, Images, MapPin, Newspaper, Wrench, type LucideIcon } from 'lucide-react';
+import { Bike, GalleryHorizontal, Images, MapPin, Newspaper, Wrench, type LucideIcon } from 'lucide-react';
 
 export interface NavLink {
   href: string;
@@ -21,6 +21,13 @@ export const navLinks: NavLink[] = [
   },
   { href: '/servicios', label: 'Servicios', short: 'Servicios', icon: Wrench, group: 'Catálogo' },
   { href: '/noticias', label: 'Noticias', short: 'Noticias', icon: Newspaper, group: 'Contenido' },
+  {
+    href: '/banners',
+    label: 'Banners',
+    short: 'Banners',
+    icon: GalleryHorizontal,
+    group: 'Contenido',
+  },
   /* Medios va de último: es la caja de herramientas, no una sección del sitio.
      Las fotos se suben desde cada ficha; aquí se entra a buscar o a borrar. */
   { href: '/medios', label: 'Medios', short: 'Medios', icon: Images, group: 'Contenido' },

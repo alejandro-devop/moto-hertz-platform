@@ -1,48 +1,23 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
-import Image from "next/image";
 import styles from "./Banner.module.scss";
 import { useImagePreload } from "@/hooks/useImagePreload";
 import { useIsClient } from "@/hooks/useHydration";
+import type { Banner as BannerItem } from "@/types/banner";
 
-// Fallback images (mock, sin assets de marca) usados solo si no llegan slides
+// Fallback (mock, sin assets de marca): solo se usa si el backend no devuelve
+// ningún banner activo y vigente (carrusel recién estrenado, o todos
+// desactivados). Ver `banner.service.ts` del backend.
 const bannerImages = [
   "https://images.unsplash.com/photo-1558980664-769d59546b3d?w=1600",
   "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600",
   "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=1600",
 ];
 
-// Types for Contentful data
-interface BannerSlide {
-  sys?: {
-    id: string;
-  };
-  fields: {
-    entryId?: string;
-    image?: {
-      fields: {
-        file: {
-          url: string;
-        };
-        title?: string;
-        description?: string;
-      };
-    };
-    title?: string;
-    caption?: string;
-    ctaButton?: {
-      fields: {
-        label?: string;
-        url?: string;
-        style?: string;
-      };
-    };
-  };
-}
-
 interface BannerProps {
-  slides?: BannerSlide[];
+  /** Del backend (Fase 5 del plan CMS), ya activos, vigentes y en orden. */
+  slides?: BannerItem[];
   autoPlayInterval?: number;
 }
 
@@ -54,45 +29,35 @@ export default function Banner({
   const [isHovered, setIsHovered] = useState(false);
   const isClient = useIsClient();
 
-  // Use Contentful slides if provided, otherwise fallback to static images
+  // Los banners reales del panel, o el mock si todavía no hay ninguno activo.
   const bannerSlides =
     slides && slides.length > 0
-      ? slides.map((slide) => {
-          // Get image URL from Contentful - URLs already include protocol or start with //
-          const imageUrl = slide.fields.image?.fields.file?.url || "";
-          // If URL starts with //, add https:, otherwise use as is
-          const fullImageUrl = imageUrl.startsWith("//")
-            ? `https:${imageUrl}`
-            : imageUrl || bannerImages[0];
-
-          return {
-            imageUrl: fullImageUrl,
-            title: slide.fields.title || "Yamaha Oriente",
-            caption:
-              slide.fields.caption ||
-              "Descubre la nueva generación de motocicletas Yamaha.",
-            ctaLabel:
-              slide.fields.ctaButton?.fields.label || "Explorar Modelos",
-            ctaUrl: slide.fields.ctaButton?.fields.url || "#",
-            ctaStyle: slide.fields.ctaButton?.fields.style || "primary",
-            alt:
-              slide.fields.image?.fields.title ||
-              slide.fields.title ||
-              "Banner",
-          };
-        })
+      ? slides.map((slide) => ({
+          imageUrl: slide.image,
+          /** Si no hay imagen de móvil, la de escritorio se usa también ahí. */
+          imageUrlMobile: slide.imageMobile || slide.image,
+          title: slide.title,
+          caption: slide.subtitle || "",
+          ctaLabel: slide.linkLabel || "",
+          ctaUrl: slide.link || "",
+          alt: slide.title,
+        }))
       : bannerImages.map((img, index) => ({
           imageUrl: img,
+          imageUrlMobile: img,
           title: "Yamaha Oriente",
           caption:
             "Descubre la nueva generación de motocicletas Yamaha. Potencia, diseño y tecnología en perfecta armonía.",
           ctaLabel: "Explorar Modelos",
-          ctaUrl: "#",
-          ctaStyle: "primary",
+          ctaUrl: "/motos",
           alt: `Banner ${index + 1}`,
         }));
 
-  const imageUrls = bannerSlides.map((slide) => slide.imageUrl);
+  const imageUrls = bannerSlides.flatMap((slide) =>
+    slide.imageUrlMobile === slide.imageUrl
+      ? [slide.imageUrl]
+      : [slide.imageUrl, slide.imageUrlMobile]
+  );
 
   // Precargar imágenes de manera inteligente
   const { isImageLoaded } = useImagePreload({
@@ -159,13 +124,20 @@ export default function Banner({
     return (
       <section className="banner-critical">
         <div style={{ position: "relative", width: "100%", height: "100vh" }}>
-          <Image
+          {/* URL de texto libre (puede ser el host de medios local del
+              panel, o una externa): no pasa por next/image. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src={firstSlide.imageUrl}
             alt={firstSlide.alt}
-            fill
-            priority
-            sizes="100vw"
-            style={{ objectFit: "cover" }}
+            fetchPriority="high"
+            style={{
+              position: "absolute",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+            }}
           />
         </div>
       </section>
@@ -196,34 +168,51 @@ export default function Banner({
           // Solo las imágenes visibles y adyacentes se cargan con eager
           const shouldLoadEager = isCurrentSlide || isPrevSlide || isNextSlide;
           const isFirstImage = index === 0;
+          const loading = isFirstImage
+            ? "eager"
+            : shouldLoadEager
+              ? "eager"
+              : "lazy";
+          const tieneMobilPropia = slide.imageUrlMobile !== slide.imageUrl;
 
           return (
             <div key={index} className={styles.slide}>
-              <Image
+              {/* URLs de texto libre (el host de medios local del panel, o
+                  externas): no pasan por next/image, mismo criterio que
+                  `/servicios` y `/noticias`. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src={slide.imageUrl}
                 alt={slide.alt}
-                fill
-                className={styles.image}
-                priority={isFirstImage} // Solo la primera imagen tiene prioridad máxima
-                loading={
-                  isFirstImage ? "eager" : shouldLoadEager ? "eager" : "lazy"
+                className={
+                  tieneMobilPropia
+                    ? `${styles.image} ${styles.imageDesktop}`
+                    : styles.image
                 }
-                sizes="100vw"
-                quality={85} // Calidad fija para evitar múltiples descargas
-                placeholder="blur"
-                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyOpWlvLdfSNBDkUwtE5qTbqONX8E2DFFYPeVf/2Q=="
+                loading={loading}
+                fetchPriority={isFirstImage ? "high" : "auto"}
               />
+              {tieneMobilPropia ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={slide.imageUrlMobile}
+                  alt={slide.alt}
+                  className={`${styles.image} ${styles.imageMobile}`}
+                  loading={loading}
+                  fetchPriority={isFirstImage ? "high" : "auto"}
+                />
+              ) : null}
               <div className={styles.overlay}>
                 <div className={styles.content}>
                   <h1 className={styles.title}>{slide.title}</h1>
-                  <p className={styles.subtitle}>{slide.caption}</p>
-                  <a
-                    href={slide.ctaUrl}
-                    className={styles.ctaButton}
-                    data-style={slide.ctaStyle}
-                  >
-                    {slide.ctaLabel}
-                  </a>
+                  {slide.caption ? (
+                    <p className={styles.subtitle}>{slide.caption}</p>
+                  ) : null}
+                  {slide.ctaUrl && slide.ctaLabel ? (
+                    <a href={slide.ctaUrl} className={styles.ctaButton}>
+                      {slide.ctaLabel}
+                    </a>
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -232,35 +221,39 @@ export default function Banner({
       </div>
 
       {/* Navigation Controls */}
-      <button
-        className={`${styles.navButton} ${styles.prevButton}`}
-        onClick={prevSlide}
-        aria-label="Slide anterior"
-      >
-        &#8249;
-      </button>
-
-      <button
-        className={`${styles.navButton} ${styles.nextButton}`}
-        onClick={nextSlide}
-        aria-label="Siguiente slide"
-      >
-        &#8250;
-      </button>
-
-      {/* Dots Indicator */}
-      <div className={styles.dotsContainer}>
-        {bannerSlides.map((_: any, index: number) => (
+      {bannerSlides.length > 1 ? (
+        <>
           <button
-            key={index}
-            className={`${styles.dot} ${
-              index === currentSlide ? styles.dotActive : ""
-            }`}
-            onClick={() => goToSlide(index)}
-            aria-label={`Ir al slide ${index + 1}`}
-          />
-        ))}
-      </div>
+            className={`${styles.navButton} ${styles.prevButton}`}
+            onClick={prevSlide}
+            aria-label="Slide anterior"
+          >
+            &#8249;
+          </button>
+
+          <button
+            className={`${styles.navButton} ${styles.nextButton}`}
+            onClick={nextSlide}
+            aria-label="Siguiente slide"
+          >
+            &#8250;
+          </button>
+
+          {/* Dots Indicator */}
+          <div className={styles.dotsContainer}>
+            {bannerSlides.map((_: unknown, index: number) => (
+              <button
+                key={index}
+                className={`${styles.dot} ${
+                  index === currentSlide ? styles.dotActive : ""
+                }`}
+                onClick={() => goToSlide(index)}
+                aria-label={`Ir al slide ${index + 1}`}
+              />
+            ))}
+          </div>
+        </>
+      ) : null}
     </section>
   );
 }

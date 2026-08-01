@@ -7,6 +7,7 @@ import { servicePointTypeDefs } from './modules/service-point/service-point.sche
 import { serviceTypeDefs } from './modules/service/service.schema';
 import { newsTypeDefs } from './modules/news/news.schema';
 import { mediaTypeDefs } from './modules/media/media.schema';
+import { bannerTypeDefs } from './modules/banner/banner.schema';
 
 // Base Query and Mutation types
 const baseTypeDefs = gql`
@@ -32,4 +33,5 @@ export const typeDefs = [
   serviceTypeDefs,
   newsTypeDefs,
   mediaTypeDefs,
+  bannerTypeDefs,
 ];

@@ -13,12 +13,22 @@ const ITEM =
   'text-muted-foreground transition-colors focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none';
 
 /**
+ * Cinco destinos al alcance del pulgar: los que más se visitan. Si
+ * `navLinks` crece más allá de cinco (como pasó en la Fase 5, con banners),
+ * el resto no desaparece: se ve en `MoreSheet`, igual que en escritorio sigue
+ * completo en `AdminRail`.
+ */
+const DESTINOS_BARRA = 5;
+
+/**
  * Navegación de móvil: cinco destinos al alcance del pulgar. Barra inferior en
  * vez de menú hamburguesa, porque cambiar de módulo es lo que más se hace.
  */
 export function AdminTabBar() {
   const pathname = usePathname();
   const [masAbierto, setMasAbierto] = useState(false);
+  const destinos = navLinks.slice(0, DESTINOS_BARRA);
+  const desbordados = navLinks.slice(DESTINOS_BARRA);
 
   return (
     <>
@@ -26,7 +36,7 @@ export function AdminTabBar() {
         aria-label="Secciones del panel"
         className="fixed inset-x-0 bottom-0 z-30 flex items-stretch gap-0.5 border-t border-border bg-card px-1 pt-1 pb-[max(0.375rem,env(safe-area-inset-bottom))] md:hidden"
       >
-        {navLinks.map((link) => {
+        {destinos.map((link) => {
           const Icon = link.icon;
           const active = pathname === link.href || pathname.startsWith(`${link.href}/`);
           return (
@@ -58,7 +68,7 @@ export function AdminTabBar() {
         </button>
       </nav>
 
-      <MoreSheet open={masAbierto} onOpenChange={setMasAbierto} />
+      <MoreSheet open={masAbierto} onOpenChange={setMasAbierto} enlaces={desbordados} />
     </>
   );
 }

@@ -247,9 +247,48 @@ documentación.
 `motorcycle.service`, `service-point.service`, `media.service` y `maps-url`,
 pero el resto del backend no está cubierto.
 
+### `BannerWrapper.tsx` y `OptimizedHero.tsx` son código muerto
+
+`web/src/components/banner/`, además de `Banner.tsx` (el que de verdad se usa),
+tiene `BannerWrapper.tsx` y `OptimizedHero.tsx`: los dos importan `next/image`
+y ninguno de los dos se referencia desde ningún lado — ni en el scaffold
+original (`2ae3829`) ni después. No es algo que rompió la Fase 5, ya estaban
+así; se detectaron al revisar quién usaba `next/image` en `web` (ver la nota
+de banners más abajo). Se pueden borrar sin que nada quede huérfano.
+
+### Un campo de imagen opcional no se puede limpiar desde la ficha
+
+`image`/`imageMobile` en banners, igual que `service.image` y `news.image`,
+solo se **reemplazan**: si alguien quita la foto en `ImagePicker` (queda en
+`''`) y guarda, el campo llega como `undefined` a la mutación de edición y
+`undefined` "no toca la columna" (así está documentado en las tres capas), así
+que la imagen vieja se queda. Para quitarla de verdad hoy hay que pegar una
+URL distinta o vaciar el campo directo en la base. Ninguna de las fichas del
+panel deja limpiar un campo de imagen a propósito; si se resuelve, hay que
+decidirlo una vez y aplicarlo a los tres dominios.
+
 ### HEIC nunca se probó con un archivo real
 
 El MIME está aceptado y sharp trae libheif, pero en la Fase 1 no había un HEIC
 de verdad. Si un iPhone sube en ese formato y falla, el mensaje que verá el
 usuario es el genérico de "formato que el servidor no entiende".
+
+### `next/image` con una imagen del panel revienta la página entera, no solo la foto
+
+Se descubrió al construir la Fase 5: `Cards.tsx` y `NewsSection.tsx` (la home)
+usaban `next/image` para pintar `service.image`/`news.image`, y en cuanto una
+de esas URLs venía del servidor de medios local (`192.168.40.24:8080/...`, un
+host que no está en `images.remotePatterns` de `next.config.ts`) la página
+completa caía con **"Application error: a client-side exception has
+occurred"** — `next/image` lanza una excepción síncrona al renderizar, no
+falla en silencio como una imagen rota. Se corrigió usando `<img>` de verdad
+en los tres componentes de la home (`Banner.tsx`, `Cards.tsx`,
+`NewsSection.tsx`), que es el mismo criterio que ya usaban `/servicios` y
+`/noticias` para las mismas URLs. **Cualquier componente nuevo que pinte una
+imagen que venga de un dominio (`service.image`, `news.image`,
+`banner.image`/`imageMobile`, o cualquier URL de texto libre pegada en el
+panel) tiene que usar `<img>`, nunca `next/image`** — a menos que alguien
+agregue el/los host(s) de medios de cada entorno a `remotePatterns`, lo cual
+además habría que mantener por cada dominio nuevo donde corra el driver
+`local` de almacenamiento.
 

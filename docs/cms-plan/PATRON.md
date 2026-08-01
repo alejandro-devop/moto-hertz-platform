@@ -159,7 +159,7 @@ componente.
 | `FormSheet` | [`components/admin/form-sheet.tsx`](../../cms-admin/components/admin/form-sheet.tsx) | Hoja lateral, pestañas por sección con contador de errores, barra de guardado fija y el aviso de «¿Descartar los cambios?». |
 | `Field` · `ToggleRow` · `Grid` · `ALTO_CAMPO` | [`components/admin/form-fields.tsx`](../../cms-admin/components/admin/form-fields.tsx) | Los controles de la ficha. `ALTO_CAMPO` es `h-11 md:h-9`. |
 | `ImagePicker` · `GaleriaImagenes` | [`components/admin/image-picker.tsx`](../../cms-admin/components/admin/image-picker.tsx) | **Todo campo de imagen usa uno de los dos.** Nunca un `<Input>` de URL a pelo. |
-| `ListaEditable` | [`components/admin/list-editor.tsx`](../../cms-admin/components/admin/list-editor.tsx) | Una lista de renglones cortos **con orden**: agregar, quitar, subir y bajar. Extraída en la Fase 3 para `features`/`benefits`; la van a necesitar las viñetas de una noticia y los enlaces de un banner. |
+| `ListaEditable` | [`components/admin/list-editor.tsx`](../../cms-admin/components/admin/list-editor.tsx) | Una lista de renglones cortos **con orden**: agregar, quitar, subir y bajar. Extraída en la Fase 3 para `features`/`benefits`; la Fase 4 la reusó para `tags`. La Fase 5 **no** la necesitó para banners — un banner tiene un único enlace (`link`/`linkLabel`), no una lista—, pero sí copió su mismo gesto de subir/bajar de 44 px para reordenar la lista *entera* de banners (ver `app/(admin)/banners/banner-row.tsx`), en vez de arrastrar. |
 | `useFichaState` | [`lib/use-ficha-state.ts`](../../cms-admin/lib/use-ficha-state.ts) | El estado de la ficha entero: formulario plano, sección abierta, errores, «sucio» y el guardado que valida y salta al primer error. Extraído en la Fase 3 (ver §4). |
 | `SeccionFicha` · `seccionDeCampo` · `erroresPorSeccion` | [`lib/form-sections.ts`](../../cms-admin/lib/form-sections.ts) | La forma de una sección y cómo se ubica un error en ella. |
 | `erroresDeZod` · `listaDesdeTexto` · `textoDesdeLista` · `textoOpcional` | [`lib/form-state.ts`](../../cms-admin/lib/form-state.ts) | Un error por campo; texto separado por comas ⇄ arreglo; `""` → `undefined`. |
@@ -329,9 +329,13 @@ backend, en el Zod, en el SDL y en las dos utilidades de formato
 catálogo de iconos de lucide vive duplicado por la misma razón
 (`cms-admin/lib/service-icons.ts` y `web/src/utils/service-icons.tsx`).
 
-Pendientes en `web`: ~~`service-points-mock.json`~~ (borrado en la Fase 2),
-~~`services-mock.json`~~ (borrado en la Fase 3), `news-mock.json` y
-`home-mock.json` (este último vía `web/src/services/contentful.ts`).
+Mocks de `web/src/data/`: ~~`service-points-mock.json`~~ (Fase 2),
+~~`services-mock.json`~~ (Fase 3), ~~`news-mock.json`~~ (Fase 4) y
+~~`home-mock.json`~~ (Fase 5, junto con toda la capa de emulación de
+Contentful que solo la servía a ella: `services/contentful.ts`,
+`hooks/useHomeData.ts`, `components/contentful/`, `types/contentful.ts`,
+`utils/contentful-resolver.ts`, `app/api/contentful/home/`). La carpeta
+`web/src/data/` queda vacía: no hay mocks pendientes.
 
 **Una sección sin datos no es un error.** Desde la Fase 3, toda página pública
 que lea una lista tiene que verse bien con la lista vacía: un bloque que dice

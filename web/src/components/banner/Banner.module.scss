@@ -22,10 +22,34 @@
 }
 
 .image {
+  /* Antes usaba `next/image` con `fill`, que agrega esto automáticamente.
+     Ahora es un `<img>` de verdad (ver Banner.tsx): las imágenes de un banner
+     son URLs de texto libre —el mismo host de medios local del panel, o una
+     externa— y `next/image` exige que cada host se liste a mano en
+     `next.config.ts`. Mismo criterio que ya usan `/servicios` y `/noticias`. */
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
+}
+
+/* Imagen de móvil, si el banner trae una distinta a la de escritorio (Fase 5
+   del plan CMS: `imageMobile` en el panel). Sin ella, `Banner.tsx` no dibuja
+   estos dos elementos y la de escritorio se ve también en el teléfono. */
+.imageDesktop {
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+
+.imageMobile {
+  display: none;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
 }
 
 .overlay {

@@ -138,6 +138,24 @@ export const createMockNews = (overrides = {}) => ({
   ...overrides,
 });
 
+export const createMockBanner = (overrides = {}) => ({
+  id: '019c7d42-15dc-7000-8000-000000000401',
+  title: 'Yamaha Oriente',
+  subtitle: 'Descubre la nueva generación de motocicletas Yamaha.',
+  image: 'https://example.com/banner-1.webp',
+  imageMobile: null,
+  link: '/motos',
+  linkLabel: 'Explorar modelos',
+  position: 0,
+  active: true,
+  startsAt: null,
+  endsAt: null,
+  createdAt: new Date('2026-01-01'),
+  updatedAt: new Date('2026-01-01'),
+  deletedAt: null,
+  ...overrides,
+});
+
 export const resetAllMocks = () => {
   jest.clearAllMocks();
   mockDbPool.query.mockReset();

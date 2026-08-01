@@ -10,13 +10,11 @@ interface SecondBannerProps {
   description?: string;
   ctaLabel?: string;
   ctaUrl?: string;
-  backgroundImage?: {
-    fields: {
-      url: string;
-      title?: string;
-      description?: string;
-    };
-  };
+  /**
+   * URL de la imagen de fondo. Fijo en el código (alcance mínimo de la
+   * Fase 5 del plan CMS): este banner no se administra desde el panel.
+   */
+  backgroundImage?: string;
   parallaxSpeed?: number;
 }
 
@@ -37,12 +35,8 @@ export default function SecondBanner({
     triggerOnce: true,
   });
 
-  // Get image URL from Contentful
-  const imageUrl = backgroundImage?.fields?.url || "";
-  const fullImageUrl = imageUrl.startsWith("//")
-    ? `https:${imageUrl}`
-    : imageUrl || "/assets/separator.jpg";
-  const imageAlt = backgroundImage?.fields?.title || title;
+  const fullImageUrl = backgroundImage || "/assets/separator.jpg";
+  const imageAlt = title;
 
   const handleClick = () => {
     if (ctaUrl && ctaUrl !== "#") {

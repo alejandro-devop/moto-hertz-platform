@@ -156,6 +156,26 @@ El módulo `medios` (biblioteca de imágenes) sigue el mismo patrón de lista, c
 
 **A diferencia de `servicios` y `puntos-de-atencion`, una noticia sí tiene página propia** (`/noticias/<slug>`), así que `urlPublicaDeNoticia` en `lib/site.ts` no necesita un `#slug` de ancla. El menú de la fila la ofrece igual estando en borrador o programada — el enlace puede llevar a un 404 hasta que se publique, y eso ya lo dice la píldora de estado de la fila, no hay que escondérselo a quien administra.
 
+### Decisiones del módulo `banners`
+
+> Construido en la **Fase 5 del plan CMS** (`../docs/cms-plan/phases/05-home-y-banners.md`), la primera sección sobre una tabla nueva del backend y la primera con orden manual.
+
+**Alcance mínimo, acordado con el usuario antes de construir**: solo el carrusel de banners se administra aquí. El segundo banner ancho de la home y los títulos de cada sección quedan fijos en el código de `web` — no hay ficha para ellos en este módulo ni en ningún otro.
+
+**No hay selector de "ordenar por".** A diferencia de todas las listas anteriores, `filters.ts` no tiene `orden`: el orden siempre es `position`, porque el orden *es* el dato que se edita — un desplegable de orden competiría con subir/bajar. Por el mismo motivo tampoco hay `q` de búsqueda por texto libre ligado a filtros de contenido más allá del título/subtítulo/enlace, y **reordenar se deshabilita mientras hay una búsqueda activa** (`page.tsx`, `puedeReordenar`): con la lista filtrada, la vecina de una fila en pantalla puede no ser su vecina real, y mover algo que no se ve confundiría más que ayudar.
+
+**Subir/bajar, no arrastrar.** El documento de la fase pedía arrastrar con una nota de riesgo en móvil; se optó directamente por los mismos botones de 44 px que ya usa `ListaEditable` para `features`/`benefits`, sin agregar una librería de drag-and-drop nueva al proyecto — mismo criterio, misma pieza visual (`ArrowUp`/`ArrowDown`), ahora también en `banner-row.tsx`. Los botones operan sobre el **orden real** (`ordenados`, todo el catálogo sin filtrar), no sobre la página visible, así que una lista de más de 25 banners seguiría reordenándose bien aunque `ListaResponsive` la corte en páginas — hoy es un escenario de sobra, un carrusel de portada no tiene decenas de banners.
+
+**El reordenar es una mutación propia, `bannerReorder(ids)`**, no una serie de `bannerEdit` por fila: manda el orden completo de una vez (transacción en el backend) para que no quede un estado intermedio si algo falla a mitad de camino.
+
+**`position` no está en la ficha.** Un banner nuevo se agrega al final (lo decide el backend); moverlo es cosa de la lista, no de `banner-form-sheet.tsx`.
+
+**Vigencia con dos fechas opcionales**, mismo patrón que `publishedAt` de noticias: `<input type="date">` en las dos puntas, `''` viaja como `null` explícito al guardar (para poder volver a "siempre vigente"), y el estado que ve quien administra (`lib/banner-status.ts`, `getBannerStatus`) deriva **visible / inactivo / programado / vencido** comparando contra `Date.now()` — la misma regla que aplica el resolver del backend para decidir qué ve el sitio público.
+
+**Sin buscador dedicado en la barra superior más allá del título.** `banners` sí está en el mapa `BUSCADORES` de `admin-search.tsx` (busca por título), pero a diferencia de `servicios`/`noticias` no tiene filtro de categoría ni de destacado: con un puñado de banners promocionales, más filtros solo estorbarían.
+
+**La barra inferior de móvil dejó de asumir cinco destinos fijos.** Hasta esta fase `navLinks` tenía exactamente cinco entradas y `admin-tabbar.tsx` las pintaba todas. Con `banners` como sexta, `AdminTabBar` ahora corta en los primeros cinco (`DESTINOS_BARRA`) y el resto —hoy, `medios`— se ve en `MoreSheet`, que ganó una lista de enlaces arriba de "Apariencia". `AdminRail` (escritorio) no cambió: ya recorría `navLinks` completo por grupo.
+
 ## Dev
 
 ```bash

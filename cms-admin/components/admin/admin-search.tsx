@@ -31,6 +31,10 @@ const BUSCADORES: Record<string, { placeholder: string; aria: string }> = {
     placeholder: 'Buscar por título o autor',
     aria: 'Buscar noticias por título o autor',
   },
+  '/banners': {
+    placeholder: 'Buscar por título',
+    aria: 'Buscar banners por título',
+  },
   '/medios': {
     placeholder: 'Buscar por nombre de archivo',
     aria: 'Buscar imágenes por nombre de archivo',
