@@ -23,6 +23,8 @@ export interface SiteSettings {
   seoDescription?: string | null;
   seoKeywords: string[];
   seoImage?: string | null;
+  /** `null` = el sitio usa el asset estático por defecto. */
+  logo?: string | null;
   updatedAt: Date;
 }
 
@@ -40,4 +42,5 @@ export interface UpdateSiteSettingsInput {
   seoDescription?: string;
   seoKeywords?: string[];
   seoImage?: string;
+  logo?: string;
 }

@@ -116,14 +116,6 @@ Fase 1; un diálogo "Elegir de la biblioteca" dentro de
 es el que usan motos, banners, servicios y noticias, así que arreglarlo una vez
 resuelve el selector "como en WordPress" en todos esos lugares a la vez.
 
-### No hay dónde cargar el logo del sitio
-
-`site_settings` (`backend/src/shared/database/schema.ts:255`) no tiene un
-campo de logo — solo `seoImage`, para Open Graph. El logo que pinta
-`web/src/components/menu/Menu.tsx` está quemado en assets estáticos. Pedido:
-un campo `logo` en `site_settings`, administrable desde `/configuracion` igual
-que el resto de la identidad del sitio.
-
 ---
 
 ## Sitio público

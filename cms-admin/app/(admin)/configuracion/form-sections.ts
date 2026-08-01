@@ -31,8 +31,8 @@ export const SECCIONES: Seccion[] = [
   {
     id: 'textos',
     label: 'Textos',
-    hint: 'El nombre del sitio: pie de página, título de la pestaña y autor por defecto de las noticias.',
-    campos: ['siteName'],
+    hint: 'El nombre y el logo del sitio: menú, pie de página, título de la pestaña y autor por defecto de las noticias.',
+    campos: ['siteName', 'logo'],
   },
 ];
 

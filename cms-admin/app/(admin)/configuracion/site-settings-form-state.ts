@@ -24,6 +24,7 @@ export interface FormState {
   seoDescription: string;
   seoKeywords: string[];
   seoImage: string;
+  logo: string;
 }
 
 export const EMPTY_FORM: FormState = {
@@ -40,6 +41,7 @@ export const EMPTY_FORM: FormState = {
   seoDescription: '',
   seoKeywords: [],
   seoImage: '',
+  logo: '',
 };
 
 export function siteSettingsToForm(config: SiteSettings): FormState {
@@ -57,6 +59,7 @@ export function siteSettingsToForm(config: SiteSettings): FormState {
     seoDescription: config.seoDescription ?? '',
     seoKeywords: [...config.seoKeywords],
     seoImage: config.seoImage ?? '',
+    logo: config.logo ?? '',
   };
 }
 
@@ -84,6 +87,7 @@ export function formToInput(form: FormState): SiteSettingsFormInput {
     seoDescription: trim(form.seoDescription),
     seoKeywords: form.seoKeywords.map((item) => item.trim()).filter(Boolean),
     seoImage: trim(form.seoImage),
+    logo: trim(form.logo),
   };
 }
 
@@ -132,6 +136,7 @@ const esquema = z.object({
   seoTitle: z.string().trim().max(255),
   seoDescription: z.string().trim().max(500),
   seoImage: z.string().trim().max(500).refine(esUrlValida, MENSAJE_URL),
+  logo: z.string().trim().max(500).refine(esUrlValida, MENSAJE_URL),
 });
 
 export function validar(form: FormState): ResultadoValidacion<SeccionId> {

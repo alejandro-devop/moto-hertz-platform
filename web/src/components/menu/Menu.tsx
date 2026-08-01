@@ -1,14 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import Drawer from "../drawer";
 import GlobalSearch from "../global-search/GlobalSearch";
 import Icon from "../icon";
+import { useSiteSettings } from "@/hooks";
 import styles from "./Menu.module.scss";
 
 export default function Menu() {
+  const settings = useSiteSettings();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   // El nav es de vidrio siempre (blanco + alfa + blur): esto solo sube la
@@ -51,13 +52,15 @@ export default function Menu() {
           <div className={styles.navContent}>
             {/* Logo */}
             <Link href="/" className={styles.logoContainer}>
-              <Image
-                src="/assets/logos/yamaha.svg"
-                alt="Yamaha"
-                width={120}
-                height={40}
+              {/* Puede venir del host de medios local del panel (si se
+                  cargó un logo desde /configuracion), así que es un <img>
+                  de verdad, nunca next/image — mismo criterio que
+                  Cards/NewsSection/SecondBanner. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={settings.logo || "/assets/logos/yamaha.svg"}
+                alt={settings.siteName}
                 className={styles.logo}
-                priority
               />
             </Link>
 

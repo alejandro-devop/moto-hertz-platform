@@ -25,6 +25,8 @@ export interface SiteSettings {
   seoKeywords: string[];
   /** Imagen para compartir en redes (Open Graph). */
   seoImage?: string | null;
+  /** Sin valor, el sitio usa el asset estático por defecto. */
+  logo?: string | null;
   updatedAt: string;
 }
 
@@ -43,6 +45,7 @@ export interface SiteSettingsFormInput {
   seoDescription?: string;
   seoKeywords?: string[];
   seoImage?: string;
+  logo?: string;
 }
 
 const SITE_SETTINGS_FIELDS = /* GraphQL */ `
@@ -60,6 +63,7 @@ const SITE_SETTINGS_FIELDS = /* GraphQL */ `
   seoDescription
   seoKeywords
   seoImage
+  logo
   updatedAt
 `;
 

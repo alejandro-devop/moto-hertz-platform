@@ -48,6 +48,7 @@ const SITE_SETTINGS_FIELDS = /* GraphQL */ `
   seoDescription
   seoKeywords
   seoImage
+  logo
 `;
 
 const SITE_SETTINGS_QUERY = /* GraphQL */ `
@@ -80,6 +81,7 @@ export const SITE_SETTINGS_FALLBACK: SiteSettings = {
   seoDescription: "Sitio web de Yamaha Oriente",
   seoKeywords: [],
   seoImage: null,
+  logo: null,
 };
 
 export async function getSiteSettings(): Promise<SiteSettings> {

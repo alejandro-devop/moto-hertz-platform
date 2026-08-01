@@ -24,6 +24,8 @@ export const siteSettingsTypeDefs = gql`
     seoKeywords: [String!]!
     "Imagen para compartir en redes (Open Graph)."
     seoImage: String
+    "Sin valor, el sitio usa el asset estático por defecto."
+    logo: String
     updatedAt: DateTime!
   }
 
@@ -50,5 +52,6 @@ export const siteSettingsTypeDefs = gql`
     seoDescription: String
     seoKeywords: [String!]
     seoImage: String
+    logo: String
   }
 `;

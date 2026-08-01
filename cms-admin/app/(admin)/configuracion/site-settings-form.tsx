@@ -272,6 +272,16 @@ export function SiteSettingsForm({ config, onSubmit, submitting }: Props) {
                 className={ALTO_CAMPO}
               />
             </Field>
+
+            <Field
+              label="Logo"
+              hint="Sale en el menú del sitio. Sin uno, se usa el logo de Yamaha por defecto."
+            >
+              <ImagePicker value={form.logo} onChange={(url) => set('logo', url)} alt="Logo del sitio" />
+              {errores.logo ? (
+                <p className="text-xs font-medium text-destructive">{errores.logo}</p>
+              ) : null}
+            </Field>
           </TabsContent>
         </div>
       </Tabs>

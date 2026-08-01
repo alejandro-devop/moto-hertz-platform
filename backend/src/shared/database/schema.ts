@@ -274,6 +274,8 @@ export const siteSettings = pgTable('site_settings', {
   seoDescription: varchar('seo_description', { length: 500 }),
   seoKeywords: jsonb('seo_keywords').$type<string[]>().notNull().default([]),
   seoImage: text('seo_image'),
+  /** `NULL` = el sitio sigue usando el asset estático por defecto. Migración `014`. */
+  logo: text('logo'),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
 

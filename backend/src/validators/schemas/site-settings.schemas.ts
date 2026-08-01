@@ -48,6 +48,7 @@ export const siteSettingsEditInputSchema = z
     seoDescription: z.string().trim().max(500).optional(),
     seoKeywords: z.array(z.string().trim().min(1).max(60)).max(30).optional(),
     seoImage: urlSchema.optional(),
+    logo: urlSchema.optional(),
   })
   .refine((d) => Object.keys(d).some((k) => (d as Record<string, unknown>)[k] !== undefined), {
     message: 'At least one field is required to update',
