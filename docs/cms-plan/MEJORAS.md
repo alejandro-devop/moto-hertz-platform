@@ -152,19 +152,6 @@ Falta decidir el modelo: ¿una tabla genérica tipo `page_content`
 
 ## Sitio público
 
-### El home no muestra motos — falta una franja antes de servicios
-
-`web/src/app/page.tsx` pinta `Banner` → `Cards` (servicios) → `SecondBanner` →
-`NewsSection`: ninguna franja de motos. Pedido: una franja de motos antes de la
-de servicios.
-
-Falta decidir cómo se eligen esas motos. El tipo `Motorcycle` ya tiene un campo
-`featured: boolean` (`web/src/types/motorcycle.ts:36`) que hoy solo pinta la
-etiqueta "Destacada" en `/motos` — nada lo usa todavía para elegir qué
-mostrar en otro lado. Es candidato natural para esta franja, pero hay que
-confirmar el criterio (¿todas las `featured`? ¿las N más recientes?) antes de
-construir.
-
 ### Los filtros de `/motos` son solo por categoría — faltan nombre y marca
 
 `web/src/app/motos/page.tsx:111` ("Filtrar por categoría") es el único filtro,

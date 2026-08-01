@@ -4,10 +4,12 @@ import dynamic from "next/dynamic";
 import { useQuery } from "@tanstack/react-query";
 import Menu from "@/components/menu";
 import Banner from "@/components/banner/Banner";
+import MotosSection from "@/components/motos-section/MotosSection";
 import Cards from "@/components/cards/Cards";
 import SecondBanner from "@/components/second-banner/SecondBanner";
 import NewsSection from "@/components/news-section/NewsSection";
 import { getBanners } from "@/services/banners";
+import { getMotorcycles } from "@/services/motorcycles";
 import { getServices } from "@/services/services";
 import { getNews } from "@/services/news";
 
@@ -38,6 +40,14 @@ export default function Home() {
     queryFn: () => getBanners({ limit: 10 }),
   });
 
+  /* Franja de motos destacadas, antes de servicios (decidido con el
+     usuario): solo las que estén marcadas `featured: true` en el panel. Si
+     no hay ninguna, `MotosSection` no se pinta. */
+  const { data: motorcycleData } = useQuery({
+    queryKey: ["home-motorcycles"],
+    queryFn: () => getMotorcycles({ page: 1, limit: 6, featured: true }),
+  });
+
   /* Los servicios y noticias más recientes: no hace falta una query nueva,
      son las mismas que ya usan `/servicios` y `/noticias`. */
   const { data: serviceData } = useQuery({
@@ -55,6 +65,8 @@ export default function Home() {
       <Menu />
 
       <Banner slides={bannerData?.banners} autoPlayInterval={5000} />
+
+      <MotosSection motorcycles={motorcycleData?.motorcycles} />
 
       <Cards services={serviceData?.services} />
 

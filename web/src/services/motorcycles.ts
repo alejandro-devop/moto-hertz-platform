@@ -67,8 +67,8 @@ const MOTORCYCLE_FIELDS = /* GraphQL */ `
 `;
 
 const MOTORCYCLES_QUERY = /* GraphQL */ `
-  query Motorcycles($page: Int, $limit: Int) {
-    motorcycles(page: $page, limit: $limit) {
+  query Motorcycles($page: Int, $limit: Int, $featured: Boolean) {
+    motorcycles(page: $page, limit: $limit, featured: $featured) {
       total
       page
       limit
@@ -88,7 +88,7 @@ const MOTORCYCLE_BY_SLUG_QUERY = /* GraphQL */ `
 `;
 
 export async function getMotorcycles(
-  variables: { page?: number; limit?: number } = {},
+  variables: { page?: number; limit?: number; featured?: boolean } = {},
 ): Promise<MotorcycleCollection> {
   const data = await graphqlRequest<{ motorcycles: MotorcycleCollection }>(
     MOTORCYCLES_QUERY,
