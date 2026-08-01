@@ -240,6 +240,7 @@ export function ServiceFormSheet({
             items={form.benefits}
             onChange={(benefits) => set('benefits', benefits)}
             etiquetaItem="beneficio"
+            genero="m"
             placeholder="Previene averías costosas"
           />
         </Field>

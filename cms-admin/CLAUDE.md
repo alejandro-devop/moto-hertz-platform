@@ -24,6 +24,8 @@ Next.js 15 (App Router) · TypeScript · React 19 · Tailwind v4 · shadcn/ui es
 
 **Reglas.** Objetivos de 44 px en móvil (`h-11 md:h-9`), foco visible en todo control, cifras con `tabular-nums`. La utilidad `scroll-x` es para tiras horizontales: `overflow-x: auto` a secas convierte el eje vertical en `auto` y saca una barra sobrante.
 
+> **Una trampa de especificidad que ya mordió una vez y puede volver a morder.** `components/ui/select.tsx` fijaba la altura por defecto de `SelectTrigger` con `data-[size=default]:h-8` — una clase con variante de atributo, que en CSS tiene **más especificidad** que una clase plana como el `h-11` que le pasa un consumidor por `className`. El resultado, arrastrado sin detectarse desde la Fase 0 hasta la Fase 7: **todos** los `<Select>` del panel (los filtros de las seis listas y los desplegables de las tres fichas que tenían uno) medían 32 px sin importar qué altura pidiera quien lo usaba — ni los 44 px de móvil de `SelectFiltro` apilado, ni los 36/44 de `ALTO_CAMPO`. Se arregló pasando esas alturas por defecto a clases planas (`h-8`/`h-7`, sin el prefijo `data-[size=…]:`) para que `cn()` (que usa `tailwind-merge`) las trate como el mismo grupo que el `h-11`/`h-9` que llega por `className` y se quede con el que corresponde. **La lección**: cualquier componente base que use un selector de variante (`data-[…]:`, `[&:…]`, `has-[…]:`…) para su tamaño por defecto puede ganarle a un `className` plano sin que se note en el código — solo se ve midiendo en el navegador. Verificarlo con `getComputedStyle(el).height`, no con una lectura del JSX.
+
 ## Estructura del panel
 
 `app/(admin)/layout.tsx` es `force-dynamic` (toda ruta exige cookie de sesión, y así `useSearchParams` funciona en los filtros) y solo monta `components/admin/admin-shell.tsx`:
@@ -34,7 +36,7 @@ Next.js 15 (App Router) · TypeScript · React 19 · Tailwind v4 · shadcn/ui es
 | `admin-tabbar.tsx` | oculta | barra inferior de 5 destinos + hoja «Más» |
 | `admin-topbar.tsx` | buscador visible + tema + sitio público | marca, sección y lupa que despliega el buscador |
 
-El buscador (`admin-search.tsx`) escribe en `?q=` **de la sección donde uno está** (mapa `BUSCADORES`); `⌘K` lo enfoca desde cualquier pantalla.
+El buscador (`admin-search.tsx`) escribe en `?q=` **de la sección donde uno está** (mapa `BUSCADORES`); `⌘K` lo enfoca desde cualquier pantalla. Si la sección actual no está en `BUSCADORES` —hoy, solo `/configuracion`, que no es una lista— el buscador **no se muestra**, ni en escritorio ni la lupa de móvil (`tieneBuscador()`, agregado en la Fase 7): antes caía en `/motos` en silencio y sacaba a quien escribía ahí de la pantalla que estaba mirando. Cualquier sección nueva sin lista hereda esto solo con no agregarse al mapa.
 
 Piezas compartidas de presentación: `page-header`, `states` (vacío, error, esqueletos), `status-pill`, `thumb`, `proximamente`.
 
@@ -47,7 +49,7 @@ Piezas compartidas de módulo, extraídas de `motos` en la Fase 0 del plan CMS (
 | `BarraFiltros`, `SelectFiltro`, `FilterChip`, `opcionesDe` | `components/admin/filter-bar.tsx` | Fila de filtros en escritorio y hoja inferior en móvil, con el contador de filtros puestos. |
 | `RowActions`, `AccionFila` | `components/admin/row-actions.tsx` | La misma lista de acciones como menú de fila (escritorio) y como hoja inferior (móvil). |
 | `FormSheet` | `components/admin/form-sheet.tsx` | Armazón de la ficha: pestañas por sección con contador de errores, barra de guardado fija y aviso antes de descartar. |
-| `ListaEditable` | `components/admin/list-editor.tsx` | Una lista de renglones **con orden**: agregar, quitar, subir y bajar. Extraída en la Fase 3 (`features`/`benefits`). |
+| `ListaEditable` | `components/admin/list-editor.tsx` | Una lista de renglones **con orden**: agregar, quitar, subir y bajar. Extraída en la Fase 3 (`features`/`benefits`). Tiene un prop `genero?: 'f' \| 'm'` (por defecto `'f'`) para el aviso de lista vacía («ningún color», no «ninguna color») — pásalo en `'m'` cuando `etiquetaItem` sea masculino. |
 | `useFichaState` | `lib/use-ficha-state.ts` | Todo el estado de una ficha: formulario plano, sección abierta, errores, «sucio» y el guardado que valida y salta al primer error. Extraído en la Fase 3. |
 | `Field`, `ToggleRow`, `Grid`, `ALTO_CAMPO` | `components/admin/form-fields.tsx` | Los controles de la ficha. `ALTO_CAMPO` = `h-11 md:h-9`. |
 | `leerOpcion`, `escribirParams`, `paginar`, comparadores | `lib/list-params.ts` | Filtros en la URL (solo se serializa lo que se desvía del valor por defecto), orden y paginación. |
@@ -103,6 +105,8 @@ Las mutaciones de escritura requieren sesión (`requireAuth` en el backend); el 
 **Marcar como vendida, no eliminar.** La acción principal de una moto vendida es apagar `available` — sale del sitio y el registro queda. Eliminar está al final del menú, separada y con confirmación que nombra la moto; desde la Fase 1 **manda a la papelera**, no borra (ver «Gestión de medios → Papelera»).
 
 **Nombre en la interfaz.** El paquete se sigue llamando `yamaha-oriente-cms-admin` (herencia de la plantilla), pero la interfaz dice «Motos Hot Wheels» porque el catálogo es multimarca. Renombrar el paquete es aparte.
+
+**`features` y `colors` se editan con `ListaEditable`, no con texto separado por comas** (desde la Fase 7). Motos fue la última sección en arrastrar el campo de comas que `servicios` ya había dejado atrás en la Fase 3 — mismo componente, mismo criterio: el orden es el dato y una coma dentro de un renglón ya no parte nada en dos sin avisar.
 
 ### Decisiones del módulo `puntos-de-atencion`
 
@@ -195,6 +199,43 @@ El módulo `medios` (biblioteca de imágenes) sigue el mismo patrón de lista, c
 **`seoKeywords` se edita con `ListaEditable`**, igual que `tags` de una noticia: es una lista sin orden relevante, se reusa el componente porque agregar/quitar renglones cortos es lo mismo, aunque mover uno arriba o abajo no cambie nada.
 
 **Los campos de texto opcionales heredan la misma limitación que las imágenes**: `formToInput` usa `textoOpcional` (`"" → undefined`), así que un campo que ya tiene valor no se puede vaciar desde la ficha, solo reemplazar por otro valor — mismo criterio documentado para `image`/`imageMobile` en motos, servicios, noticias y banners. `seoKeywords` es la excepción: al ser un arreglo, `[]` es un valor legítimo que sí viaja y sí limpia la lista.
+
+### Fase 7 — QA y cierre del CMS
+
+No agregó ningún módulo: recorrió los seis ya construidos, arregló lo que
+chirriaba de verdad y volcó el resto en `../docs/cms-plan/MEJORAS.md`. Lo que
+cambió en esta capa:
+
+- **Los `<Select>` volvieron a medir lo que su `className` pedía** (ver la nota
+  de especificidad en «Sistema de diseño» arriba) — afectaba a los filtros de
+  las seis listas y a los desplegables de `motos`, `puntos-de-atencion` y
+  `servicios`.
+- **`motos` dejó de ser la única sección con listas de texto separado por
+  comas**: `features` y `colors` pasaron a `ListaEditable` (ver arriba).
+- **El buscador global se oculta en secciones sin lista** (`tieneBuscador()`,
+  ver «Estructura del panel» arriba), en vez de caer en `/motos` sin avisar.
+- **Se borró código muerto**: `components/admin/proximamente.tsx` (ya no lo
+  usaba ningún módulo, todos tienen backend desde hace fases) y, en `web`,
+  `BannerWrapper.tsx` y `OptimizedHero.tsx` del scaffold original.
+
+Lo que se revisó y **no** se tocó, con el porqué en `MEJORAS.md`: que un campo
+de imagen opcional no se pueda limpiar desde la ficha (solo reemplazar), que
+`/servicios` y `/puntos-de-atencion` abran el detalle en un modal en vez de una
+página propia, y que `web/public/manifest.json` no lea `site_settings` — las
+tres son trabajo real de una fase propia, no un arreglo de QA, o dependen de
+un `next build` de producción que no se podía correr con los `dev` de por
+medio (ver «Riesgos» del documento de la Fase 7).
+
+El patrón de **traer la página completa (hasta `LIMITE_BACKEND = 100`) y
+filtrar/ordenar/paginar en el cliente** —documentado como decisión de `motos`
+más arriba— resultó ser, al revisar los seis `use-<dominio>.ts`, el patrón de
+**todo** el panel, no una excepción de motos: ninguna query de lista del
+backend busca ni ordena, así que no había otra forma de construirlo con el
+`PATRON.md` actual. Con los volúmenes reales de hoy (30 motos, 9 noticias, 5
+puntos, 3 banners, 3 imágenes, 1 servicio) cada consulta al backend tarda de
+un dígito de milisegundos; el límite sigue siendo el mismo que ya advertía
+`motos`: si algún catálogo llega a los miles, hay que mover búsqueda, orden y
+paginación a la query en esa sección.
 
 ## Dev
 

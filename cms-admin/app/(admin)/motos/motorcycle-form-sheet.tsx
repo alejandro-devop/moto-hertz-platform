@@ -15,6 +15,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { ALTO_CAMPO, Field, Grid, ToggleRow } from '@/components/admin/form-fields';
 import { FormSheet } from '@/components/admin/form-sheet';
 import { GaleriaImagenes } from '@/components/admin/image-picker';
+import { ListaEditable } from '@/components/admin/list-editor';
 import { StatusPill, paperTone } from '@/components/admin/status-pill';
 import { daysUntil, formatCop, formatDate, groupDigits, humanizeDays, onlyDigits } from '@/lib/format';
 import { useFichaState } from '@/lib/use-ficha-state';
@@ -493,23 +494,24 @@ export function MotorcycleFormSheet({
 
         <Field
           label="Equipamiento"
-          htmlFor="features"
-          hint="Separado por comas: frenos ABS, tablero digital…"
+          error={errores.features}
+          hint="Lo que trae la moto. El orden es el que verá el cliente."
         >
-          <Textarea
-            id="features"
-            rows={3}
-            value={form.features}
-            onChange={(event) => set('features', event.target.value)}
+          <ListaEditable
+            items={form.features}
+            onChange={(features) => set('features', features)}
+            etiquetaItem="característica"
+            placeholder="Frenos ABS"
           />
         </Field>
 
-        <Field label="Colores" htmlFor="colors" hint="Separados por comas.">
-          <Input
-            id="colors"
-            value={form.colors}
-            onChange={(event) => set('colors', event.target.value)}
-            className={ALTO_CAMPO}
+        <Field label="Colores" error={errores.colors}>
+          <ListaEditable
+            items={form.colors}
+            onChange={(colors) => set('colors', colors)}
+            etiquetaItem="color"
+            genero="m"
+            placeholder="Rojo"
           />
         </Field>
       </TabsContent>

@@ -1,5 +1,5 @@
 export { default as Menu } from "./menu";
-export { default as Banner } from "./banner";
+export { default as Banner } from "./banner/Banner";
 export { default as Button } from "./button";
 export { default as Cards } from "./cards";
 export { default as SecondBanner } from "./second-banner";

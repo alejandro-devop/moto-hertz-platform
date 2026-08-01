@@ -173,7 +173,7 @@ Siempre UUID v7: `import { generateUuidV7 } from '../shared/database/uuid'` (usa
 - Framework: Jest + ts-jest
 - Setup global: `tests/setup.ts`
 - Mocks helper: `tests/helpers/mocks.ts`
-- Cobertura mínima configurada: 70% (branches, functions, lines, statements) — aún no alcanzada globalmente, solo `motorcycle.service` tiene test de referencia
+- Cobertura mínima configurada: 70% (branches, functions, lines, statements) — aún no alcanzada globalmente (ver «La cobertura de tests no llega al mínimo configurado» en `../docs/cms-plan/MEJORAS.md`). 87 tests en verde a cierre de la Fase 7 del plan CMS: los siete servicios de dominio (`motorcycle`, `service-point`, `service`, `news`, `media`, `banner`, `site-settings`) más `maps-url`, y un test de resolver dedicado para la regla de visibilidad de `news`. Lo que falta es sobre todo resolvers y validadores Zod, no services.
 - Correr: `npm test` | `npm run test:coverage`
 
 ## Migraciones

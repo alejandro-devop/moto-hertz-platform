@@ -38,8 +38,8 @@ export interface FormState {
   engineDisplacement: string;
   enginePower: string;
   engineTorque: string;
-  features: string;
-  colors: string;
+  features: string[];
+  colors: string[];
   imagesMain: string;
   imagesGallery: string[];
   specsWeight: string;
@@ -82,8 +82,8 @@ export const EMPTY_FORM: FormState = {
   engineDisplacement: '',
   enginePower: '',
   engineTorque: '',
-  features: '',
-  colors: '',
+  features: [],
+  colors: [],
   imagesMain: '',
   imagesGallery: [],
   specsWeight: '',
@@ -128,8 +128,8 @@ export function motorcycleToForm(motorcycle: Motorcycle): FormState {
     engineDisplacement: motorcycle.engine?.displacement ?? '',
     enginePower: motorcycle.engine?.power ?? '',
     engineTorque: motorcycle.engine?.torque ?? '',
-    features: textoDesdeLista(motorcycle.features),
-    colors: textoDesdeLista(motorcycle.colors),
+    features: [...motorcycle.features],
+    colors: [...motorcycle.colors],
     imagesMain: motorcycle.images?.main ?? '',
     imagesGallery: [...(motorcycle.images?.gallery ?? [])],
     specsWeight: motorcycle.specs?.weight ?? '',
@@ -187,8 +187,8 @@ export function formToInput(form: FormState): MotorcycleFormInput {
       power: trim(form.enginePower),
       torque: trim(form.engineTorque),
     },
-    features: listaDesdeTexto(form.features),
-    colors: listaDesdeTexto(form.colors),
+    features: form.features.map((item) => item.trim()).filter(Boolean),
+    colors: form.colors.map((item) => item.trim()).filter(Boolean),
     /* `images.main` es obligatorio en el backend: sin portada no se envía nada. */
     images: main ? { main, gallery: form.imagesGallery.filter(Boolean) } : undefined,
     specs: {

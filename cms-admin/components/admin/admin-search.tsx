@@ -44,6 +44,19 @@ const BUSCADORES: Record<string, { placeholder: string; aria: string }> = {
 const DESTINO_POR_DEFECTO = '/motos';
 
 /**
+ * Si la sección actual no tiene una lista que buscar (hoy, `/configuracion`,
+ * la única sección del panel que no es una lista), el buscador global no
+ * tiene a dónde escribir: mejor ocultarlo que mandar a `/motos` en silencio.
+ * Cualquier sección nueva sin lista hereda esto automáticamente con solo no
+ * agregarse a `BUSCADORES`.
+ */
+export function tieneBuscador(pathname: string): boolean {
+  return Object.keys(BUSCADORES).some(
+    (ruta) => pathname === ruta || pathname.startsWith(`${ruta}/`)
+  );
+}
+
+/**
  * Buscador global. Escribe en `?q=` de la lista de la sección actual, que es de
  * donde esa lista lee su filtro — así la búsqueda queda en la URL y el botón de
  * atrás funciona.

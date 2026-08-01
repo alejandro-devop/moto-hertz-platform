@@ -11,11 +11,11 @@ import { cn } from '@/lib/utils';
  * **reordenar**. Es lo que necesitan `features` y `benefits` de un servicio, y
  * lo que van a necesitar las viñetas de una noticia y los enlaces de un banner.
  *
- * **Por qué no un campo de texto separado por comas** (que es lo que hace hoy
- * `motos` con sus `features`, vía `listaDesdeTexto`): en una lista con orden,
- * mover el tercer elemento al primer lugar con comas obliga a reescribir la
- * línea entera, y una coma dentro de un renglón —«Cambio de aceite, filtro y
- * bujía»— parte el renglón en dos sin avisar.
+ * **Por qué no un campo de texto separado por comas** (que es como `motos`
+ * editaba `features`/`colors` hasta la Fase 7, vía `listaDesdeTexto`): en una
+ * lista con orden, mover el tercer elemento al primer lugar con comas obliga
+ * a reescribir la línea entera, y una coma dentro de un renglón —«Cambio de
+ * aceite, filtro y bujía»— parte el renglón en dos sin avisar.
  *
  * **El orden es el dato.** El sitio pinta los renglones en el orden en que
  * están aquí, así que subir y bajar tienen que estar al alcance del pulgar:
@@ -29,6 +29,8 @@ export function ListaEditable({
   placeholder,
   /** Singular, en minúsculas: «característica», «beneficio». */
   etiquetaItem,
+  /** Género de `etiquetaItem`, para el aviso de lista vacía («ningún color», no «ninguna color»). */
+  genero = 'f',
   error,
   max = 30,
   className,
@@ -37,6 +39,7 @@ export function ListaEditable({
   onChange: (items: string[]) => void;
   placeholder?: string;
   etiquetaItem: string;
+  genero?: 'f' | 'm';
   error?: string;
   max?: number;
   className?: string;
@@ -82,7 +85,7 @@ export function ListaEditable({
     <div className={cn('flex flex-col gap-2', className)}>
       {items.length === 0 ? (
         <p className="rounded-lg border border-dashed border-border px-3 py-4 text-center text-[13px] text-muted-foreground">
-          Todavía no hay ninguna {etiquetaItem}.
+          Todavía no hay {genero === 'm' ? 'ningún' : 'ninguna'} {etiquetaItem}.
         </p>
       ) : (
         <ol className="flex flex-col gap-2">

@@ -396,9 +396,58 @@ porque abstraerlo mal cuesta más que escribirlo dos veces:
 - [ ] La ficha guarda, valida, avisa antes de descartar y salta a la pestaña del
       primer error.
 - [ ] Todo funciona a 390 px de ancho y en tema oscuro.
+- [ ] Los controles que deben medir 44 px en móvil **miden 44 px de verdad**:
+      `getComputedStyle(el).height` en la consola del navegador, no una
+      lectura de qué clase trae el JSX. La Fase 7 encontró seis módulos donde
+      la clase correcta estaba puesta y aun así no se aplicaba — ver §6.
 - [ ] La página pública correspondiente ya no lee un mock y el JSON está
       borrado.
 - [ ] El buscador de la barra superior busca **en la sección**, no en `/motos`
-      (mapa `BUSCADORES` de `admin-search.tsx`).
+      (mapa `BUSCADORES` de `admin-search.tsx`) — o, si la sección no tiene
+      lista (como `configuracion`), que **no aparezca** en vez de caer en
+      `/motos` en silencio (`tieneBuscador()` en `admin-search.tsx`).
 - [ ] `backend/CLAUDE.md` (tabla de dominios + decisiones) y
       `cms-admin/CLAUDE.md` (decisiones del módulo) actualizados.
+
+---
+
+## 6. Lo que dejó la Fase 7 (QA y cierre)
+
+La Fase 7 no construyó una sección: recorrió las seis ya construidas
+buscando lo que no se veía leyendo el código. Dos lecciones que valen para la
+próxima sección, no solo para esta:
+
+**Una clase Tailwind correcta en el JSX no garantiza el estilo correcto en
+pantalla.** `components/ui/select.tsx` traía la altura por defecto de
+`SelectTrigger` como `data-[size=default]:h-8` — una clase con selector de
+atributo, que en CSS **pesa más** que una clase plana como el `h-11` que le
+pasaba cada consumidor. El resultado: los seis filtros del panel y los tres
+desplegables de ficha llevaban meses con la clase de 44 px puesta en el
+código y 32 px de verdad en pantalla, porque nadie lo midió con
+`getComputedStyle`, solo se leyó el JSX y se dio por bueno. La lección general:
+**cualquier variante de un componente base con un selector `data-[…]:`,
+`[&:…]` o `has-[…]:` puede ganarle a un `className` plano sin que se note en
+una revisión de código.** El arreglo (`components/ui/select.tsx`) fue cambiar
+esas clases por condicionales planas en JS, para que `cn()` (que usa
+`tailwind-merge`) las trate como el mismo grupo que la altura que llega por
+`className` y se quede con la que corresponde — no hace falta tocar cada
+consumidor.
+
+**Una pieza compartida documentada como "reglas que no se negocian" (§2.5)
+puede quedarse a medio aplicar en la sección más vieja.** `motos`, la primera
+sección construida (antes de que existiera `ListaEditable`), siguió editando
+`features`/`colors` con texto separado por comas hasta la Fase 7 — la Fase 3
+había creado `ListaEditable` para `servicios` y nunca se volvió sobre `motos`
+para adoptarla, porque ninguna fase posterior tenía motivo para tocar esa
+ficha. Vale la pena, al cerrar una sección nueva que reemplaza un patrón
+viejo, preguntarse si alguna sección anterior se quedó con el patrón que se
+está reemplazando — no solo revisar hacia adelante.
+
+Lo que se revisó y se dejó tal cual, con el porqué en `MEJORAS.md`: que un
+campo de imagen opcional no se pueda limpiar desde la ficha (afecta a
+`banner.imageMobile`, `service.image` y `news.image` por igual, y arreglarlo
+bien implica decidir una convención de "borrar" nueva para los tres a la
+vez, no un parche de una sección), y que `web/public/manifest.json` siga sin
+leer `site_settings` (exige un `next build` de producción para probarlo a
+fondo con `next-pwa`, que esta fase no podía correr con los `dev` de las tres
+capas ya levantados).

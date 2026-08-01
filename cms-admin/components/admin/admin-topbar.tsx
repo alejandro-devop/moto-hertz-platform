@@ -4,7 +4,7 @@ import { Suspense, useState } from 'react';
 import { ExternalLink, Search } from 'lucide-react';
 import { activeLink } from '@/app/(admin)/nav-links';
 import { usePathname } from 'next/navigation';
-import { AdminSearch } from '@/components/admin/admin-search';
+import { AdminSearch, tieneBuscador } from '@/components/admin/admin-search';
 import { BrandMark } from '@/components/admin/brand-mark';
 import { ThemeToggle } from '@/components/admin/theme-toggle';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -18,10 +18,11 @@ export function AdminTopbar() {
   const pathname = usePathname();
   const [buscando, setBuscando] = useState(false);
   const seccion = activeLink(pathname);
+  const conBuscador = tieneBuscador(pathname);
 
   return (
     <header className="sticky top-0 z-20 flex h-14 items-center gap-2 border-b border-border bg-card px-3 md:h-12 md:px-4">
-      {buscando ? (
+      {buscando && conBuscador ? (
         <Suspense fallback={null}>
           <AdminSearch className="flex-1 md:hidden" autoFocus onClose={() => setBuscando(false)} />
         </Suspense>
@@ -35,20 +36,24 @@ export function AdminTopbar() {
             </span>
           </span>
 
-          <Suspense fallback={null}>
-            <AdminSearch className="hidden w-full max-w-sm md:flex" />
-          </Suspense>
+          {conBuscador ? (
+            <Suspense fallback={null}>
+              <AdminSearch className="hidden w-full max-w-sm md:flex" />
+            </Suspense>
+          ) : null}
 
           <span className="flex-1" />
 
-          <button
-            type="button"
-            onClick={() => setBuscando(true)}
-            aria-label="Buscar motos"
-            className="grid size-9 shrink-0 place-items-center rounded-lg border border-border text-muted-foreground hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none md:hidden"
-          >
-            <Search className="size-4" />
-          </button>
+          {conBuscador ? (
+            <button
+              type="button"
+              onClick={() => setBuscando(true)}
+              aria-label="Buscar motos"
+              className="grid size-9 shrink-0 place-items-center rounded-lg border border-border text-muted-foreground hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none md:hidden"
+            >
+              <Search className="size-4" />
+            </button>
+          ) : null}
 
           <Tooltip>
             <TooltipTrigger

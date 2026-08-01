@@ -112,39 +112,6 @@ ir a `/medios`, copiar la URL y volver. Es el hueco más visible que dejó la
 Fase 1; un diálogo "Elegir de la biblioteca" dentro de
 `components/admin/image-picker.tsx` es trabajo de una tarde.
 
-### `motos` sigue editando sus listas con comas
-
-Desde la Fase 3 existe `components/admin/list-editor.tsx` (`ListaEditable`), que
-edita una lista con orden: agregar, quitar, subir y bajar. `motos` todavía usa
-`listaDesdeTexto`/`textoDesdeLista` para `features` y `colors`, es decir un
-campo de texto separado por comas — donde una coma dentro de un renglón lo parte
-en dos sin avisar y reordenar obliga a reescribir la línea.
-
-Cambiarlo es sustituir dos campos en `motorcycle-form-sheet.tsx` y ajustar el
-estado plano para que guarde `string[]` en vez de `string`.
-
-### El buscador de la barra superior no se esconde en `/configuracion`
-
-`/configuracion` (Fase 6) es la primera sección del panel sin lista ni
-búsqueda: no está en el mapa `BUSCADORES` de `admin-search.tsx`, así que ahí
-el buscador global cae en el destino por defecto (`/motos`) con su placeholder
-("Buscar por nombre o matrícula"). Escribir algo ahí saca al usuario de
-Configuración sin avisar. No se resolvió en esta fase porque `AdminSearch`
-asume que toda sección tiene una lista que buscar — resolverlo bien implica
-decidir qué hace el buscador (u ocultarlo) en cualquier sección futura que
-tampoco tenga lista, no solo en esta.
-
-### Los desplegables de filtro miden 32 px, no 44
-
-`cms-admin/CLAUDE.md` manda objetivos de 44 px en móvil (`h-11 md:h-9`), pero la
-clase base de `SelectTrigger` (`data-[size=default]:h-8`) gana en la cascada
-sobre el `h-11` que se le pasa. Afecta a los filtros de **todas** las secciones
-y se hereda a cada módulo nuevo. Se arregla en `components/ui/select.tsx`, con
-una variante propia o pasando la altura como `data-size`.
-
-Es previo al plan CMS y se ha ido arrastrando fase tras fase. Cuanto más se
-espere, más módulos hay que volver a verificar.
-
 ---
 
 ## Sitio público
@@ -163,6 +130,13 @@ puede enlazar ni indexar**: el panel enlaza a `/servicios#<slug>`, que lleva a
 la tarjeta pero no abre el detalle. La query `service(slug:)` ya existe en el
 backend y en `web/src/services/services.ts`, sin usar — la página sería lo único
 que falta. Lo mismo aplica a los puntos de atención (Fase 2).
+
+**Revisado en la Fase 7 y dejado fuera a propósito**: construir las dos
+páginas es trabajo real con decisiones de diseño propias (qué va en la
+página, breadcrumbs, metadata de cada una), no un arreglo de QA — el
+documento de la Fase 7 es explícito en que esa fase «no construye secciones
+nuevas». Sigue siendo la mejora más barata de esta lista (la query ya existe
+en las dos puntas), solo que no encajaba en el alcance de un cierre.
 
 ### El botón «Solicitar» de un servicio lleva a los puntos de atención
 
@@ -198,6 +172,15 @@ a propósito para no arriesgar la integración con `next-pwa`
 (`next.config.ts`) sin poder probarla a fondo. Si el nombre del sitio cambia
 alguna vez, hay que recordar tocar este archivo a mano.
 
+**Revisado otra vez en la Fase 7 y dejado igual, por la misma razón.**
+`next-pwa` va desactivado en `next dev` (`disable: process.env.NODE_ENV ===
+"development"` en `next.config.ts`), así que la única forma real de probar
+que el manifiesto dinámico no rompe el *service worker* es con un `next
+build` de producción — y esta fase no podía correr uno sin tumbar los `dev`
+de `web` y `cms-admin` que estaban activos (ver «Riesgos» del documento de la
+Fase 7). Queda para una sesión que pueda dedicarse a levantar y probar un
+build de producción completo.
+
 ### `motorcycle` no tiene campo de placa
 
 El catálogo legacy la lleva metida dentro del texto libre de `description`.
@@ -205,12 +188,17 @@ Mientras no exista la columna, la lista identifica la moto por miniatura,
 nombre, marca, año y kilometraje, y **el buscador no puede buscar por placa** —
 que es probablemente como la busca quien atiende el mostrador.
 
-### El filtrado de motos ocurre en el cliente
+### Ninguna lista del panel busca ni ordena en el backend
 
-`use-motorcycles.ts` trae el catálogo completo en páginas de 100 y filtra en
-memoria, porque la query del backend no busca ni ordena y buscar es lo que más
-se hace. Con ~120 motos es instantáneo. **Si el catálogo llega a unos pocos
-miles, hay que mover búsqueda, orden y paginación a la query.**
+Los seis módulos con lista de `cms-admin` (`motos`, `puntos-de-atencion`,
+`servicios`, `noticias`, `banners`, `medios`) traen hasta 100 registros y
+buscan/ordenan/paginan en el cliente, porque ninguna query de lista del
+backend busca ni ordena. No es un atajo de `motos`: se revisó en la Fase 7 y
+es el patrón de los seis `use-<dominio>.ts` por igual. Con los volúmenes
+reales de hoy (decenas de registros por dominio) cada consulta tarda un
+dígito de milisegundos. **Si algún catálogo llega a los miles, ese módulo en
+particular tiene que mover búsqueda, orden y paginación a la query** — no
+hace falta adelantarlo para los demás.
 
 ---
 
@@ -260,6 +248,19 @@ enlaces reales, así que no había nada que preservar. Cargarlos desde
 `/configuracion` → Redes sociales hace aparecer el ícono correspondiente en el
 pie de página (hoy no se muestra ninguno).
 
+### Dos de las noticias sembradas apuntan a fotos que ya no existen
+
+Encontrado en el recorrido de la Fase 7: de las 8 noticias cargadas en la
+Fase 4 desde `news-mock.json`, dos (`Comparativa: las mejores naked de media
+cilindrada` y `Equipamiento de seguridad esencial para todo motociclista`)
+tienen `image` apuntando a `images.unsplash.com`, y esas dos URLs concretas
+ya devuelven **404** (Unsplash las movió o las borró). No es un bug de
+código — el ícono de imagen rota que se ve en `/noticias` del panel es el
+comportamiento correcto ante una URL externa muerta, igual que documenta
+`PATRON.md` §2.4 para «el campo de pegar URLs externas». Se arregla
+reemplazando esas dos URLs por una imagen subida al panel (o por otra URL
+viva), no tocando código.
+
 ---
 
 ## Entorno y despliegue
@@ -297,24 +298,33 @@ es multimarca. Renombrar el paquete (y el del backend) es un cambio mecánico
 pero toca `package.json`, los filtros de `pnpm --filter`, los scripts y la
 documentación.
 
+### Hay datos de prueba manual mezclados con los datos reales
+
+El entorno de desarrollo, a cierre de la Fase 7, tiene registros que no
+vienen de ninguna siembra de fase ni de `motoshotwheels.com`: una noticia
+("Noticia bien chida", sin autor ni resumen), un servicio ("Mentenimiento
+preventivo", con la modalidad de precio en «A convenir» y ese error de
+tipeo) y tres imágenes en `/medios` subidas el mismo día. Por la fecha
+(hoy) y el contenido, son de alguien probando el panel a mano, no de esta
+fase — no se tocaron, porque no hay forma de distinguir con certeza una
+prueba de un borrador real sin preguntar. Antes de sembrar el entorno de
+producción o de grabar una demo, vale la pena revisar `/noticias`,
+`/servicios` y `/medios` y decidir qué de eso se borra.
+
 ---
 
 ## Calidad
 
 ### La cobertura de tests no llega al mínimo configurado
 
-`backend/jest.config` exige 70 % y no se alcanza globalmente. Hay tests de
-`motorcycle.service`, `service-point.service`, `media.service` y `maps-url`,
-pero el resto del backend no está cubierto.
-
-### `BannerWrapper.tsx` y `OptimizedHero.tsx` son código muerto
-
-`web/src/components/banner/`, además de `Banner.tsx` (el que de verdad se usa),
-tiene `BannerWrapper.tsx` y `OptimizedHero.tsx`: los dos importan `next/image`
-y ninguno de los dos se referencia desde ningún lado — ni en el scaffold
-original (`2ae3829`) ni después. No es algo que rompió la Fase 5, ya estaban
-así; se detectaron al revisar quién usaba `next/image` en `web` (ver la nota
-de banners más abajo). Se pueden borrar sin que nada quede huérfano.
+`backend/jest.config` exige 70 % y no se alcanza globalmente. A cierre de la
+Fase 7 hay 87 tests en verde: los siete servicios de dominio (`motorcycle`,
+`service-point`, `service`, `news`, `media`, `banner`, `site-settings`) y
+`maps-url` tienen su capa de service cubierta, más un test de resolver para
+la regla de visibilidad de `news`. Lo que falta es sobre todo **resolvers**
+(la validación Zod y el `requireAuth` de cada mutación) y los validadores
+Zod en sí — la capa de service, que es donde vive casi toda la lógica de
+negocio, ya está cubierta en los siete dominios.
 
 ### Un campo de imagen opcional no se puede limpiar desde la ficha
 
@@ -326,6 +336,15 @@ que la imagen vieja se queda. Para quitarla de verdad hoy hay que pegar una
 URL distinta o vaciar el campo directo en la base. Ninguna de las fichas del
 panel deja limpiar un campo de imagen a propósito; si se resuelve, hay que
 decidirlo una vez y aplicarlo a los tres dominios.
+
+**Revisado en la Fase 7 y dejado igual**: no es un `<Input>` a medio hacer,
+es una convención completa (`textoOpcional`, "" → `undefined`, documentada en
+las tres capas) que además comparten los campos de texto opcionales de
+`site_settings` (ver la nota correspondiente en `cms-admin/CLAUDE.md`).
+Arreglarlo bien significa inventar una forma de decir "bórralo" distinta de
+"no lo toques" (un botón "Quitar imagen" que mande `null` explícito, como ya
+hacen `publishedAt` y las fechas de vigencia de un banner) y aplicarla a los
+tres dominios de una vez — no un parche de una sección.
 
 ### HEIC nunca se probó con un archivo real
 

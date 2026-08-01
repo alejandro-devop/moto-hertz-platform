@@ -19,11 +19,11 @@
 - Banners de home.
 - Configuración general del sitio (SEO, contacto).
 
-Corresponde 1:1 con los dominios ya modelados en el `backend` (motorcycle, service-point, service, news) más entidades de configuración/banners a agregar en Fase 4/5.
+Corresponde 1:1 con los dominios modelados en el `backend` (motorcycle, service-point, service, news, banner, site-settings) — el último dominio, `site-settings`, cerró la lista en la Fase 6 del plan CMS. Ver `../cms-plan/PLAN.md` para el orden en que se construyó cada uno y `backend/CLAUDE.md` para la tabla completa.
 
 ## Autenticación y roles
 
-Un solo rol admin (sin roles diferenciados por ahora). Reutiliza el sistema de auth del `backend`, que hasta la Fase 2 tenía la autenticación diferida como placeholder — se implementará en la Fase 4/5 pensando únicamente en este caso de uso (un usuario admin), sin necesidad de autorización granular por rol.
+Un solo rol admin (sin roles diferenciados). Reutiliza el sistema de auth del `backend` (`login` en GraphQL, JWT en cookie httpOnly), pensado únicamente para este caso de uso (un usuario admin), sin autorización granular por rol.
 
 ## Gestión de medios
 
