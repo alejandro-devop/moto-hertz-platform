@@ -1,6 +1,7 @@
 'use client';
 
 import { TriangleAlert } from 'lucide-react';
+import { BUSCADORES } from '@/lib/list-search';
 import {
   BarraFiltros,
   FilterChip,
@@ -45,6 +46,11 @@ export function MotosFilters({ filtros, onChange, marcas, sedes }: Props) {
     <BarraFiltros
       activos={activos}
       onLimpiar={limpiar}
+      busqueda={{
+        value: filtros.q,
+        onChange: (q) => onChange({ q }),
+        placeholder: BUSCADORES['/motos'].placeholder,
+      }}
       controles={(apilado) => (
         <>
           <SelectFiltro<Estado>

@@ -34,9 +34,9 @@ Next.js 15 (App Router) · TypeScript · React 19 · Tailwind v4 · shadcn/ui es
 | --- | --- | --- |
 | `admin-rail.tsx` | barra lateral colapsable (persiste en `localStorage`) | oculta |
 | `admin-tabbar.tsx` | oculta | barra inferior de 5 destinos + hoja «Más» |
-| `admin-topbar.tsx` | buscador visible + tema + sitio público | marca, sección y lupa que despliega el buscador |
+| `admin-topbar.tsx` | tema + sitio público | marca, sección y sitio público |
 
-El buscador (`admin-search.tsx`) escribe en `?q=` **de la sección donde uno está** (mapa `BUSCADORES`); `⌘K` lo enfoca desde cualquier pantalla. Si la sección actual no está en `BUSCADORES` —hoy, solo `/configuracion`, que no es una lista— el buscador **no se muestra**, ni en escritorio ni la lupa de móvil (`tieneBuscador()`, agregado en la Fase 7): antes caía en `/motos` en silencio y sacaba a quien escribía ahí de la pantalla que estaba mirando. Cualquier sección nueva sin lista hereda esto solo con no agregarse al mapa.
+**No hay buscador en la barra superior.** Se probó un buscador global ahí (escribía en `?q=` de la sección donde uno estuviera, con `⌘K` para enfocarlo desde cualquier pantalla) y se sacó: cambiaba de sección según dónde estuviera parado quien administra, y eso se leyó como un buscador global en vez del buscador de la lista que se estaba mirando. Cada lista tiene el suyo, a la vista, en su propia fila de filtros — ver `BuscadorLista` más abajo.
 
 Piezas compartidas de presentación: `page-header`, `states` (vacío, error, esqueletos), `status-pill`, `thumb`, `proximamente`.
 
@@ -46,7 +46,7 @@ Piezas compartidas de módulo, extraídas de `motos` en la Fase 0 del plan CMS (
 | --- | --- | --- |
 | `ListaResponsive` | `components/admin/responsive-list.tsx` | Tabla en escritorio, tarjetas en móvil, paginación en las dos. La fila y la tarjeta las pone cada módulo. |
 | `Paginacion` | `components/admin/pagination.tsx` | Primera, última y las vecinas de la actual. |
-| `BarraFiltros`, `SelectFiltro`, `FilterChip`, `opcionesDe` | `components/admin/filter-bar.tsx` | Fila de filtros en escritorio y hoja inferior en móvil, con el contador de filtros puestos. |
+| `BarraFiltros`, `SelectFiltro`, `FilterChip`, `opcionesDe` | `components/admin/filter-bar.tsx` | Fila de filtros en escritorio y hoja inferior en móvil, con el contador de filtros puestos. `BarraFiltros` acepta un prop `busqueda` que renderiza `BuscadorLista` (mismo archivo): el campo de texto de la lista, siempre a la vista arriba de los demás filtros. El placeholder de cada módulo sale de `lib/list-search.ts` (`BUSCADORES`). |
 | `RowActions`, `AccionFila` | `components/admin/row-actions.tsx` | La misma lista de acciones como menú de fila (escritorio) y como hoja inferior (móvil). |
 | `FormSheet` | `components/admin/form-sheet.tsx` | Armazón de la ficha: pestañas por sección con contador de errores, barra de guardado fija y aviso antes de descartar. |
 | `ListaEditable` | `components/admin/list-editor.tsx` | Una lista de renglones **con orden**: agregar, quitar, subir y bajar. Extraída en la Fase 3 (`features`/`benefits`). Tiene un prop `genero?: 'f' \| 'm'` (por defecto `'f'`) para el aviso de lista vacía («ningún color», no «ninguna color») — pásalo en `'m'` cuando `etiquetaItem` sea masculino. |
@@ -122,7 +122,7 @@ Las mutaciones de escritura requieren sesión (`requireAuth` en el backend); el 
 
 **La papelera es un valor del filtro de estado** (`En el sitio` / `En papelera`), igual que en motos y en medios. En la papelera la fila muestra la píldora y el menú se reduce a *Restaurar al sitio* / *Eliminar definitivamente*.
 
-**El buscador de la barra superior ya no manda siempre a `/motos`.** Escribe en `?q=` de la sección donde uno está, con su propio placeholder (`components/admin/admin-search.tsx`, mapa `BUSCADORES`). **Toda lista nueva con búsqueda tiene que agregarse a ese mapa**, o su buscador saca al usuario de la sección.
+**El buscador vive en la fila de filtros de cada lista**, con su propio placeholder (`lib/list-search.ts`, mapa `BUSCADORES`). **Toda lista nueva con búsqueda tiene que agregarse a ese mapa** y pasarle `busqueda` a su `BarraFiltros`.
 
 ### Decisiones del módulo `servicios`
 
@@ -176,7 +176,7 @@ El módulo `medios` (biblioteca de imágenes) sigue el mismo patrón de lista, c
 
 **Vigencia con dos fechas opcionales**, mismo patrón que `publishedAt` de noticias: `<input type="date">` en las dos puntas, `''` viaja como `null` explícito al guardar (para poder volver a "siempre vigente"), y el estado que ve quien administra (`lib/banner-status.ts`, `getBannerStatus`) deriva **visible / inactivo / programado / vencido** comparando contra `Date.now()` — la misma regla que aplica el resolver del backend para decidir qué ve el sitio público.
 
-**Sin buscador dedicado en la barra superior más allá del título.** `banners` sí está en el mapa `BUSCADORES` de `admin-search.tsx` (busca por título), pero a diferencia de `servicios`/`noticias` no tiene filtro de categoría ni de destacado: con un puñado de banners promocionales, más filtros solo estorbarían.
+**El buscador solo busca por título.** `banners` está en el mapa `BUSCADORES` de `lib/list-search.ts`, pero a diferencia de `servicios`/`noticias` no tiene filtro de categoría ni de destacado: con un puñado de banners promocionales, más filtros solo estorbarían.
 
 **La barra inferior de móvil dejó de asumir cinco destinos fijos.** Hasta esta fase `navLinks` tenía exactamente cinco entradas y `admin-tabbar.tsx` las pintaba todas. Con `banners` como sexta, `AdminTabBar` ahora corta en los primeros cinco (`DESTINOS_BARRA`) y el resto —hoy, `medios`— se ve en `MoreSheet`, que ganó una lista de enlaces arriba de "Apariencia". `AdminRail` (escritorio) no cambió: ya recorría `navLinks` completo por grupo.
 

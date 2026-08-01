@@ -1,5 +1,6 @@
 'use client';
 
+import { BUSCADORES } from '@/lib/list-search';
 import { BarraFiltros, SelectFiltro, opcionesDe } from '@/components/admin/filter-bar';
 import {
   contarFiltrosActivos,
@@ -24,6 +25,11 @@ export function MediosFilters({
     <BarraFiltros
       activos={activos}
       onLimpiar={() => onChange({ ...FILTROS_POR_DEFECTO, q: filtros.q, orden: filtros.orden })}
+      busqueda={{
+        value: filtros.q,
+        onChange: (q) => onChange({ q }),
+        placeholder: BUSCADORES['/medios'].placeholder,
+      }}
       controles={(apilado) => (
         <SelectFiltro<Estado>
           value={filtros.estado}

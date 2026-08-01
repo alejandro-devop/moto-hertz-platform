@@ -1,5 +1,6 @@
 'use client';
 
+import { BUSCADORES } from '@/lib/list-search';
 import { BarraFiltros, SelectFiltro, opcionesDe } from '@/components/admin/filter-bar';
 import {
   contarFiltrosActivos,
@@ -41,6 +42,11 @@ export function ServiciosFilters({
       activos={activos}
       /* Limpiar deja la búsqueda y el orden: son del usuario, no del filtro. */
       onLimpiar={() => onChange({ ...FILTROS_POR_DEFECTO, q: filtros.q, orden: filtros.orden })}
+      busqueda={{
+        value: filtros.q,
+        onChange: (q) => onChange({ q }),
+        placeholder: BUSCADORES['/servicios'].placeholder,
+      }}
       controles={(apilado) => (
         <>
           <SelectFiltro<Estado>
