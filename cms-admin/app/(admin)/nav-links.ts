@@ -1,5 +1,6 @@
 import {
   Bike,
+  FileText,
   GalleryHorizontal,
   Images,
   MapPin,
@@ -40,6 +41,15 @@ export const navLinks: NavLink[] = [
   /* Medios va de último: es la caja de herramientas, no una sección del sitio.
      Las fotos se suben desde cada ficha; aquí se entra a buscar o a borrar. */
   { href: '/medios', label: 'Medios', short: 'Medios', icon: Images, group: 'Contenido' },
+  /* Contenido editorial suelto de cada página (heading, bajada), no un
+     catálogo de registros — mismo grupo que Configuración por eso. */
+  {
+    href: '/paginas',
+    label: 'Páginas',
+    short: 'Páginas',
+    icon: FileText,
+    group: 'Sistema',
+  },
   /* Grupo aparte: no es catálogo ni contenido del sitio, es un registro único
      de configuración (Fase 6 del plan CMS). Desborda a la hoja «Más» en móvil
      igual que Medios, porque no es de lo que más se visita. */

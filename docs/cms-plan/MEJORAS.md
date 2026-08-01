@@ -136,18 +136,6 @@ campo de logo — solo `seoImage`, para Open Graph. El logo que pinta
 un campo `logo` en `site_settings`, administrable desde `/configuracion` igual
 que el resto de la identidad del sitio.
 
-### No hay dónde administrar el contenido de cada página/sección (heading, caption…)
-
-Textos como el heading y el caption de `/motos`, o el título/descripción del
-`SecondBanner` del home, están quemados en el JSX de cada página de `web` — no
-hay tabla ni pantalla del panel que los toque. Pedido explícito: un lugar en el
-panel para administrar el contenido editorial de cada página/sección del
-sitio, empezando por `/motos`.
-
-Falta decidir el modelo: ¿una tabla genérica tipo `page_content`
-(página + campo + valor), o un módulo por página? Toca a cualquier página de
-`web` que hoy tenga textos fijos, no solo `/motos`.
-
 ---
 
 ## Sitio público

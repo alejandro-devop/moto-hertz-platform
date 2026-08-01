@@ -8,8 +8,15 @@ import Menu from "@/components/menu";
 import SearchableSelect from "@/components/searchable-select/SearchableSelect";
 import { useInView } from "@/hooks";
 import { categorySlug, getMotorcycles } from "@/services/motorcycles";
+import { getPageContentMap } from "@/services/page-content";
 import type { Motorcycle } from "@/types/motorcycle";
 import styles from "./Motos.module.scss";
+
+/** Mismo texto que antes estaba quemado acá: ahora es el valor por defecto
+ * hasta que alguien lo edite desde `/paginas` del panel. */
+const DEFAULT_HEADING = "Nuestras Motocicletas";
+const DEFAULT_CAPTION =
+  "Descubre la línea completa de motocicletas Yamaha. Potencia, tecnología y diseño en cada modelo.";
 
 function MotorcycleCard({ moto, index }: { moto: Motorcycle; index: number }) {
   const { ref, isInView } = useInView({
@@ -77,6 +84,11 @@ export default function MotosPage() {
     queryFn: () => getMotorcycles({ page: 1, limit: 100 }),
   });
 
+  const { data: pageContent } = useQuery({
+    queryKey: ["page-content", "motos"],
+    queryFn: () => getPageContentMap("motos"),
+  });
+
   const motorcycles = data?.motorcycles ?? [];
 
   const categories = useMemo(() => {
@@ -121,11 +133,8 @@ export default function MotosPage() {
       <main className={styles.motosPage}>
         <section className={styles.hero}>
           <div className={styles.heroContent}>
-            <h1>Nuestras Motocicletas</h1>
-            <p>
-              Descubre la línea completa de motocicletas Yamaha. Potencia,
-              tecnología y diseño en cada modelo.
-            </p>
+            <h1>{pageContent?.heading || DEFAULT_HEADING}</h1>
+            <p>{pageContent?.caption || DEFAULT_CAPTION}</p>
           </div>
         </section>
 

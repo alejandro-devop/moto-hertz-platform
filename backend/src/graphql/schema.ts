@@ -9,6 +9,7 @@ import { newsTypeDefs } from './modules/news/news.schema';
 import { mediaTypeDefs } from './modules/media/media.schema';
 import { bannerTypeDefs } from './modules/banner/banner.schema';
 import { siteSettingsTypeDefs } from './modules/site-settings/site-settings.schema';
+import { pageContentTypeDefs } from './modules/page-content/page-content.schema';
 
 // Base Query and Mutation types
 const baseTypeDefs = gql`
@@ -36,4 +37,5 @@ export const typeDefs = [
   mediaTypeDefs,
   bannerTypeDefs,
   siteSettingsTypeDefs,
+  pageContentTypeDefs,
 ];

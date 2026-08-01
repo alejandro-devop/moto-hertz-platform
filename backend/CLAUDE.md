@@ -36,6 +36,7 @@ Registrar en `src/graphql/schema.ts` y `src/graphql/resolvers.ts`.
 | media | ✅ completo (biblioteca de imágenes) | `media/` | `media.service.ts` |
 | banner | ✅ completo (carrusel de la portada) | `banner/` | `banner.service.ts` |
 | site-settings | ✅ completo (configuración global del sitio) | `site-settings/` | `site-settings.service.ts` |
+| page-content | ✅ completo (contenido editorial suelto de una página) | `page-content/` | `page-content.service.ts` |
 
 `motorcycle` es la referencia de patrón completa (schema Drizzle, migración, service, tipos, validadores Zod, módulo GraphQL con query/mutations).
 
@@ -105,6 +106,16 @@ Segundo dominio del proyecto (después de `news`) donde **la lectura pública y 
 **Textos es un solo campo: `siteName`.** Es deliberado — el usuario decidió que solo el nombre del sitio se administra (repetido antes en al menos ocho sitios: `footer-data.json`, `layout.tsx`, `manifest.json`, componentes de la home, autor por defecto de una noticia sin firma); la descripción de la empresa del footer y el resto de textos institucionales quedan fijos en el código, fuera de alcance.
 
 **`web/public/manifest.json` (PWA) queda fuera**, con el nombre repetido a mano: es un JSON estático servido sin build step de Next, no puede leer `site_settings` en tiempo real sin convertirse en una ruta dinámica (`app/manifest.ts`). Ver la nota en `docs/cms-plan/MEJORAS.md`.
+
+### `page-content` (pedido posterior al plan, ver MEJORAS.md)
+
+**Tabla genérica, no una tabla por página.** `page_content` es `page` + `field` + `value` (migración `012`), con un índice único en `(page, field)`. Agregar una página nueva o un campo editable no pide migración: quien sabe qué campos tiene cada página es el código de `web` (los valores por defecto) y `cms-admin` (`app/(admin)/paginas/page-fields.ts`), no la base — mismo espíritu que el catálogo de iconos de `service` o las categorías de `service`/`news`.
+
+**Sin siembra inicial.** A diferencia de `site_settings` (registro único sembrado por la migración), un campo que nunca se guardó desde el panel simplemente no aparece en `pageContent(page)`. `web` y el formulario del panel resuelven eso con su propio valor por defecto (el mismo texto que antes estaba quemado en el componente), así que el sitio se ve igual hasta que alguien lo edite.
+
+**`pageContentSetMany(page, fields)` reemplaza todos los campos que llegan, no hace merge parcial por campo individual** — como `siteSettingsEdit`, la ficha manda el formulario completo cada vez. No hay `onConflictDoUpdate` de Drizzle: se leyó y, según exista o no la fila `(page, field)`, se hace `update` o `insert`, dentro de una transacción — mismo criterio explícito que el resto de los services de este proyecto (ninguno usa upsert nativo).
+
+Hoy solo existe la página `motos` (`heading`, `caption`), consumida por `web/src/app/motos/page.tsx`.
 
 ## Autenticación
 

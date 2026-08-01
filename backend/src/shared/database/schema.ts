@@ -271,3 +271,24 @@ export const siteSettings = pgTable('site_settings', {
   seoImage: text('seo_image'),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
+
+// ============================================
+// PAGE_CONTENT — contenido editorial suelto de una página (tabla genérica)
+// ============================================
+/**
+ * Un pendiente de MEJORAS.md pedía un lugar para administrar textos como el
+ * heading/caption de `/motos`, que hoy quedan quemados en el JSX de `web`.
+ * En vez de una tabla por página (que pide una migración cada vez que se
+ * agrega una página nueva), es `page` + `field` + `value`: quien sabe qué
+ * campos tiene cada página es el código de `web`/`cms-admin`, no la base.
+ * `(page, field)` es único — ver migración `012`.
+ */
+export const pageContent = pgTable('page_content', {
+  id: uuid('id')
+    .primaryKey()
+    .$defaultFn(() => generateUuidV7()),
+  page: varchar('page', { length: 100 }).notNull(),
+  field: varchar('field', { length: 100 }).notNull(),
+  value: text('value'),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+});
