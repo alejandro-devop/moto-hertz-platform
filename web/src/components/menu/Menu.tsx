@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Drawer from "../drawer";
+import GlobalSearch from "../global-search/GlobalSearch";
 import Icon from "../icon";
 import styles from "./Menu.module.scss";
 
@@ -75,31 +76,13 @@ export default function Menu() {
               </nav>
 
               {/* Search Button */}
-              <div className={styles.searchContainer}>
-                <button
-                  className={`${styles.searchButton} ${
-                    isSearchOpen ? styles.active : ""
-                  }`}
-                  onClick={toggleSearch}
-                  aria-label="Abrir búsqueda"
-                >
-                  <Icon name={isSearchOpen ? "close" : "search"} size={20} />
-                </button>
-
-                {/* Search Dropdown */}
-                <div
-                  className={`${styles.searchDropdown} ${
-                    isSearchOpen ? styles.open : ""
-                  }`}
-                >
-                  <input
-                    type="text"
-                    placeholder="Buscar..."
-                    className={styles.searchInput}
-                    autoFocus={isSearchOpen}
-                  />
-                </div>
-              </div>
+              <button
+                className={styles.searchButton}
+                onClick={toggleSearch}
+                aria-label="Abrir búsqueda"
+              >
+                <Icon name="search" size={20} />
+              </button>
             </div>
 
             {/* Mobile menu button */}
@@ -123,7 +106,16 @@ export default function Menu() {
       </nav>
 
       {/* Mobile Drawer */}
-      <Drawer isOpen={isMobileMenuOpen} onClose={closeMobileMenu} />
+      <Drawer
+        isOpen={isMobileMenuOpen}
+        onClose={closeMobileMenu}
+        onOpenSearch={() => {
+          closeMobileMenu();
+          setIsSearchOpen(true);
+        }}
+      />
+
+      <GlobalSearch isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </>
   );
 }

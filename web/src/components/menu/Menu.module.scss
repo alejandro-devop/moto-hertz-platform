@@ -155,21 +155,15 @@
   }
 }
 
-// Search input styles
-.searchContainer {
-  position: relative;
-  margin-left: auto; // Push to the right edge
-  margin-right: 0; // Ensure it's at the edge
-  flex-shrink: 0; // Prevent search button from shrinking
-  overflow: visible; // Allow dropdown to appear outside container
-}
-
+// Search button: abre el overlay de GlobalSearch, ya no un dropdown propio.
 .searchButton {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 40px;
   height: 40px;
+  margin-left: auto;
+  flex-shrink: 0;
   background: none;
   border: 1px solid rgba(18, 20, 27, 0.15);
   border-radius: 50%;
@@ -181,95 +175,6 @@
     border-color: var(--color-red);
     color: var(--color-red);
     background-color: rgba(209, 14, 16, 0.06);
-  }
-
-  &.active {
-    border-color: var(--color-red);
-    color: var(--color-red);
-    background-color: rgba(209, 14, 16, 0.1);
-  }
-}
-
-// Dropdown search container
-.searchDropdown {
-  position: fixed; // Fixed positioning to escape navbar container completely
-  top: 70px; // Just below the navbar height
-  left: 50%; // Center like the main container
-  transform: translateX(-50%); // Center it
-  margin-left: calc(
-    700px - 1.5rem - 100px
-  ); // Position at right edge like the button (half of max-width minus padding minus half dropdown width)
-  width: 200px;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(18px) saturate(180%);
-  -webkit-backdrop-filter: blur(18px) saturate(180%);
-  border: 1px solid var(--color-stone);
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(12, 30, 63, 0.12);
-  padding: 1rem;
-  z-index: 9999; // High z-index to appear above everything
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s ease;
-
-  &.open {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  // For screens at or below max-width, use simple right positioning
-  @media (max-width: 1400px) {
-    left: auto;
-    right: 0.5rem;
-    transform: none;
-    margin-left: 0;
-  }
-
-  @media (max-width: 1400px) and (min-width: 640px) {
-    right: 0.75rem;
-  }
-
-  @media (max-width: 1400px) and (min-width: 768px) {
-    right: 1rem;
-  }
-
-  @media (max-width: 1400px) and (min-width: 1024px) {
-    right: 1.5rem;
-  }
-
-  @include mobile-only {
-    position: fixed;
-    top: 70px;
-    left: 0;
-    right: 0;
-    width: 100%;
-    border-radius: 0;
-    border-left: none;
-    border-right: none;
-    border-top: none;
-    padding: 1rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transform: none;
-    margin-left: 0;
-  }
-}
-
-.searchInput {
-  width: 100%;
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--color-stone);
-  border-radius: 20px;
-  font-size: 0.9rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-
-  &:focus {
-    outline: none;
-    border-color: var(--color-red);
-    box-shadow: 0 0 0 2px rgba(209, 14, 16, 0.1);
-  }
-
-  &::placeholder {
-    color: var(--color-muted);
   }
 }
 
@@ -353,17 +258,6 @@
     font-size: 0.8rem;
   }
 
-  .searchContainer {
-    margin-left: 0.25rem;
-    max-width: 150px; // Reduced max width for tight spaces
-  }
-
-  .searchDropdown {
-    width: 150px;
-    max-width: calc(100vw - 1rem);
-    right: -5px; // Prevent edge overflow
-  }
-
   .container {
     padding: 0 0.5rem;
   }
@@ -371,16 +265,6 @@
 
 // Additional safety for very specific problematic range
 @media (min-width: 840px) and (max-width: 870px) {
-  .searchContainer {
-    margin-left: 0;
-    margin-right: 0.25rem;
-  }
-
-  .searchDropdown {
-    width: 120px;
-    right: 0;
-  }
-
   .container {
     padding: 0 0.25rem;
   }

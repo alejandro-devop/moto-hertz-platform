@@ -77,7 +77,14 @@ function MotorcycleCard({ moto, index }: { moto: Motorcycle; index: number }) {
 export default function MotosPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedBrand, setSelectedBrand] = useState<string>("");
-  const [searchTerm, setSearchTerm] = useState("");
+  /* El buscador global (`GlobalSearch`) manda acá con `?q=<término>`. Se lee
+     directo de `window.location` en vez de `useSearchParams` de Next para no
+     forzar un `<Suspense>` en esta página solo por el estado inicial de un
+     campo — el resto de la página ya es "use client" sin necesitarlo. */
+  const [searchTerm, setSearchTerm] = useState(() => {
+    if (typeof window === "undefined") return "";
+    return new URLSearchParams(window.location.search).get("q") ?? "";
+  });
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["motorcycles"],

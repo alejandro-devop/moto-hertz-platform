@@ -7,10 +7,12 @@ import styles from "./Drawer.module.scss";
 interface DrawerProps {
   isOpen: boolean;
   onClose: () => void;
+  /** Cierra el drawer y abre el buscador global (mismo overlay que el botón de lupa del desktop). */
+  onOpenSearch: () => void;
   children?: React.ReactNode;
 }
 
-export default function Drawer({ isOpen, onClose, children }: DrawerProps) {
+export default function Drawer({ isOpen, onClose, onOpenSearch, children }: DrawerProps) {
   // Prevent body scroll when drawer is open
   useEffect(() => {
     if (isOpen) {
@@ -86,14 +88,14 @@ export default function Drawer({ isOpen, onClose, children }: DrawerProps) {
             </ul>
           </nav>
 
-          {/* Search Input */}
-          <div className={styles.searchContainer}>
-            <input
-              type="text"
-              placeholder="Buscar..."
-              className={styles.searchInput}
-            />
-          </div>
+          {/* Search */}
+          <button
+            type="button"
+            className={styles.searchTrigger}
+            onClick={onOpenSearch}
+          >
+            Buscar en el catálogo
+          </button>
 
           {/* Custom children if provided */}
           {children}

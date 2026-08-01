@@ -152,12 +152,6 @@ y la grilla tarda en terminar de aparecer. Hay que decidir si vale la pena
 mantener el efecto y, si sí, acotar el delay máximo en vez de escalarlo por
 índice.
 
-### El buscador global es una burbuja lateral poco visible
-
-`web/src/components/menu/Menu.tsx` — el ícono de lupa abre un
-`searchDropdown` angosto junto al botón. Pedido: un buscador más llamativo
-(¿modal a pantalla completa? ¿overlay?), forma a definir.
-
 ### Una moto inexistente o en papelera renderiza una página casi vacía
 
 No devuelve 404 ni dice "no encontrada": pinta el armazón sin contenido. Se
