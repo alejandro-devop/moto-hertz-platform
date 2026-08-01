@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Drawer from "../drawer";
@@ -10,6 +10,16 @@ import styles from "./Menu.module.scss";
 export default function Menu() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  // El nav es de vidrio siempre (blanco + alfa + blur): esto solo sube la
+  // opacidad al scrollear, nunca lo vuelve invisible ni opaco al 100%.
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 40);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const menuItems = [
     { label: "Motocicletas", href: "/motos" },
@@ -33,7 +43,9 @@ export default function Menu() {
 
   return (
     <>
-      <nav className={styles.navbar}>
+      <nav
+        className={`${styles.navbar} ${isScrolled ? styles.scrolled : ""}`}
+      >
         <div className={styles.container}>
           <div className={styles.navContent}>
             {/* Logo */}

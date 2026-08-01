@@ -41,8 +41,8 @@ export default function NewsSection({
   return (
     <section className={styles.newsSection}>
       <div className={styles.container}>
-        <h2 className="title">{title}</h2>
-        <p className="paragraph">{subtitle}</p>
+        <h2 className={styles.title}>{title}</h2>
+        <p className={styles.subtitle}>{subtitle}</p>
 
         <div className={styles.grid}>
           {news.map((item, index) => (

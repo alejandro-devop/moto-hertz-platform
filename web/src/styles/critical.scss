@@ -5,12 +5,26 @@
 // Solo los estilos esenciales para el above-the-fold content
 
 // Variables críticas
+//
+// Sistema de color: reduce los ~15 rojos/azules sueltos que había por
+// componente (#d10e10, #e60012, #a00c0e, #0c1e3f, #1a3a6b...) a un solo
+// set de tokens. --color-red es el único acento — CTA, precio, subrayado
+// activo — nunca decorativo. Ver la propuesta de rediseño acordada con el
+// usuario (agosto 2026).
 :root {
-  --font-primary: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, sans-serif;
-  --color-primary: #0066cc;
-  --color-text: #333;
-  --color-bg: #fff;
+  --color-red: #d10e10;
+  --color-red-dark: #b90c0e;
+  --color-navy: #0c1e3f;
+  --color-navy-deep: #0a1730;
+  --color-ink: #12141b;
+  --color-muted: #6b6f76;
+  --color-stone: #e7e4dd;
+  --color-bg: #fafaf7;
+  --color-surface: #ffffff;
+
+  // Alias retrocompatibles mientras se termina de migrar cada componente.
+  --color-primary: var(--color-red);
+  --color-text: var(--color-ink);
 }
 
 // Reset crítico
@@ -20,23 +34,42 @@
   padding: 0;
 }
 
-html,
+// --font-archivo/--font-inter los define next/font vía clases en <body>
+// (ver layout.tsx), nunca en <html>. --font-body/--font-display tienen que
+// declararse acá, en el mismo elemento donde esas dos existen: un
+// custom property inválido en su elemento de origen se hereda ya inválido
+// —no se vuelve a resolver en los descendientes—, así que declararlas en
+// :root (el <html>, que nunca tiene --font-archivo/--font-inter) las deja
+// vacías para toda la página, cayendo al serif por defecto del navegador.
+html {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, sans-serif;
+}
+
 body {
-  font-family: var(--font-primary);
+  --font-body: var(--font-inter), system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: var(--font-archivo), var(--font-body);
+  --font-primary: var(--font-body); // alias retrocompatible
+
+  font-family: var(--font-body);
   font-size: 16px;
   line-height: 1.5;
-  color: var(--color-text);
+  color: var(--color-ink);
   background-color: var(--color-bg);
   overflow-x: hidden;
   max-width: 100vw;
 }
 
-// Estilos críticos para el banner (above-the-fold)
+// Estilos críticos para el banner (above-the-fold). El mismo -70px que
+// .gallery en Banner.module.scss: si no, el fallback previo a la hidratación
+// queda debajo del navbar y el hero salta 70px al montar el carrusel real.
 .banner-critical {
   position: relative;
   width: 100%;
   height: 100vh;
   min-height: 400px;
+  margin-top: -70px;
   overflow: hidden;
 }
 

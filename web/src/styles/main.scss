@@ -16,7 +16,7 @@
 
 // Example of global styles using the breakpoint system
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--font-body);
   font-size: 14px;
   line-height: 1.5;
 

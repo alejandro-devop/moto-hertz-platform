@@ -27,31 +27,12 @@ export default function Cards({
   if (!services || services.length === 0) return null;
 
   return (
-    <section className={`${styles.section} py-16 bg-gray-50`}>
-      <div
-        className="container mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8"
-        style={{
-          marginLeft: "auto",
-          marginRight: "auto",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          width: "100%",
-        }}
-      >
-        <h2 className="text-center text-3xl font-bold text-gray-900">
-          {title}
-        </h2>
-        <p className="mt-3 max-w-2xl text-center text-gray-600">{subtitle}</p>
+    <section className={styles.section}>
+      <div className={styles.container}>
+        <h2 className={styles.title}>{title}</h2>
+        <p className={styles.subtitle}>{subtitle}</p>
 
-        <div
-          className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center"
-          style={{
-            width: "100%",
-            maxWidth: "1200px",
-            margin: "0 auto",
-          }}
-        >
+        <div className={styles.grid}>
           {services.map((service, index) => (
             <ServiceCard key={service.id} service={service} index={index} />
           ))}
@@ -76,14 +57,12 @@ function ServiceCard({ service, index }: ServiceCardProps) {
   return (
     <div
       ref={ref}
-      className={`bg-white rounded-lg shadow-md p-6 space-y-4 w-full max-w-sm hover:shadow-lg transition-shadow duration-300 ${
-        styles.card
-      } ${isInView ? styles.cardVisible : ""}`}
+      className={`${styles.card} ${isInView ? styles.cardVisible : ""}`}
       style={{
         animationDelay: `${index * 100}ms`,
       }}
     >
-      <div className="h-48 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg overflow-hidden relative">
+      <div className={styles.imageContainer}>
         {service.image ? (
           // URL de texto libre (el host de medios local del panel, o
           // externa): no pasa por next/image, mismo criterio que /servicios.
@@ -92,33 +71,32 @@ function ServiceCard({ service, index }: ServiceCardProps) {
             src={service.image}
             alt={service.name}
             loading="lazy"
-            className="absolute inset-0 h-full w-full object-cover"
+            className={styles.image}
           />
         ) : (
-          <div className="flex items-center justify-center h-full">
-            <ServiceIcon name={service.icon} className="h-12 w-12 text-white" />
+          <div className={styles.iconPlaceholder}>
+            <ServiceIcon name={service.icon} className="h-12 w-12" />
           </div>
         )}
       </div>
 
-      <h3 className="text-xl font-bold text-gray-900 text-center">
-        {service.name}
-      </h3>
+      <div className={styles.content}>
+        <h3 className={styles.cardTitle}>{service.name}</h3>
 
-      {service.shortDescription ? (
-        <p className="text-gray-600 text-center leading-relaxed">
-          {service.shortDescription}
-        </p>
-      ) : null}
+        {service.shortDescription ? (
+          <p className={styles.cardDescription}>
+            {service.shortDescription}
+          </p>
+        ) : null}
 
-      <div className="flex justify-center pt-6">
-        <Button
-          size="md"
-          className={styles.button}
-          onClick={() => router.push(`/servicios#${service.slug}`)}
-        >
-          Ver más
-        </Button>
+        <div className={styles.buttonContainer}>
+          <Button
+            size="md"
+            onClick={() => router.push(`/servicios#${service.slug}`)}
+          >
+            Ver más
+          </Button>
+        </div>
       </div>
     </div>
   );

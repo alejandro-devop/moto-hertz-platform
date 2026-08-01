@@ -1,30 +1,31 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Archivo, Inter } from "next/font/google";
 import { QueryProvider } from "@/providers";
 import WelcomeModal from "@/components/welcome-modal";
 import { getSiteSettingsConFallback } from "@/services/site-settings";
 import "./globals.scss";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-  display: "swap", // Mejora la experiencia de carga
-  preload: true,
-  fallback: ["system-ui", "arial"], // Fallback inmediato
-  // Optimización de subsetting
-  adjustFontFallback: false,
-  weight: ["400", "500", "600", "700"], // Solo los pesos que usamos
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+// Par tipográfico de la propuesta de rediseño: Archivo (peso alto, tracking
+// negativo) para títulos y nombres de moto — carácter técnico sin caer en
+// itálicas de carreras — e Inter para cuerpo, specs y precios.
+const archivo = Archivo({
+  variable: "--font-archivo",
   subsets: ["latin"],
   display: "swap",
-  preload: false, // No precargar la fuente mono ya que no es crítica
-  fallback: ["'Courier New'", "monospace"],
-  // Optimización de subsetting
+  preload: true,
+  fallback: ["system-ui", "arial"],
   adjustFontFallback: false,
-  weight: ["400", "500"], // Solo los pesos que usamos
+  weight: ["700", "800"],
+});
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  display: "swap",
+  preload: true,
+  fallback: ["system-ui", "arial"],
+  adjustFontFallback: false,
+  weight: ["400", "500", "600", "700"],
 });
 
 /**
@@ -97,7 +98,7 @@ export default function RootLayout({
         <meta name="supported-color-schemes" content="light" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${archivo.variable} ${inter.variable} antialiased`}
         suppressHydrationWarning={true}
       >
         <QueryProvider>{children}</QueryProvider>

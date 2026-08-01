@@ -2,7 +2,11 @@
 .gallery {
   position: relative;
   width: 100%;
-  height: calc(100vh - 70px); /* Adjust height to account for navbar */
+  height: 100vh;
+  /* El hero va a sangre detrás del nav de vidrio (fixed, siempre translúcido)
+     en vez de empezar debajo: por eso sube 70px (la altura del navbar) y
+     recupera esos px en la altura. */
+  margin-top: -70px;
   overflow: hidden;
 }
 
@@ -55,11 +59,13 @@
 .overlay {
   position: absolute;
   inset: 0;
+  /* Scrim con tinte navy de marca en vez de negro plano: se funde mejor con
+     el nav de vidrio y con la banda/footer navy del resto del sitio. */
   background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.3) 0%,
-    rgba(0, 0, 0, 0.1) 50%,
-    rgba(0, 0, 0, 0.4) 100%
+    180deg,
+    rgba(10, 23, 48, 0.55) 0%,
+    rgba(10, 23, 48, 0.18) 42%,
+    rgba(10, 23, 48, 0.6) 100%
   );
   display: flex;
   align-items: center;
@@ -75,40 +81,44 @@
 }
 
 .title {
+  font-family: var(--font-display);
   font-size: 3.5rem;
-  font-weight: bold;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   margin-bottom: 1rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.35);
   animation: fadeInUp 1s ease-out;
 }
 
 .subtitle {
   font-size: 1.25rem;
   margin-bottom: 2rem;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
   animation: fadeInUp 1s ease-out 0.2s both;
 }
 
 .ctaButton {
-  background: linear-gradient(45deg, #ff6b35, #f7931e);
+  display: inline-flex;
+  align-items: center;
+  background: rgba(209, 14, 16, 0.85);
   color: white;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
   padding: 1rem 2rem;
-  font-size: 1.1rem;
-  font-weight: 600;
-  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: 999px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   text-transform: uppercase;
   letter-spacing: 1px;
-  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
   animation: fadeInUp 1s ease-out 0.4s both;
 }
 
 .ctaButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
-  background: linear-gradient(45deg, #f7931e, #ff6b35);
+  background: rgba(185, 12, 14, 0.92);
 }
 
 /* Navigation Controls */

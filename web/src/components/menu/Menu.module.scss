@@ -1,18 +1,30 @@
 @use "../../styles/abstracts" as *;
 
+// Nav de vidrio siempre: blanco + alfa + blur incluso sobre el hero, nunca
+// invisible ni 100% opaco. El scroll solo sube la opacidad (.scrolled).
 .navbar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 50;
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  transition: background-color 0.35s ease, border-color 0.35s ease,
+    box-shadow 0.35s ease;
   height: 70px;
   overflow-x: hidden; // Prevent horizontal overflow
   width: 100%; // Changed back to 100% to avoid viewport issues
   max-width: 100%; // Never exceed viewport width
   box-sizing: border-box; // Include padding and border in width calculations
+
+  &.scrolled {
+    background-color: rgba(255, 255, 255, 0.88);
+    border-bottom-color: var(--color-stone);
+    box-shadow: 0 1px 12px rgba(12, 30, 63, 0.06);
+  }
 }
 
 .container {
@@ -110,9 +122,9 @@
 }
 
 .menuLink {
-  color: #333;
+  color: var(--color-ink);
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 0.85rem; // Smaller font size on medium screens
   padding: 0.5rem 0;
   text-transform: capitalize;
@@ -120,7 +132,7 @@
   white-space: nowrap;
 
   &:hover {
-    color: #e60012; // Yamaha red color
+    color: var(--color-red);
   }
 
   &::after {
@@ -130,7 +142,7 @@
     left: 0;
     width: 0;
     height: 2px;
-    background-color: #e60012;
+    background-color: var(--color-red);
     transition: width 0.3s ease;
   }
 
@@ -159,22 +171,22 @@
   width: 40px;
   height: 40px;
   background: none;
-  border: 1px solid #ddd;
+  border: 1px solid rgba(18, 20, 27, 0.15);
   border-radius: 50%;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: #666;
+  color: var(--color-ink);
 
   &:hover {
-    border-color: #e60012;
-    color: #e60012;
-    background-color: rgba(230, 0, 18, 0.05);
+    border-color: var(--color-red);
+    color: var(--color-red);
+    background-color: rgba(209, 14, 16, 0.06);
   }
 
   &.active {
-    border-color: #e60012;
-    color: #e60012;
-    background-color: rgba(230, 0, 18, 0.1);
+    border-color: var(--color-red);
+    color: var(--color-red);
+    background-color: rgba(209, 14, 16, 0.1);
   }
 }
 
@@ -188,10 +200,12 @@
     700px - 1.5rem - 100px
   ); // Position at right edge like the button (half of max-width minus padding minus half dropdown width)
   width: 200px;
-  background: white;
-  border: 1px solid #ddd;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  border: 1px solid var(--color-stone);
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(12, 30, 63, 0.12);
   padding: 1rem;
   z-index: 9999; // High z-index to appear above everything
   opacity: 0;
@@ -243,19 +257,19 @@
 .searchInput {
   width: 100%;
   padding: 0.5rem 1rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-stone);
   border-radius: 20px;
   font-size: 0.9rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
   &:focus {
     outline: none;
-    border-color: #e60012;
-    box-shadow: 0 0 0 2px rgba(230, 0, 18, 0.1);
+    border-color: var(--color-red);
+    box-shadow: 0 0 0 2px rgba(209, 14, 16, 0.1);
   }
 
   &::placeholder {
-    color: #999;
+    color: var(--color-muted);
   }
 }
 
@@ -273,7 +287,7 @@
   transition: background-color 0.2s ease;
 
   &:hover {
-    background-color: #f5f5f5;
+    background-color: rgba(18, 20, 27, 0.06);
   }
 
   @include md {
@@ -290,7 +304,7 @@
     display: block;
     width: 100%;
     height: 2px;
-    background-color: #333;
+    background-color: var(--color-ink);
     margin: 5px 0;
     transition: 0.3s;
     transform-origin: center;

@@ -5,8 +5,8 @@
 @use "../../styles/abstracts" as *;
 
 .newsSection {
-  padding: 4rem 0;
-  background-color: #f9fafb;
+  padding: 6rem 0;
+  background-color: var(--color-bg);
 }
 
 .container {
@@ -34,9 +34,12 @@
 }
 
 .title {
+  font-family: var(--font-display);
   font-size: 1.875rem;
-  font-weight: bold;
-  color: #111827;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+  text-align: center;
   margin-bottom: 1rem;
 
   @include md {
@@ -46,14 +49,18 @@
 
 .subtitle {
   font-size: 1.125rem;
-  color: #6b7280;
+  color: var(--color-muted);
   max-width: 42rem;
   margin: 0 auto;
+  text-align: center;
 }
 
+// El borde va en cada tarjeta, no en el fondo del contenedor: con pocas
+// noticias, un `background` en `.grid` deja las columnas vacías pintadas
+// como un bloque suelto.
 .grid {
   display: grid;
-  gap: 2rem;
+  gap: 1.25rem;
   width: 100%;
   max-width: 80rem;
 
@@ -63,17 +70,11 @@
 }
 
 .article {
-  background-color: white;
-  border-radius: 0.75rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-stone);
   overflow: hidden;
-  transition: box-shadow 0.3s ease;
   opacity: 0;
-  transform: scale(0.8);
-
-  &:hover {
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-  }
+  transform: scale(0.96);
 
   &.articleVisible {
     animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
@@ -83,7 +84,13 @@
 .imageContainer {
   position: relative;
   height: 12rem;
-  background: linear-gradient(to right, #3b82f6, #8b5cf6);
+  background: linear-gradient(
+    155deg,
+    #101828 0%,
+    var(--color-navy) 55%,
+    #1c3968 100%
+  );
+  overflow: hidden;
 }
 
 /* Antes usaba `next/image` con `fill`, que agrega esto automáticamente. Ahora
@@ -96,6 +103,11 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.article:hover .image {
+  transform: scale(1.06);
 }
 
 .imagePlaceholder {
@@ -121,36 +133,44 @@
   opacity: 0.8;
 }
 
+// Chip navy oscuro (no blanco translúcido): sobre fotos reales, no el
+// placeholder de gradiente, un badge blanco pierde contraste en imágenes
+// claras.
 .categoryBadge {
   position: absolute;
   top: 1rem;
   left: 1rem;
-  background-color: #dc2626;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: white;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.875rem;
-  font-weight: 500;
+  background-color: rgba(10, 23, 48, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  padding: 0.3rem 0.6rem;
+  backdrop-filter: blur(6px);
 }
 
 .content {
-  padding: 1.5rem;
-  padding-bottom: 2rem;
+  padding: 1.5rem 1.6rem 1.7rem;
 }
 
 .dateContainer {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.875rem;
-  color: #6b7280;
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-muted);
   margin-bottom: 0.75rem;
 }
 
 .articleTitle {
-  font-size: 1.25rem;
-  font-weight: bold;
-  color: #111827;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
   margin-bottom: 0.75rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -160,7 +180,7 @@
 }
 
 .excerpt {
-  color: #6b7280;
+  color: var(--color-muted);
   margin-bottom: 1.5rem;
   display: -webkit-box;
   -webkit-line-clamp: 3;
