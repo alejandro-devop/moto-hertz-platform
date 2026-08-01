@@ -112,9 +112,82 @@ ir a `/medios`, copiar la URL y volver. Es el hueco más visible que dejó la
 Fase 1; un diálogo "Elegir de la biblioteca" dentro de
 `components/admin/image-picker.tsx` es trabajo de una tarde.
 
+**Confirmado como pedido explícito**: el mismo componente (`image-picker.tsx`)
+es el que usan motos, banners, servicios y noticias, así que arreglarlo una vez
+resuelve el selector "como en WordPress" en todos esos lugares a la vez.
+
+### La administración de banners solo cubre el carrusel del home
+
+`home_banners` (`backend/src/shared/database/schema.ts:195`) y
+`cms-admin/app/(admin)/banners` administran un único carrusel: el que pinta
+`Banner` en el home. El resto de banners del sitio están fuera de esa tabla y
+quemados en código — por ejemplo el `SecondBanner` ("Financia tu próxima
+Yamaha", título/descripción/imagen fijos en `web/src/app/page.tsx`). Pedido:
+que el panel administre todos los banners del sitio, no solo el del home.
+
+Falta decidir el modelo: ¿un campo `location`/`slot` en `home_banners` para
+distinguir carruseles por ubicación, o una tabla nueva por tipo de banner?
+
+### No hay dónde cargar el logo del sitio
+
+`site_settings` (`backend/src/shared/database/schema.ts:255`) no tiene un
+campo de logo — solo `seoImage`, para Open Graph. El logo que pinta
+`web/src/components/menu/Menu.tsx` está quemado en assets estáticos. Pedido:
+un campo `logo` en `site_settings`, administrable desde `/configuracion` igual
+que el resto de la identidad del sitio.
+
+### No hay dónde administrar el contenido de cada página/sección (heading, caption…)
+
+Textos como el heading y el caption de `/motos`, o el título/descripción del
+`SecondBanner` del home, están quemados en el JSX de cada página de `web` — no
+hay tabla ni pantalla del panel que los toque. Pedido explícito: un lugar en el
+panel para administrar el contenido editorial de cada página/sección del
+sitio, empezando por `/motos`.
+
+Falta decidir el modelo: ¿una tabla genérica tipo `page_content`
+(página + campo + valor), o un módulo por página? Toca a cualquier página de
+`web` que hoy tenga textos fijos, no solo `/motos`.
+
 ---
 
 ## Sitio público
+
+### El home no muestra motos — falta una franja antes de servicios
+
+`web/src/app/page.tsx` pinta `Banner` → `Cards` (servicios) → `SecondBanner` →
+`NewsSection`: ninguna franja de motos. Pedido: una franja de motos antes de la
+de servicios.
+
+Falta decidir cómo se eligen esas motos. El tipo `Motorcycle` ya tiene un campo
+`featured: boolean` (`web/src/types/motorcycle.ts:36`) que hoy solo pinta la
+etiqueta "Destacada" en `/motos` — nada lo usa todavía para elegir qué
+mostrar en otro lado. Es candidato natural para esta franja, pero hay que
+confirmar el criterio (¿todas las `featured`? ¿las N más recientes?) antes de
+construir.
+
+### Los filtros de `/motos` son solo por categoría — faltan nombre y marca
+
+`web/src/app/motos/page.tsx:111` ("Filtrar por categoría") es el único filtro,
+en pills. Pedido: filtros avanzados, incluyendo búsqueda por nombre y por
+marca.
+
+### El "lazy load" de `/motos` se siente lento — es una animación, no carga de datos
+
+`getMotorcycles` trae la lista completa de una sola vez; no hay paginación
+diferida real. Lo que se percibe como lento es el efecto de aparición de cada
+tarjeta al entrar en el viewport: `useInView` (`web/src/hooks`, con
+`triggerOnce: true`) combinado con un `animationDelay` escalonado
+(`index * 0.1s` en `web/src/app/motos/page.tsx`) y una animación `popIn` de
+0.6s (`Motos.module.scss:183`). Con muchas tarjetas ese escalonado se acumula
+y la grilla tarda en terminar de aparecer. Hay que decidir si vale la pena
+mantener el efecto y, si sí, acotar el delay máximo en vez de escalarlo por
+índice.
+
+### El buscador global es una burbuja lateral poco visible
+
+`web/src/components/menu/Menu.tsx` — el ícono de lupa abre un
+`searchDropdown` angosto junto al botón. Pedido: un buscador más llamativo
+(¿modal a pantalla completa? ¿overlay?), forma a definir.
 
 ### Una moto inexistente o en papelera renderiza una página casi vacía
 

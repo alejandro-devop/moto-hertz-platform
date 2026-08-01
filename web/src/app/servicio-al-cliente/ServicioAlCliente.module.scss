@@ -1,0 +1,117 @@
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/variables" as *;
+
+.servicioAlClientePage {
+  min-height: 100vh;
+  padding-top: 0;
+}
+
+.hero {
+  background: linear-gradient(135deg, #0c1e3f 0%, #1a3a6b 100%);
+  color: white;
+  padding: 3rem 1.5rem;
+  text-align: center;
+
+  @include breakpoint(md) {
+    padding: 5rem 2rem;
+  }
+
+  @include breakpoint(lg) {
+    padding: 6rem 2rem;
+  }
+}
+
+.heroContent {
+  max-width: 1200px;
+  margin: 0 auto;
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    letter-spacing: -0.5px;
+
+    @include breakpoint(md) {
+      font-size: 3rem;
+    }
+
+    @include breakpoint(lg) {
+      font-size: 3.5rem;
+    }
+  }
+
+  p {
+    font-size: 1rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+
+    @include breakpoint(md) {
+      font-size: 1.125rem;
+    }
+  }
+}
+
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+
+  @include breakpoint(md) {
+    padding: 4rem 2rem;
+  }
+}
+
+.channelGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+
+  @include breakpoint(sm) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.channelCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  color: inherit;
+  text-decoration: none;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #1a3a6b;
+    box-shadow: 0 4px 12px rgba(12, 30, 63, 0.08);
+  }
+}
+
+.channelLabel {
+  display: block;
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+}
+
+.channelValue {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.noChannels {
+  color: #6b7280;
+}
+
+.puntosAtencionNote {
+  margin-top: 2rem;
+  color: #6b7280;
+
+  a {
+    color: #1a3a6b;
+    font-weight: 600;
+  }
+}

@@ -13,11 +13,10 @@ export default function Menu() {
 
   const menuItems = [
     { label: "Motocicletas", href: "/motos" },
-    { label: "Financiación", href: "/en-construccion" },
     { label: "Servicios", href: "/servicios" },
     { label: "Noticias", href: "/noticias" },
     { label: "Puntos de atención", href: "/puntos-atencion" },
-    { label: "Servicio al cliente", href: "/en-construccion" },
+    { label: "Servicio al cliente", href: "/servicio-al-cliente" },
   ];
 
   const toggleMobileMenu = () => {
