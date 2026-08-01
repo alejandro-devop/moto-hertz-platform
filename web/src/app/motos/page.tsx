@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import Footer from "@/components/footer";
 import Menu from "@/components/menu";
+import SearchableSelect from "@/components/searchable-select/SearchableSelect";
 import { useInView } from "@/hooks";
 import { categorySlug, getMotorcycles } from "@/services/motorcycles";
 import type { Motorcycle } from "@/types/motorcycle";
@@ -68,6 +69,8 @@ function MotorcycleCard({ moto, index }: { moto: Motorcycle; index: number }) {
 
 export default function MotosPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedBrand, setSelectedBrand] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["motorcycles"],
@@ -84,13 +87,33 @@ export default function MotosPage() {
     return [...names].map((name) => ({ id: categorySlug(name), name }));
   }, [motorcycles]);
 
-  const filteredMotorcycles =
-    selectedCategory === "all"
-      ? motorcycles
-      : motorcycles.filter(
-          (moto) =>
-            moto.category && categorySlug(moto.category) === selectedCategory,
-        );
+  const brands = useMemo(() => {
+    const names = new Set<string>();
+    for (const moto of motorcycles) {
+      if (moto.brand) names.add(moto.brand);
+    }
+    return [...names].sort();
+  }, [motorcycles]);
+
+  const filteredMotorcycles = useMemo(() => {
+    const term = searchTerm.trim().toLowerCase();
+
+    return motorcycles.filter((moto) => {
+      if (
+        selectedCategory !== "all" &&
+        (!moto.category || categorySlug(moto.category) !== selectedCategory)
+      ) {
+        return false;
+      }
+      if (selectedBrand && moto.brand !== selectedBrand) {
+        return false;
+      }
+      if (term && !moto.name.toLowerCase().includes(term)) {
+        return false;
+      }
+      return true;
+    });
+  }, [motorcycles, selectedCategory, selectedBrand, searchTerm]);
 
   return (
     <>
@@ -108,6 +131,33 @@ export default function MotosPage() {
 
         <section className={styles.filters}>
           <div className={styles.filterContainer}>
+            <div className={styles.searchAndBrand}>
+              <div className={styles.searchField}>
+                <h2>Buscar por nombre</h2>
+                <input
+                  type="search"
+                  value={searchTerm}
+                  onChange={(event) => setSearchTerm(event.target.value)}
+                  placeholder="Ej: MT-03, NMAX..."
+                  aria-label="Buscar moto por nombre"
+                />
+              </div>
+
+              {brands.length > 0 && (
+                <div className={styles.brandField}>
+                  <h2>Marca</h2>
+                  <SearchableSelect
+                    options={brands}
+                    value={selectedBrand}
+                    onChange={setSelectedBrand}
+                    allLabel="Todas las marcas"
+                    placeholder="Buscar marca..."
+                    ariaLabel="Filtrar por marca"
+                  />
+                </div>
+              )}
+            </div>
+
             <h2>Filtrar por categoría</h2>
             <div className={styles.filterButtons}>
               <button
@@ -157,7 +207,7 @@ export default function MotosPage() {
 
         {!isLoading && !isError && filteredMotorcycles.length === 0 && (
           <div className={styles.noResults}>
-            <p>No se encontraron motocicletas en esta categoría.</p>
+            <p>No se encontraron motocicletas con esos filtros.</p>
           </div>
         )}
       </main>

@@ -39,6 +39,7 @@ const MOTORCYCLE_FIELDS = /* GraphQL */ `
   slug
   name
   category
+  brand
   year
   price
   currency

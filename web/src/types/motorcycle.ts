@@ -22,6 +22,7 @@ export interface Motorcycle {
   slug: string;
   name: string;
   category?: string | null;
+  brand?: string | null;
   year?: number | null;
   price?: string | null;
   currency: string;

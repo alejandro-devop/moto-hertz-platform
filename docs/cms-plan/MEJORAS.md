@@ -152,12 +152,6 @@ Falta decidir el modelo: ¿una tabla genérica tipo `page_content`
 
 ## Sitio público
 
-### Los filtros de `/motos` son solo por categoría — faltan nombre y marca
-
-`web/src/app/motos/page.tsx:111` ("Filtrar por categoría") es el único filtro,
-en pills. Pedido: filtros avanzados, incluyendo búsqueda por nombre y por
-marca.
-
 ### El "lazy load" de `/motos` se siente lento — es una animación, no carga de datos
 
 `getMotorcycles` trae la lista completa de una sola vez; no hay paginación
