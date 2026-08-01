@@ -23,6 +23,18 @@ const Footer = dynamic(() => import("@/components/footer"), {
   ),
 });
 
+/** Mismo texto que antes estaba quemado acá: valor por defecto hasta que
+ * alguien cargue un banner real en el slot SECUNDARIO desde `/banners`. */
+const DEFAULT_SECOND_BANNER = {
+  title: "Financia tu próxima Yamaha",
+  description:
+    "Planes de crédito flexibles para que estrenes tu moto sin complicaciones.",
+  ctaLabel: "Conocer planes",
+  ctaUrl: "/motos",
+  backgroundImage:
+    "https://images.unsplash.com/photo-1558980664-769d59546b3d?w=1600",
+};
+
 /**
  * La home. Desde la Fase 5 del plan CMS ya no lee el "layout" tipo
  * Contentful de `web/src/data/home-mock.json` (borrado en esta fase): el
@@ -30,15 +42,23 @@ const Footer = dynamic(() => import("@/components/footer"), {
  * las franjas de servicios/noticias muestran lo mismo que ya se administra en
  * `/servicios` y `/noticias` — la home dejó de inventar sus propias tarjetas.
  *
- * El segundo banner ancho ("Financia tu próxima Yamaha") y los títulos de
- * cada sección quedan fijos aquí a propósito: es el alcance mínimo acordado
- * con el usuario para esta fase (ver `docs/cms-plan/phases/05-home-y-banners.md`).
+ * El segundo banner ancho también se administra desde `/banners` (slot
+ * `SECUNDARIO`) desde que se resolvió el pedido de MEJORAS.md de administrar
+ * todos los banners del sitio, no solo el carrusel — antes quedaba fijo en
+ * este componente. Los títulos de cada sección (`Motos Destacadas`,
+ * `Servicios Yamaha`...) siguen fijos en el código, fuera de ese alcance.
  */
 export default function Home() {
   const { data: bannerData } = useQuery({
     queryKey: ["home-banners"],
-    queryFn: () => getBanners({ limit: 10 }),
+    queryFn: () => getBanners({ limit: 10, slot: "HOME" }),
   });
+
+  const { data: secondBannerData } = useQuery({
+    queryKey: ["home-second-banner"],
+    queryFn: () => getBanners({ limit: 1, slot: "SECUNDARIO" }),
+  });
+  const secondBanner = secondBannerData?.banners[0];
 
   /* Franja de motos destacadas, antes de servicios (decidido con el
      usuario): solo las que estén marcadas `featured: true` en el panel. Si
@@ -71,11 +91,15 @@ export default function Home() {
       <Cards services={serviceData?.services} />
 
       <SecondBanner
-        title="Financia tu próxima Yamaha"
-        description="Planes de crédito flexibles para que estrenes tu moto sin complicaciones."
-        ctaLabel="Conocer planes"
-        ctaUrl="/motos"
-        backgroundImage="https://images.unsplash.com/photo-1558980664-769d59546b3d?w=1600"
+        title={secondBanner?.title || DEFAULT_SECOND_BANNER.title}
+        description={
+          secondBanner?.subtitle || DEFAULT_SECOND_BANNER.description
+        }
+        ctaLabel={secondBanner?.linkLabel || DEFAULT_SECOND_BANNER.ctaLabel}
+        ctaUrl={secondBanner?.link || DEFAULT_SECOND_BANNER.ctaUrl}
+        backgroundImage={
+          secondBanner?.image || DEFAULT_SECOND_BANNER.backgroundImage
+        }
         parallaxSpeed={0.1}
       />
 

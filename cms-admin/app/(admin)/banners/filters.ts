@@ -6,7 +6,7 @@ import {
   leerPagina,
   leerTexto,
 } from '@/lib/list-params';
-import type { Banner } from '@/lib/graphql/banners';
+import { BANNER_SLOT_LABELS, type Banner, type BannerSlot } from '@/lib/graphql/banners';
 
 /**
  * La papelera es un valor del filtro de estado, igual que en el resto de los
@@ -17,12 +17,15 @@ export type Estado = 'activos' | 'papelera';
 export interface Filtros {
   q: string;
   estado: Estado;
+  /** Cada slot es su propio carrusel/orden — se ve uno a la vez, no mezclados. */
+  slot: BannerSlot;
   pagina: number;
 }
 
 export const FILTROS_POR_DEFECTO: Filtros = {
   q: '',
   estado: 'activos',
+  slot: 'HOME',
   pagina: 1,
 };
 
@@ -36,6 +39,7 @@ export function leerFiltros(params: URLSearchParams): Filtros {
   return {
     q: leerTexto(params, 'q'),
     estado: leerClave(params, 'estado', ETIQUETAS_ESTADO, 'activos'),
+    slot: leerClave(params, 'slot', BANNER_SLOT_LABELS, 'HOME'),
     pagina: leerPagina(params),
   };
 }

@@ -116,18 +116,6 @@ Fase 1; un diálogo "Elegir de la biblioteca" dentro de
 es el que usan motos, banners, servicios y noticias, así que arreglarlo una vez
 resuelve el selector "como en WordPress" en todos esos lugares a la vez.
 
-### La administración de banners solo cubre el carrusel del home
-
-`home_banners` (`backend/src/shared/database/schema.ts:195`) y
-`cms-admin/app/(admin)/banners` administran un único carrusel: el que pinta
-`Banner` en el home. El resto de banners del sitio están fuera de esa tabla y
-quemados en código — por ejemplo el `SecondBanner` ("Financia tu próxima
-Yamaha", título/descripción/imagen fijos en `web/src/app/page.tsx`). Pedido:
-que el panel administre todos los banners del sitio, no solo el del home.
-
-Falta decidir el modelo: ¿un campo `location`/`slot` en `home_banners` para
-distinguir carruseles por ubicación, o una tabla nueva por tipo de banner?
-
 ### No hay dónde cargar el logo del sitio
 
 `site_settings` (`backend/src/shared/database/schema.ts:255`) no tiene un

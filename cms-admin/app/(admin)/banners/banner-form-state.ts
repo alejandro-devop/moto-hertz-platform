@@ -2,15 +2,16 @@ import { z } from 'zod';
 import { toDateInput } from '@/lib/format';
 import { erroresDeZod, textoOpcional } from '@/lib/form-state';
 import type { ResultadoValidacion } from '@/lib/use-ficha-state';
-import type { Banner, BannerFormInput } from '@/lib/graphql/banners';
+import type { Banner, BannerFormInput, BannerSlot } from '@/lib/graphql/banners';
 import { seccionDeCampo, type SeccionId } from './form-sections';
 
 /**
  * El formulario es plano. `position` no está aquí: la fija el backend al
- * crear (se agrega al final) y solo cambia con el reordenar de la lista, no
- * desde la ficha.
+ * crear (se agrega al final de su slot) y solo cambia con el reordenar de la
+ * lista, no desde la ficha.
  */
 export interface FormState {
+  slot: BannerSlot;
   title: string;
   subtitle: string;
   image: string;
@@ -24,6 +25,7 @@ export interface FormState {
 }
 
 export const EMPTY_FORM: FormState = {
+  slot: 'HOME',
   title: '',
   subtitle: '',
   image: '',
@@ -39,6 +41,7 @@ export const EMPTY_FORM: FormState = {
 
 export function bannerToForm(banner: Banner): FormState {
   return {
+    slot: banner.slot,
     title: banner.title,
     subtitle: banner.subtitle ?? '',
     image: banner.image,
@@ -55,6 +58,7 @@ export function formToInput(form: FormState): BannerFormInput {
   const trim = textoOpcional;
 
   return {
+    slot: form.slot,
     title: form.title.trim(),
     subtitle: trim(form.subtitle),
     image: form.image.trim(),

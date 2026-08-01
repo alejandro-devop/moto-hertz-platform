@@ -36,6 +36,9 @@
 }
 
 .backgroundImage {
+  /* Antes lo ponía `next/image` con `fill`; ahora es un `<img>` de verdad. */
+  position: absolute;
+  inset: 0;
   object-fit: cover;
   object-position: center center;
   /* Improve image rendering during parallax */

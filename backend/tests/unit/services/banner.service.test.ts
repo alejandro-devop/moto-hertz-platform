@@ -81,6 +81,7 @@ describe('bannerService', () => {
       await bannerService.createBanner({
         title: banner.title,
         image: banner.image,
+        slot: 'HOME',
       });
 
       expect(values.mock.calls[0][0].position).toBe(2);
@@ -201,7 +202,7 @@ describe('bannerService', () => {
       mockDb.transaction.mockImplementation(async (cb: any) => cb(tx));
       mockDb.select.mockReturnValueOnce(createQueryMock([primero, segundo]));
 
-      const result = await bannerService.reorderBanners(['b', 'a']);
+      const result = await bannerService.reorderBanners('HOME', ['b', 'a']);
 
       expect(sets).toHaveLength(2);
       expect(sets[0].position).toBe(0);

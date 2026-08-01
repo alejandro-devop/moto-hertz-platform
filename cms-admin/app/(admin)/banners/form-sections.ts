@@ -12,8 +12,8 @@ export const SECCIONES: Seccion[] = [
   {
     id: 'contenido',
     label: 'Contenido',
-    hint: 'La imagen y el texto que se ven sobre ella.',
-    campos: ['title', 'subtitle', 'image', 'imageMobile'],
+    hint: 'Dónde aparece, y la imagen y el texto que se ven sobre ella.',
+    campos: ['slot', 'title', 'subtitle', 'image', 'imageMobile'],
   },
   {
     id: 'enlace',

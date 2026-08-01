@@ -1,6 +1,7 @@
 'use client';
 
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { TabsContent } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { ALTO_CAMPO, Field, Grid, ToggleRow } from '@/components/admin/form-fields';
@@ -8,7 +9,7 @@ import { FormSheet } from '@/components/admin/form-sheet';
 import { ImagePicker } from '@/components/admin/image-picker';
 import { useFichaState } from '@/lib/use-ficha-state';
 import { cn } from '@/lib/utils';
-import type { Banner, BannerFormInput } from '@/lib/graphql/banners';
+import { BANNER_SLOT_LABELS, type Banner, type BannerFormInput, type BannerSlot } from '@/lib/graphql/banners';
 import { SECCIONES, seccionDeCampo, type SeccionId } from './form-sections';
 import { EMPTY_FORM, bannerToForm, formToInput, validar, type FormState } from './banner-form-state';
 
@@ -68,6 +69,18 @@ export function BannerFormSheet({
     >
       {/* ------------------------------------------- contenido --- */}
       <TabsContent value="contenido" className="flex flex-col gap-4">
+        <Field label="Dónde aparece" hint="Cada lugar del sitio tiene su propio orden.">
+          <Select value={form.slot} onValueChange={(value) => set('slot', value as BannerSlot)}>
+            <SelectTrigger className={cn(ALTO_CAMPO, 'w-full')} aria-label="Dónde aparece el banner">
+              <SelectValue>{(value: BannerSlot) => BANNER_SLOT_LABELS[value]}</SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="HOME">{BANNER_SLOT_LABELS.HOME}</SelectItem>
+              <SelectItem value="SECUNDARIO">{BANNER_SLOT_LABELS.SECUNDARIO}</SelectItem>
+            </SelectContent>
+          </Select>
+        </Field>
+
         <Field
           label="Título"
           htmlFor="title"

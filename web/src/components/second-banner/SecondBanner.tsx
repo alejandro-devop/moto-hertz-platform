@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Button from "../button/Button";
 import { useSmartParallax, useInView } from "../../hooks";
 import styles from "./SecondBanner.module.scss";
@@ -11,8 +10,11 @@ interface SecondBannerProps {
   ctaLabel?: string;
   ctaUrl?: string;
   /**
-   * URL de la imagen de fondo. Fijo en el código (alcance mínimo de la
-   * Fase 5 del plan CMS): este banner no se administra desde el panel.
+   * URL de la imagen de fondo. Administrable desde `/banners` del panel
+   * (slot `SECUNDARIO`), así que puede venir del host de medios local — por
+   * eso es un `<img>` de verdad, nunca `next/image` (ver la nota en
+   * `docs/cms-plan/MEJORAS.md` sobre por qué `next/image` revienta la
+   * página entera con esas URLs).
    */
   backgroundImage?: string;
   parallaxSpeed?: number;
@@ -55,12 +57,12 @@ export default function SecondBanner({
         className={styles.backgroundContainer}
         style={backgroundParallax.style}
       >
-        <Image
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
           src={fullImageUrl}
           alt={imageAlt}
-          fill
           className={styles.backgroundImage}
-          priority
+          loading="lazy"
         />
       </div>
 

@@ -9,6 +9,7 @@ import {
   bannersListArgsSchema,
 } from '../../../validators/schemas/banner.schemas';
 import type { GraphQLContext } from '../../server';
+import type { BannerSlot } from '../../../types/services/banner.types';
 
 /**
  * `banner` es el segundo dominio del proyecto (después de `news`) donde la
@@ -82,9 +83,13 @@ export const bannerResolvers = {
 
     bannerReorder: withValidatedResolver(
       bannerReorderArgsSchema,
-      async (_: unknown, { ids }: { ids: string[] }, context: GraphQLContext) => {
+      async (
+        _: unknown,
+        { slot, ids }: { slot: BannerSlot; ids: string[] },
+        context: GraphQLContext
+      ) => {
         requireAuth(context, 'bannerReorder');
-        return bannerService.reorderBanners(ids);
+        return bannerService.reorderBanners(slot, ids);
       },
       'bannerReorder'
     ),

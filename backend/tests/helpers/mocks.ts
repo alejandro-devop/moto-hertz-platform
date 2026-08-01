@@ -146,6 +146,7 @@ export const createMockBanner = (overrides = {}) => ({
   imageMobile: null,
   link: '/motos',
   linkLabel: 'Explorar modelos',
+  slot: 'HOME',
   position: 0,
   active: true,
   startsAt: null,

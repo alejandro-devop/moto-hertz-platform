@@ -7,6 +7,8 @@
  * activo). El segundo banner ancho y los títulos de sección de la home
  * quedan fijos en el código de `web`, no en este dominio.
  */
+export type BannerSlot = 'HOME' | 'SECUNDARIO';
+
 export interface Banner {
   id: string;
   title: string;
@@ -16,7 +18,9 @@ export interface Banner {
   imageMobile?: string | null;
   link?: string | null;
   linkLabel?: string | null;
-  /** El orden del carrusel. Un banner nuevo se agrega al final. */
+  /** Dónde aparece este banner en `web`. */
+  slot: BannerSlot;
+  /** El orden dentro de su slot. Un banner nuevo se agrega al final del suyo. */
   position: number;
   active: boolean;
   /** Sin fecha, el banner ya está vigente. */
@@ -39,6 +43,8 @@ export interface BannerCollection {
 export interface ListBannersOptions {
   page?: number;
   limit?: number;
+  /** Sin esto, trae banners de todos los slots (lo que usa el panel). */
+  slot?: BannerSlot;
   /** `true` = solo la papelera. Por defecto, solo lo no borrado. */
   trashed?: boolean;
   /**
@@ -57,6 +63,7 @@ export interface CreateBannerInput {
   imageMobile?: string;
   link?: string;
   linkLabel?: string;
+  slot: BannerSlot;
   active?: boolean;
   startsAt?: Date | null;
   endsAt?: Date | null;

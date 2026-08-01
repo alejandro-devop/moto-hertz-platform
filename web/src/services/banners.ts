@@ -49,8 +49,8 @@ const BANNER_FIELDS = /* GraphQL */ `
 `;
 
 const BANNERS_QUERY = /* GraphQL */ `
-  query Banners($page: Int, $limit: Int) {
-    banners(page: $page, limit: $limit) {
+  query Banners($page: Int, $limit: Int, $slot: BannerSlot) {
+    banners(page: $page, limit: $limit, slot: $slot) {
       total
       page
       limit
@@ -61,8 +61,11 @@ const BANNERS_QUERY = /* GraphQL */ `
   }
 `;
 
+/** Dónde aparece un banner. Espejo del enum `BannerSlot` del backend. */
+export type BannerSlot = "HOME" | "SECUNDARIO";
+
 export async function getBanners(
-  variables: { page?: number; limit?: number } = {},
+  variables: { page?: number; limit?: number; slot?: BannerSlot } = {},
 ): Promise<BannerCollection> {
   const data = await graphqlRequest<{ banners: BannerCollection }>(
     BANNERS_QUERY,

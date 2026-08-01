@@ -164,7 +164,9 @@ El módulo `medios` (biblioteca de imágenes) sigue el mismo patrón de lista, c
 
 > Construido en la **Fase 5 del plan CMS** (`../docs/cms-plan/phases/05-home-y-banners.md`), la primera sección sobre una tabla nueva del backend y la primera con orden manual.
 
-**Alcance mínimo, acordado con el usuario antes de construir**: solo el carrusel de banners se administra aquí. El segundo banner ancho de la home y los títulos de cada sección quedan fijos en el código de `web` — no hay ficha para ellos en este módulo ni en ningún otro.
+**Alcance original, ampliado después.** La Fase 5 solo administraba el carrusel del home; el segundo banner ancho quedaba fijo en `web`. Fue un pedido explícito del usuario en `docs/cms-plan/MEJORAS.md` ("la administración de banners solo cubre el carrusel del home") lo que agregó `slot` (`HOME` | `SECUNDARIO`, catálogo cerrado — ver `backend/CLAUDE.md`): ahora este módulo administra los dos, y la lista muestra un slot a la vez (selector "Dónde aparece" en `BannersFilters`). Los **títulos de cada sección de la home** (`Motos Destacadas`, `Servicios Yamaha`...) siguen fijos en el código — eso no cambió, y sigue sin ficha en ningún módulo.
+
+**`position` es por slot, no global.** Cada slot es su propio carrusel con su propio orden: `nextPosition` y `bannerReorder` (ahora `bannerReorder(slot, ids)`) operan dentro de un slot, nunca across. Un banner de `HOME` en posición 0 y uno de `SECUNDARIO` en posición 0 no compiten entre sí.
 
 **No hay selector de "ordenar por".** A diferencia de todas las listas anteriores, `filters.ts` no tiene `orden`: el orden siempre es `position`, porque el orden *es* el dato que se edita — un desplegable de orden competiría con subir/bajar. Por el mismo motivo tampoco hay `q` de búsqueda por texto libre ligado a filtros de contenido más allá del título/subtítulo/enlace, y **reordenar se deshabilita mientras hay una búsqueda activa** (`page.tsx`, `puedeReordenar`): con la lista filtrada, la vecina de una fila en pantalla puede no ser su vecina real, y mover algo que no se ve confundiría más que ayudar.
 

@@ -202,6 +202,11 @@ export const homeBanners = pgTable('home_banners', {
   imageMobile: text('image_mobile'),
   link: text('link'),
   linkLabel: varchar('link_label', { length: 100 }),
+  /**
+   * Catálogo cerrado (`HOME` | `SECUNDARIO`, ver `BannerSlot` del SDL):
+   * dónde aparece este banner en `web`. Migración `013`.
+   */
+  slot: varchar('slot', { length: 50 }).notNull().default('HOME'),
   position: integer('position').notNull().default(0),
   active: boolean('active').notNull().default(true),
   startsAt: timestamp('starts_at'),

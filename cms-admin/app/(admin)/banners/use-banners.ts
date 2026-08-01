@@ -13,6 +13,7 @@ import {
   BANNER_REORDER_MUTATION,
   BANNER_RESTORE_MUTATION,
   type BannerFormInput,
+  type BannerSlot,
   type BannersQueryResult,
 } from '@/lib/graphql/banners';
 
@@ -24,15 +25,17 @@ const LIMITE_BACKEND = 100;
 /**
  * Los activos o la papelera, según se pida: dos consultas distintas al backend
  * (`trashed`) con su propia entrada de caché, para que cambiar de una a otra no
- * mezcle las listas.
+ * mezcle las listas. `slot` filtra en el backend: cada lugar del sitio es su
+ * propio carrusel, con su propio orden.
  */
-export function useBannersQuery(trashed = false) {
+export function useBannersQuery(trashed: boolean, slot: BannerSlot) {
   return useQuery({
-    queryKey: [...BANNERS_KEY, trashed ? 'papelera' : 'activos'],
+    queryKey: [...BANNERS_KEY, trashed ? 'papelera' : 'activos', slot],
     queryFn: () =>
       graphqlClient.request<BannersQueryResult>(BANNERS_QUERY, {
         page: 1,
         limit: LIMITE_BACKEND,
+        slot,
         trashed,
       }),
   });
@@ -124,11 +127,13 @@ export function useBannerMutations() {
   });
 
   /**
-   * El orden completo, tras subir/bajar o arrastrar una fila: `ids` es el
-   * orden final, de arriba a abajo.
+   * El orden completo de un slot, tras subir/bajar o arrastrar una fila:
+   * `ids` es el orden final de ESE slot, de arriba a abajo. No toca los
+   * demás.
    */
   const reorder = useMutation({
-    mutationFn: (ids: string[]) => graphqlClient.request(BANNER_REORDER_MUTATION, { ids }),
+    mutationFn: ({ slot, ids }: { slot: BannerSlot; ids: string[] }) =>
+      graphqlClient.request(BANNER_REORDER_MUTATION, { slot, ids }),
     onSuccess: async () => {
       await refetch();
     },

@@ -7,6 +7,14 @@
  * cambia con `bannerReorder`.
  */
 
+/** Catálogo cerrado: dónde aparece el banner en `web`. */
+export type BannerSlot = 'HOME' | 'SECUNDARIO';
+
+export const BANNER_SLOT_LABELS: Record<BannerSlot, string> = {
+  HOME: 'Carrusel del home',
+  SECUNDARIO: 'Banner ancho del home',
+};
+
 export interface Banner {
   id: string;
   title: string;
@@ -16,7 +24,8 @@ export interface Banner {
   imageMobile?: string | null;
   link?: string | null;
   linkLabel?: string | null;
-  /** El orden del carrusel. Solo lo cambia `bannerReorder`. */
+  slot: BannerSlot;
+  /** El orden dentro de su slot. Solo lo cambia `bannerReorder`. */
   position: number;
   active: boolean;
   /** `null` = ya vigente. */
@@ -35,6 +44,7 @@ export interface BannerFormInput {
   imageMobile?: string;
   link?: string;
   linkLabel?: string;
+  slot: BannerSlot;
   active: boolean;
   startsAt?: string | null;
   endsAt?: string | null;
@@ -48,6 +58,7 @@ const BANNER_FIELDS = /* GraphQL */ `
   imageMobile
   link
   linkLabel
+  slot
   position
   active
   startsAt
@@ -56,8 +67,8 @@ const BANNER_FIELDS = /* GraphQL */ `
 `;
 
 export const BANNERS_QUERY = /* GraphQL */ `
-  query Banners($page: Int, $limit: Int, $trashed: Boolean) {
-    banners(page: $page, limit: $limit, trashed: $trashed) {
+  query Banners($page: Int, $limit: Int, $slot: BannerSlot, $trashed: Boolean) {
+    banners(page: $page, limit: $limit, slot: $slot, trashed: $trashed) {
       total
       page
       limit
@@ -107,10 +118,10 @@ export const BANNER_PURGE_MUTATION = /* GraphQL */ `
   }
 `;
 
-/** El orden completo, de arriba a abajo. */
+/** El orden completo de un slot, de arriba a abajo. No toca los demás slots. */
 export const BANNER_REORDER_MUTATION = /* GraphQL */ `
-  mutation BannerReorder($ids: [ID!]!) {
-    bannerReorder(ids: $ids) {
+  mutation BannerReorder($slot: BannerSlot!, $ids: [ID!]!) {
+    bannerReorder(slot: $slot, ids: $ids) {
       ${BANNER_FIELDS}
     }
   }

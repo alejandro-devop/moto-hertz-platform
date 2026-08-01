@@ -5,6 +5,7 @@ import { BadRequestError, NotFoundError } from '../shared/errors';
 import type {
   Banner,
   BannerCollection,
+  BannerSlot,
   CreateBannerInput,
   ListBannersOptions,
   UpdateBannerInput,
@@ -16,6 +17,12 @@ function buildFilters(options: ListBannersOptions): SQL | undefined {
   const conditions: SQL[] = [
     options.trashed ? isNotNull(homeBanners.deletedAt) : isNull(homeBanners.deletedAt),
   ];
+
+  /* Sin `slot`, trae banners de todos los slots — lo que usa la lista del
+     panel, que los muestra agrupados. `web` siempre pide un slot puntual. */
+  if (options.slot) {
+    conditions.push(eq(homeBanners.slot, options.slot));
+  }
 
   /* El sitio público solo ve banners activos y dentro de vigencia; el panel
      los ve todos siempre (papelera aparte). Quien decide si esta condición se
@@ -70,19 +77,20 @@ async function getBannerById(id: string): Promise<Banner> {
   return row as Banner;
 }
 
-/** Un banner nuevo se agrega al final: la posición es cuántos hay hoy en el sitio. */
-async function nextPosition(): Promise<number> {
+/** Un banner nuevo se agrega al final de su propio slot: la posición es
+ *  cuántos hay hoy en ese slot, no en el sitio entero. */
+async function nextPosition(slot: BannerSlot): Promise<number> {
   const db = getDb();
   const [{ value }] = await db
     .select({ value: count() })
     .from(homeBanners)
-    .where(isNull(homeBanners.deletedAt));
+    .where(and(isNull(homeBanners.deletedAt), eq(homeBanners.slot, slot)));
   return value;
 }
 
 async function createBanner(input: CreateBannerInput): Promise<Banner> {
   const db = getDb();
-  const position = await nextPosition();
+  const position = await nextPosition(input.slot);
   const [row] = await db
     .insert(homeBanners)
     .values({
@@ -148,12 +156,14 @@ async function purgeBanner(id: string): Promise<boolean> {
 }
 
 /**
- * El orden completo, de una sola vez: `ids` trae todos los banners no
- * borrados en el orden que quedó tras arrastrar o subir/bajar en el panel, y
- * la posición de cada uno pasa a ser su índice en esa lista. Va en una
- * transacción: a mitad de camino no puede quedar un orden a medio escribir.
+ * El orden completo de un slot, de una sola vez: `ids` trae todos los
+ * banners no borrados de ese slot en el orden que quedó tras arrastrar o
+ * subir/bajar en el panel, y la posición de cada uno pasa a ser su índice en
+ * esa lista. Va en una transacción: a mitad de camino no puede quedar un
+ * orden a medio escribir. Reordenar un slot no toca la posición de los
+ * demás.
  */
-async function reorderBanners(ids: string[]): Promise<Banner[]> {
+async function reorderBanners(slot: BannerSlot, ids: string[]): Promise<Banner[]> {
   const db = getDb();
   await db.transaction(async (tx) => {
     for (let indice = 0; indice < ids.length; indice++) {
@@ -167,7 +177,7 @@ async function reorderBanners(ids: string[]): Promise<Banner[]> {
   const rows = await db
     .select()
     .from(homeBanners)
-    .where(isNull(homeBanners.deletedAt))
+    .where(and(isNull(homeBanners.deletedAt), eq(homeBanners.slot, slot)))
     .orderBy(asc(homeBanners.position), asc(homeBanners.createdAt));
   return rows as Banner[];
 }

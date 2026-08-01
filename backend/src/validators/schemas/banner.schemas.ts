@@ -2,6 +2,9 @@ import { z } from 'zod';
 
 const urlSchema = z.string().trim().min(1).max(2000);
 
+/** Catálogo cerrado: ver la nota de la migración `013`. */
+const bannerSlotSchema = z.enum(['HOME', 'SECUNDARIO']);
+
 /** Vigencia opcional: si llegan las dos, el fin no puede ser antes que el inicio. */
 function vigenciaValida(d: { startsAt?: Date | null; endsAt?: Date | null }): boolean {
   if (!d.startsAt || !d.endsAt) return true;
@@ -15,10 +18,12 @@ export const bannerIdArgSchema = z.object({
 export const bannersListArgsSchema = z.object({
   page: z.number().int().min(1).optional(),
   limit: z.number().int().min(1).max(100).optional(),
+  slot: bannerSlotSchema.optional(),
   trashed: z.boolean().optional(),
 });
 
 export const bannerReorderArgsSchema = z.object({
+  slot: bannerSlotSchema,
   ids: z.array(z.string().uuid()).min(1, 'La lista de orden no puede estar vacía'),
 });
 
@@ -30,6 +35,7 @@ export const bannerAddInputSchema = z
     imageMobile: urlSchema.optional(),
     link: z.string().trim().max(2000).optional(),
     linkLabel: z.string().trim().max(100).optional(),
+    slot: bannerSlotSchema,
     active: z.boolean().optional(),
     startsAt: z.coerce.date().nullable().optional(),
     endsAt: z.coerce.date().nullable().optional(),
@@ -48,6 +54,7 @@ export const bannerEditInputSchema = z
     imageMobile: urlSchema.optional(),
     link: z.string().trim().max(2000).optional(),
     linkLabel: z.string().trim().max(100).optional(),
+    slot: bannerSlotSchema.optional(),
     active: z.boolean().optional(),
     startsAt: z.coerce.date().nullable().optional(),
     endsAt: z.coerce.date().nullable().optional(),

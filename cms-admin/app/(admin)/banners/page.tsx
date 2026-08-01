@@ -9,7 +9,7 @@ import { EmptyState, ErrorState, InlineSkeleton, TableSkeleton } from '@/compone
 import { mensajeDeError, registrarError } from '@/lib/errors';
 import { paginar } from '@/lib/list-params';
 import { useFiltrosUrl } from '@/lib/use-url-filters';
-import type { Banner, BannerFormInput } from '@/lib/graphql/banners';
+import { BANNER_SLOT_LABELS, type Banner, type BannerFormInput } from '@/lib/graphql/banners';
 import { aplicarFiltros, escribirFiltros, leerFiltros, type Filtros } from './filters';
 import type { SeccionId } from './form-sections';
 import { BannersFilters } from './banners-filters';
@@ -32,9 +32,13 @@ export default function BannersPage() {
     escribir: escribirFiltros,
   });
 
-  /* «En papelera» no es un filtro sobre la lista: es otra consulta. */
+  /* «En papelera» no es un filtro sobre la lista: es otra consulta. Slot
+     tampoco: cada uno es su propio carrusel. */
   const enPapelera = filtros.estado === 'papelera';
-  const { data, isLoading, isError, error, refetch, isFetching } = useBannersQuery(enPapelera);
+  const { data, isLoading, isError, error, refetch, isFetching } = useBannersQuery(
+    enPapelera,
+    filtros.slot
+  );
   const { add, edit, reorder } = useBannerMutations();
 
   const [fichaAbierta, setFichaAbierta] = useState(false);
@@ -76,9 +80,10 @@ export default function BannersPage() {
     if (indice < 0 || destino < 0 || destino >= ordenados.length) return;
     const siguiente = [...ordenados];
     [siguiente[indice], siguiente[destino]] = [siguiente[destino], siguiente[indice]];
-    reorder.mutate(siguiente.map((banner) => banner.id));
+    reorder.mutate({ slot: filtros.slot, ids: siguiente.map((banner) => banner.id) });
   }
 
+  const nombreSlot = BANNER_SLOT_LABELS[filtros.slot].toLowerCase();
   const resumen = isLoading ? (
     <InlineSkeleton />
   ) : isError ? (
@@ -86,7 +91,7 @@ export default function BannersPage() {
   ) : enPapelera ? (
     `${banners.length} ${banners.length === 1 ? 'banner' : 'banners'} en la papelera`
   ) : (
-    `${banners.length} ${banners.length === 1 ? 'banner' : 'banners'} en el carrusel · ${activos} ${
+    `${banners.length} ${banners.length === 1 ? 'banner' : 'banners'} en ${nombreSlot} · ${activos} ${
       activos === 1 ? 'activo' : 'activos'
     }`
   );
@@ -108,7 +113,7 @@ export default function BannersPage() {
 
       {enPapelera && banners.length > 0 ? (
         <p className="rounded-lg border border-border bg-muted/40 px-3 py-2 text-[13px] text-muted-foreground">
-          Estos banners no salen en el carrusel. Se pueden restaurar desde el menú de cada fila.
+          Estos banners no salen en el sitio. Se pueden restaurar desde el menú de cada fila.
         </p>
       ) : null}
 
@@ -144,7 +149,7 @@ export default function BannersPage() {
           <EmptyState
             icon={GalleryHorizontal}
             title="Todavía no hay banners"
-            description="Agrega el primero: con una imagen ya sale en el carrusel de la portada."
+            description={`Agrega el primero: con una imagen ya sale en ${nombreSlot}.`}
             action={
               <Button onClick={() => abrirFicha(null)}>
                 <Plus />
