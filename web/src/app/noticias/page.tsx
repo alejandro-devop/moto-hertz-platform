@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import Menu from "@/components/menu";
 import Footer from "@/components/footer";
-import { useInView } from "@/hooks";
+import { useInView, useSiteSettings } from "@/hooks";
 import { getNews } from "@/services/news";
 import type { News } from "@/types/news";
 import styles from "./Noticias.module.scss";
@@ -31,6 +31,10 @@ function NewsCard({ article, index }: { article: News; index: number }) {
     threshold: 0.2,
     triggerOnce: true,
   });
+  /* Autor por defecto de una noticia sin firma: el nombre del sitio
+     (`site_settings.siteName`, Fase 6 del plan CMS), no "Yamaha Oriente"
+     escrito a mano. */
+  const { siteName } = useSiteSettings();
 
   return (
     <article
@@ -77,7 +81,7 @@ function NewsCard({ article, index }: { article: News; index: number }) {
               {(article.author?.trim().charAt(0) || "?").toUpperCase()}
             </div>
             <span className={styles.authorName}>
-              {article.author?.trim() || "Yamaha Oriente"}
+              {article.author?.trim() || siteName}
             </span>
           </div>
           <Link

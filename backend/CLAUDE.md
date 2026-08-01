@@ -35,6 +35,7 @@ Registrar en `src/graphql/schema.ts` y `src/graphql/resolvers.ts`.
 | news | ✅ completo (noticias) | `news/` | `news.service.ts` |
 | media | ✅ completo (biblioteca de imágenes) | `media/` | `media.service.ts` |
 | banner | ✅ completo (carrusel de la portada) | `banner/` | `banner.service.ts` |
+| site-settings | ✅ completo (configuración global del sitio) | `site-settings/` | `site-settings.service.ts` |
 
 `motorcycle` es la referencia de patrón completa (schema Drizzle, migración, service, tipos, validadores Zod, módulo GraphQL con query/mutations).
 
@@ -89,6 +90,22 @@ Segundo dominio del proyecto (después de `news`) donde **la lectura pública y 
 - **Vigencia opcional en las dos puntas**: `startsAt` ausente = ya vigente; `endsAt` ausente = no vence nunca. Los dos aceptan `null` explícito en la edición (igual que `publishedAt` en `news`) para poder volver a "siempre vigente" sin tocar el resto de la ficha. El Zod rechaza `endsAt` anterior a `startsAt` cuando llegan los dos.
 - **`imageMobile` es opcional**: si falta, el sitio usa `image` también en pantallas chicas. A diferencia de las fechas, **no acepta `null`** (mismo criterio que `service.image`/`news.image`: un campo de imagen opcional no se puede limpiar explícitamente desde la ficha, solo se reemplaza por otra URL — es una limitación conocida y pareja en todo el proyecto, no algo nuevo de este dominio).
 
+### `site-settings` (Fase 6 del plan CMS)
+
+**Es el único dominio del proyecto que es un registro único, no una lista.** La tabla `site_settings` tiene exactamente una fila, con `id SMALLINT PRIMARY KEY DEFAULT 1 CHECK (id = 1)` (migración `011`): el `CHECK` impide que exista una segunda fila incluso si alguien intenta un `INSERT` a mano. No hay `siteSettingsAdd`, `siteSettingsRemove`, `siteSettingsRestore` ni `siteSettingsPurge` — no hay papelera, no hay `deletedAt`. Solo `siteSettings` (query pública, sin argumentos) y `siteSettingsEdit` (con `requireAuth`), y las dos siempre trabajan sobre la fila `id = 1`. `site-settings.service.ts` lanza `NotFoundError` si esa fila no existe, en vez de devolver `null` o crearla sola: en un ambiente migrado correctamente eso nunca pasa, y si pasa es porque falta `npm run migrate`.
+
+**La migración `011` siembra la fila con los valores que estaban quemados en `web`**, para que el sitio se vea igual al terminar la fase — con dos excepciones documentadas en la propia migración: `phone` no hereda el `+52 55 1234 5678` de `footer-data.json` (prefijo de México en un sitio colombiano, dato de prueba sin limpiar) sino un placeholder con prefijo `+57`; y los cuatro enlaces sociales, que en el código eran anclas rotas (`#facebook`...) y no URLs, se siembran en `NULL` en vez de preservar la ancla — sembrarla habría hecho fallar el primer guardado del panel por la validación de URL, aunque nadie tocara esos campos. Ver «Datos que faltan» en `docs/cms-plan/MEJORAS.md` para lo que hay que corregir con datos reales.
+
+**Contacto son cuatro campos, todos opcionales, todos texto libre salvo el formato:** `phone` (sin validar formato, se escribe como se marca), `email` (`z.string().email()`), `whatsapp` (nuevo en esta fase — no existía a nivel de sitio, solo por `service_point` — validado por cantidad de dígitos igual que el `urlWhatsApp` de `web`: entre 7 y 15 tras quitar todo lo que no sea dígito) y `address` (texto libre, consolida en un solo campo global lo que antes eran dos "sedes" de plantilla en el footer — no reemplaza las direcciones reales de `service_points`, que las administra la Fase 2).
+
+**Los cuatro enlaces sociales son URLs de verdad, no rutas**, a diferencia de `banner.link` (que puede ser interno, `/motos`): se validan con `z.string().url()`. Son las mismas cuatro redes que ya existen como íconos en `web/src/components/icon/Icon.tsx` (`facebook`, `instagram`, `twitter`, `youtube`) — no se agregó ninguna red nueva, fue decisión explícita del usuario.
+
+**SEO tiene alcance completo**, a diferencia de todo lo demás en esta fase (que solo mueve texto que ya existía): antes de la Fase 6, `web/src/app/layout.tsx` no tenía `openGraph`, `keywords` ni `twitter` card, así que `seoTitle`, `seoDescription`, `seoKeywords` (`string[]`, como `news.tags`) y `seoImage` (URL para Open Graph) llenan una laguna real, no solo mueven código. `layout.tsx` los consume en un `generateMetadata()` asíncrono en vez del `export const metadata` estático que había antes.
+
+**Textos es un solo campo: `siteName`.** Es deliberado — el usuario decidió que solo el nombre del sitio se administra (repetido antes en al menos ocho sitios: `footer-data.json`, `layout.tsx`, `manifest.json`, componentes de la home, autor por defecto de una noticia sin firma); la descripción de la empresa del footer y el resto de textos institucionales quedan fijos en el código, fuera de alcance.
+
+**`web/public/manifest.json` (PWA) queda fuera**, con el nombre repetido a mano: es un JSON estático servido sin build step de Next, no puede leer `site_settings` en tiempo real sin convertirse en una ruta dinámica (`app/manifest.ts`). Ver la nota en `docs/cms-plan/MEJORAS.md`.
+
 ## Autenticación
 
 Un solo rol admin (sin tabla de usuarios ni roles diferenciados, decisión de Fase 3): las credenciales viven en `ADMIN_EMAIL` / `ADMIN_PASSWORD_HASH` (bcrypt) por variable de entorno. La mutation `login(email, password)` (`src/graphql/modules/auth/`) verifica contra esas variables y devuelve un JWT (`src/shared/auth/jwt.ts`, secreto en `JWT_SECRET`). `getGraphQLContext` (`src/graphql/server.ts`) valida el header `Authorization: Bearer <token>` en cada request y expone `context.user` si es válido. Las queries de catálogo siguen siendo públicas; las mutaciones de escritura llaman a `requireAuth(context, operationName)` (`src/graphql/utils/error-handler.ts`) para exigir sesión — ver `motorcycle.resolvers.ts` como referencia a replicar en los demás dominios.
@@ -112,6 +129,8 @@ Al subir, `src/shared/images/process.ts` (sharp) reduce el lado mayor a 1600 px 
 - Eliminar un registro de contenido **no toca sus imágenes**: los archivos se borran solo desde la biblioteca de medios.
 
 `service_points` estrenó su papelera en la Fase 2, `services` en la Fase 3 y `news` en la Fase 4, las tres **sin migración nueva** para eso: la columna ya estaba desde la `006`. En `news` y en `banner`, además, `trashed` **solo tiene efecto con sesión**: sin ella el resolver lo ignora y siempre fuerza `false` (ver «`news` (Fase 4 del plan CMS)» y «`banner` (Fase 5 del plan CMS)» arriba). El patrón a seguir está en `../docs/cms-plan/PATRON.md` §1.1.
+
+**`site_settings` es la única excepción a "todo dominio nace con papelera"**: no tiene `deleted_at` ni lo va a tener. Es un registro único (Fase 6) — no hay nada que "trashear" en una fila que siempre existe y nunca se crea ni se borra, solo se edita.
 
 ## Patrones obligatorios
 

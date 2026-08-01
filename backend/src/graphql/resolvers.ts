@@ -7,6 +7,7 @@ import { serviceResolvers } from './modules/service/service.resolvers';
 import { newsResolvers } from './modules/news/news.resolvers';
 import { mediaResolvers } from './modules/media/media.resolvers';
 import { bannerResolvers } from './modules/banner/banner.resolvers';
+import { siteSettingsResolvers } from './modules/site-settings/site-settings.resolvers';
 
 // Nuevos dominios siguen el mismo patrón que motorcycle:
 // agregar su <domain>.resolvers.ts aquí.
@@ -19,4 +20,5 @@ export const resolvers: any = mergeResolvers([
   newsResolvers,
   mediaResolvers,
   bannerResolvers,
+  siteSettingsResolvers,
 ]);

@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import styles from "./Banner.module.scss";
 import { useImagePreload } from "@/hooks/useImagePreload";
 import { useIsClient } from "@/hooks/useHydration";
+import { useSiteSettings } from "@/hooks";
 import type { Banner as BannerItem } from "@/types/banner";
 
 // Fallback (mock, sin assets de marca): solo se usa si el backend no devuelve
@@ -28,6 +29,10 @@ export default function Banner({
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const isClient = useIsClient();
+  /* El mock de más abajo solo se usa sin banners reales, y lleva el nombre
+     del sitio (`site_settings.siteName`, Fase 6 del plan CMS) en vez de
+     "Yamaha Oriente" escrito a mano. */
+  const { siteName } = useSiteSettings();
 
   // Los banners reales del panel, o el mock si todavía no hay ninguno activo.
   const bannerSlides =
@@ -45,7 +50,7 @@ export default function Banner({
       : bannerImages.map((img, index) => ({
           imageUrl: img,
           imageUrlMobile: img,
-          title: "Yamaha Oriente",
+          title: siteName,
           caption:
             "Descubre la nueva generación de motocicletas Yamaha. Potencia, diseño y tecnología en perfecta armonía.",
           ctaLabel: "Explorar Modelos",

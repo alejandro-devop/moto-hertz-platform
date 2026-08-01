@@ -1,19 +1,6 @@
 {
   "company": {
-    "name": "Yamaha Oriente",
-    "description": "Tu destino para las mejores motocicletas Yamaha. Calidad, rendimiento e innovación en cada modelo.",
-    "locations": [
-      {
-        "title": "Sede Principal",
-        "value": "Medellín, Colombia",
-        "phone": "+57 (4) 123 4567"
-      },
-      {
-        "title": "Sucursal Norte",
-        "value": "Bogotá, Colombia",
-        "phone": "+57 (1) 234 5678"
-      }
-    ]
+    "description": "Tu destino para las mejores motocicletas Yamaha. Calidad, rendimiento e innovación en cada modelo."
   },
   "quickLinks": {
     "title": "Enlaces Rápidos",
@@ -36,23 +23,12 @@
     ]
   },
   "contact": {
-    "title": "Contacto",
-    "phone": "+52 55 1234 5678",
-    "email": "info@yamahaoriente.com"
+    "title": "Contacto"
   },
   "newsletter": {
     "title": "Newsletter",
     "description": "Recibe las últimas noticias y ofertas especiales",
     "placeholder": "Tu email",
     "buttonText": "Suscribirse"
-  },
-  "social": {
-    "links": [
-      { "platform": "facebook", "href": "#facebook", "label": "Facebook" },
-      { "platform": "instagram", "href": "#instagram", "label": "Instagram" },
-      { "platform": "twitter", "href": "#twitter", "label": "Twitter" },
-      { "platform": "youtube", "href": "#youtube", "label": "YouTube" }
-    ]
-  },
-  "copyright": "© 2026 Yamaha Oriente. Todos los derechos reservados."
+  }
 }

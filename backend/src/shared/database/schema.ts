@@ -241,3 +241,33 @@ export const media = pgTable('media', {
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
   deletedAt: timestamp('deleted_at'),
 });
+
+// ============================================
+// SITE_SETTINGS — configuración global del sitio (registro único)
+// ============================================
+/**
+ * Fase 6 del plan CMS: contacto, redes sociales, SEO y el nombre del sitio,
+ * sacados del código de `web`. **Registro único**: la migración `011` crea la
+ * fila con `id = 1` (con un `CHECK` que impide cualquier otra), sembrada con
+ * los valores que hoy están en el código — no hay `Add` ni `Remove`, solo
+ * `siteSettingsEdit`. Ver `docs/cms-plan/phases/06-configuracion-sitio.md`.
+ */
+export const siteSettings = pgTable('site_settings', {
+  id: integer('id').primaryKey().default(1),
+  siteName: varchar('site_name', { length: 255 }).notNull().default('Yamaha Oriente'),
+  phone: varchar('phone', { length: 50 }),
+  email: varchar('email', { length: 255 }),
+  /** Campo nuevo: no existía configuración de WhatsApp a nivel de sitio antes de esta fase. */
+  whatsapp: varchar('whatsapp', { length: 50 }),
+  /** Dirección física global, texto libre (no reemplaza `service_points`, que administra cada sede). */
+  address: text('address'),
+  socialFacebook: text('social_facebook'),
+  socialInstagram: text('social_instagram'),
+  socialTwitter: text('social_twitter'),
+  socialYoutube: text('social_youtube'),
+  seoTitle: varchar('seo_title', { length: 255 }),
+  seoDescription: varchar('seo_description', { length: 500 }),
+  seoKeywords: jsonb('seo_keywords').$type<string[]>().notNull().default([]),
+  seoImage: text('seo_image'),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+});

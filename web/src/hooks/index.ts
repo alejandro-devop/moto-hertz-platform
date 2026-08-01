@@ -11,6 +11,7 @@ export { useSimpleParallax } from "./useSimpleParallax";
 export { useVisibleParallax } from "./useVisibleParallax";
 export { useSmartParallax } from "./useSmartParallax";
 export { useInView } from "./useInView";
+export { useSiteSettings } from "./useSiteSettings";
 
 // API hooks
 export * from "./api";

@@ -123,6 +123,17 @@ en dos sin avisar y reordenar obliga a reescribir la línea.
 Cambiarlo es sustituir dos campos en `motorcycle-form-sheet.tsx` y ajustar el
 estado plano para que guarde `string[]` en vez de `string`.
 
+### El buscador de la barra superior no se esconde en `/configuracion`
+
+`/configuracion` (Fase 6) es la primera sección del panel sin lista ni
+búsqueda: no está en el mapa `BUSCADORES` de `admin-search.tsx`, así que ahí
+el buscador global cae en el destino por defecto (`/motos`) con su placeholder
+("Buscar por nombre o matrícula"). Escribir algo ahí saca al usuario de
+Configuración sin avisar. No se resolvió en esta fase porque `AdminSearch`
+asume que toda sección tiene una lista que buscar — resolverlo bien implica
+decidir qué hace el buscador (u ocultarlo) en cualquier sección futura que
+tampoco tenga lista, no solo en esta.
+
 ### Los desplegables de filtro miden 32 px, no 44
 
 `cms-admin/CLAUDE.md` manda objetivos de 44 px en móvil (`h-11 md:h-9`), pero la
@@ -157,9 +168,35 @@ que falta. Lo mismo aplica a los puntos de atención (Fase 2).
 
 En el modal de un servicio, el botón de la plantilla no hacía **nada**. La Fase 3
 lo convirtió en un enlace a `/puntos-atencion`, que es lo honesto mientras no
-haya un número de WhatsApp ni un agendamiento del negocio. Cuando la Fase 6
-(configuración del sitio) traiga el contacto general, ese botón debería abrir el
-chat o el agendamiento con el servicio ya nombrado.
+haya un número de WhatsApp ni un agendamiento del negocio. **La Fase 6 ya trajo
+el contacto general** (`site_settings.whatsapp`, hoy vacío — ver «Datos que
+faltan»): en cuanto tenga un número real, este botón debería abrir
+`https://wa.me/<whatsapp>` con el nombre del servicio en el mensaje, en vez de
+enlazar a `/puntos-atencion`.
+
+### Los enlaces institucionales del footer son anclas rotas
+
+`web/src/components/footer/footer-data.json` (`quickLinks` y `support`) sigue
+enlazando a `#inicio`, `#garantia`, `#manual`, `#repuestos`,
+`#servicio-tecnico`, `#faq`, etc. — anclas de una maqueta de una sola página
+que no llevan a ningún lado. Detectado al inventariar la Fase 6 (configuración
+del sitio); no es parte de esa fase porque son enlaces de navegación, no datos
+de configuración. Arreglarlos significa decidir a dónde debería ir cada uno
+(¿una página `/garantia`? ¿una sección de `/servicios`? ¿desaparecer del
+todo?), que es una decisión de contenido, no solo de código.
+
+### `web/manifest.json` no lee de `site_settings`
+
+El nombre y la descripción del sitio se administran desde `/configuracion`
+(Fase 6) para el `<title>`, el `<meta description>` y el Open Graph, pero
+`web/public/manifest.json` (el manifiesto de la PWA: `name`, `short_name`,
+`description`) sigue siendo un JSON estático servido sin build step de
+Next — no puede leer de la base de datos en tiempo real sin convertirlo en una
+ruta dinámica (`app/manifest.ts`, que Next sí soporta con un `export default
+async function` y un tipo `MetadataRoute.Manifest`). Se dejó fuera de la Fase 6
+a propósito para no arriesgar la integración con `next-pwa`
+(`next.config.ts`) sin poder probarla a fondo. Si el nombre del sitio cambia
+alguna vez, hay que recordar tocar este archivo a mano.
 
 ### `motorcycle` no tiene campo de placa
 
@@ -199,6 +236,29 @@ Y tres cosas que solo el dueño del negocio puede confirmar:
   Antioqueño", "Motos Hertz" y "YAMAHA El Retiro" en distintos sitios.
 - Si **Mega Scooter (Bogotá)** debe aparecer en el sitio público: el legacy lo
   lista como distribuidor y también lo ofrece en su selector de WhatsApp.
+
+### `site_settings` tiene dos campos sembrados a propósito sin dato real (Fase 6)
+
+La migración `011` puebla la fila única con los valores que ya estaban en el
+código, pero dos de ellos son placeholder, no el dato real:
+
+- **`phone`** quedó en `+57 300 000 0000`. El valor que había en el código
+  (`+52 55 1234 5678`, en `footer-data.json`) tenía el prefijo de México en un
+  sitio colombiano — dato de prueba sin limpiar de la plantilla original, no
+  algo que valiera la pena preservar. Hay que corregirlo desde
+  `/configuracion` → Contacto con el teléfono real.
+- **`whatsapp`** quedó vacío (`null`). Es un campo nuevo de esta fase: no
+  existía configuración de WhatsApp a nivel de sitio antes (solo por punto de
+  atención, Fase 2). Mientras esté vacío, el pie de página no muestra el
+  enlace de WhatsApp — no es un error, es el comportamiento esperado de un
+  campo opcional sin valor. Cargarlo también resuelve el punto de arriba
+  («El botón «Solicitar» de un servicio…»).
+
+Los cuatro enlaces sociales (`socialFacebook/Instagram/Twitter/Youtube`)
+también quedaron en `null` — antes eran anclas rotas (`#facebook`, …), nunca
+enlaces reales, así que no había nada que preservar. Cargarlos desde
+`/configuracion` → Redes sociales hace aparecer el ícono correspondiente en el
+pie de página (hoy no se muestra ninguno).
 
 ---
 

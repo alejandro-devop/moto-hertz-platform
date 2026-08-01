@@ -176,6 +176,26 @@ El módulo `medios` (biblioteca de imágenes) sigue el mismo patrón de lista, c
 
 **La barra inferior de móvil dejó de asumir cinco destinos fijos.** Hasta esta fase `navLinks` tenía exactamente cinco entradas y `admin-tabbar.tsx` las pintaba todas. Con `banners` como sexta, `AdminTabBar` ahora corta en los primeros cinco (`DESTINOS_BARRA`) y el resto —hoy, `medios`— se ve en `MoreSheet`, que ganó una lista de enlaces arriba de "Apariencia". `AdminRail` (escritorio) no cambió: ya recorría `navLinks` completo por grupo.
 
+### Decisiones del módulo `configuracion`
+
+> Construido en la **Fase 6 del plan CMS** (`../docs/cms-plan/phases/06-configuracion-sitio.md`), la primera (y única) sección que **no es una lista**: `site_settings` es un registro único, se edita, no se crea ni se elimina.
+
+**No hay `page.tsx` con `ListaResponsive` delante.** `/configuracion` entra directo a la ficha: no hay `filters.ts`, `<x>-row.tsx`, `<x>-actions.tsx` ni `<x>-filters.tsx` — nada de eso tiene sentido sin una lista. Tampoco hay papelera: `site_settings` no tiene `deleted_at` (ver `backend/CLAUDE.md`).
+
+**`FormSheet` no se reutiliza tal cual, `useFichaState` sí.** `FormSheet` es una hoja lateral que se abre desde una fila y se cierra volviendo a la lista — aquí no hay a dónde volver, así que `site-settings-form.tsx` reimplementa el mismo armazón visual (pestañas con contador de errores, barra de guardado fija) **sin el `<Sheet>`** ni el botón «Cerrar» ni el aviso de «¿Descartar los cambios?» (no tiene sentido preguntar si no hay nada a lo que volver). Lo que sí se reutiliza tal cual es `useFichaState`, con `open: true` fijo — la ficha nace abierta y se queda abierta toda la vida de la página.
+
+**El `registro` de la ficha lo controla el propio componente, no la query directamente.** `page.tsx` guarda la fila en un `useState<SiteSettings | null>` que solo se actualiza (a) la primera vez que llega la consulta y (b) con la respuesta de `siteSettingsEdit` tras guardar — nunca automáticamente en cada refetch de TanStack Query en segundo plano (por ejemplo, al recuperar el foco de la ventana). Si se hubiera atado `registro` directo a `data` de `useQuery`, un refetch a mitad de una edición sin guardar habría reseteado el formulario y borrado lo que se estaba escribiendo, porque `useFichaState` recarga el formulario cada vez que cambia la referencia de `registro`.
+
+**Nueva entrada de navegación, grupo propio.** `nav-links.ts` ganó un tercer grupo, `'Sistema'` (antes solo `'Catálogo'` y `'Contenido'`), porque `/configuracion` no es ni catálogo ni contenido del sitio. Con Configuración como séptima entrada, sigue desbordando a `MoreSheet` en móvil junto con Medios (ver «Decisiones del módulo `banners`» arriba: `AdminTabBar` corta en las primeras cinco).
+
+**Contacto, redes, SEO y textos — cuatro secciones, en ese orden**, el mismo del documento de la fase. `whatsapp` es el único campo genuinamente nuevo (no existía configuración de WhatsApp a nivel de sitio); el resto mueve texto que ya estaba quemado en `web` (ver `backend/CLAUDE.md`, sección `site-settings`, para qué se sembró y por qué dos valores son placeholder).
+
+**Validación de formato en tres campos**, con el mismo criterio que el Zod del backend dicho en el idioma de la ficha (`site-settings-form-state.ts`): correo (`email`), URL completa para los cuatro enlaces sociales y la imagen de SEO, y cantidad de dígitos para WhatsApp. El campo de correo usa `type="email"`, así que el navegador ya bloquea un `hola@` con su propio aviso nativo antes de que el JS del formulario llegue a evaluar Zod — el mensaje «Correo inválido» de Zod es la segunda línea de defensa (por ejemplo, para un valor que pase la validación nativa del navegador pero no la de Zod), no la única.
+
+**`seoKeywords` se edita con `ListaEditable`**, igual que `tags` de una noticia: es una lista sin orden relevante, se reusa el componente porque agregar/quitar renglones cortos es lo mismo, aunque mover uno arriba o abajo no cambie nada.
+
+**Los campos de texto opcionales heredan la misma limitación que las imágenes**: `formToInput` usa `textoOpcional` (`"" → undefined`), así que un campo que ya tiene valor no se puede vaciar desde la ficha, solo reemplazar por otro valor — mismo criterio documentado para `image`/`imageMobile` en motos, servicios, noticias y banners. `seoKeywords` es la excepción: al ser un arreglo, `[]` es un valor legítimo que sí viaja y sí limpia la lista.
+
 ## Dev
 
 ```bash

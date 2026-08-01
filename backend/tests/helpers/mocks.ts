@@ -156,6 +156,25 @@ export const createMockBanner = (overrides = {}) => ({
   ...overrides,
 });
 
+export const createMockSiteSettings = (overrides = {}) => ({
+  id: 1,
+  siteName: 'Yamaha Oriente',
+  phone: '+57 300 000 0000',
+  email: 'info@yamahaoriente.com',
+  whatsapp: null,
+  address: 'Medellín, Colombia',
+  socialFacebook: null,
+  socialInstagram: null,
+  socialTwitter: null,
+  socialYoutube: null,
+  seoTitle: 'Yamaha Oriente',
+  seoDescription: 'Sitio web de Yamaha Oriente',
+  seoKeywords: [],
+  seoImage: null,
+  updatedAt: new Date('2026-01-01'),
+  ...overrides,
+});
+
 export const resetAllMocks = () => {
   jest.clearAllMocks();
   mockDbPool.query.mockReset();

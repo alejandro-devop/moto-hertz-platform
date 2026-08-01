@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import Menu from "@/components/menu";
 import Footer from "@/components/footer";
+import { useSiteSettings } from "@/hooks";
 import { getNews, getNewsBySlug } from "@/services/news";
 import { sanitizeNewsContent } from "@/utils/sanitize-news-content";
 import type { News } from "@/types/news";
@@ -52,6 +53,10 @@ export default function NewsDetailPage() {
     queryKey: ["news"],
     queryFn: () => getNews({ page: 1, limit: 100 }),
   });
+
+  /* Autor por defecto de una noticia sin firma: el nombre del sitio, no
+     "Yamaha Oriente" escrito a mano (Fase 6 del plan CMS). */
+  const { siteName } = useSiteSettings();
 
   if (isLoading) {
     return (
@@ -114,7 +119,7 @@ export default function NewsDetailPage() {
                 <span className={styles.authorAvatar}>
                   {(article.author?.trim().charAt(0) || "?").toUpperCase()}
                 </span>
-                {article.author?.trim() || "Yamaha Oriente"}
+                {article.author?.trim() || siteName}
               </span>
               <span>{formatDate(article.publishedAt)}</span>
               {article.readTime && <span>{article.readTime} de lectura</span>}

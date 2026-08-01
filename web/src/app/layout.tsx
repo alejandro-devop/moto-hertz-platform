@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { QueryProvider } from "@/providers";
 import WelcomeModal from "@/components/welcome-modal";
+import { getSiteSettingsConFallback } from "@/services/site-settings";
 import "./globals.scss";
 
 const geistSans = Geist({
@@ -26,14 +27,48 @@ const geistMono = Geist_Mono({
   weight: ["400", "500"], // Solo los pesos que usamos
 });
 
-export const metadata: Metadata = {
-  title: "Yamaha Oriente",
-  description: "Sitio web de Yamaha Oriente",
-  icons: {
-    icon: "/assets/logos/favicon.ico",
-  },
-  manifest: "/manifest.json",
-};
+/**
+ * Metadatos de SEO desde `site_settings` (Fase 6 del plan CMS): título,
+ * descripción, palabras clave e imagen para compartir en redes (Open
+ * Graph/Twitter). Antes de esta fase el sitio no tenía `openGraph`, `keywords`
+ * ni `twitter` — no era texto quemado que se movió, era una laguna real.
+ *
+ * `generateMetadata` corre en el servidor en cada request (Next 15 no cachea
+ * `fetch` por defecto): un cambio en el panel se ve en la siguiente carga de
+ * página, sin esperar un redeploy. `getSiteSettingsConFallback` nunca
+ * rechaza — si el backend no responde, el sitio arranca con el título y la
+ * descripción que ya tenía antes de esta fase, nunca con una pestaña en blanco.
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettingsConFallback();
+  const title = settings.seoTitle?.trim() || settings.siteName;
+  const description =
+    settings.seoDescription?.trim() || `Sitio web de ${settings.siteName}`;
+  const images = settings.seoImage ? [{ url: settings.seoImage }] : undefined;
+
+  return {
+    title,
+    description,
+    keywords: settings.seoKeywords.length > 0 ? settings.seoKeywords : undefined,
+    icons: {
+      icon: "/assets/logos/favicon.ico",
+    },
+    manifest: "/manifest.json",
+    openGraph: {
+      title,
+      description,
+      siteName: settings.siteName,
+      type: "website",
+      images,
+    },
+    twitter: {
+      card: images ? "summary_large_image" : "summary",
+      title,
+      description,
+      images,
+    },
+  };
+}
 
 export default function RootLayout({
   children,
