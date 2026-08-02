@@ -104,18 +104,6 @@ Lo que hay que decidir: dónde se guarda "este usuario ya vio el recorrido de
 motos" (hoy no hay tabla de usuarios; `localStorage` alcanza), y si el recorrido
 se actualiza solo cuando el módulo cambia o hay que reescribirlo a mano.
 
-### Elegir una imagen ya subida desde la ficha
-
-El selector de imágenes sube archivos nuevos o acepta una URL pegada, pero **no
-deja escoger algo que ya está en la biblioteca**. Para reusar una foto hay que
-ir a `/medios`, copiar la URL y volver. Es el hueco más visible que dejó la
-Fase 1; un diálogo "Elegir de la biblioteca" dentro de
-`components/admin/image-picker.tsx` es trabajo de una tarde.
-
-**Confirmado como pedido explícito**: el mismo componente (`image-picker.tsx`)
-es el que usan motos, banners, servicios y noticias, así que arreglarlo una vez
-resuelve el selector "como en WordPress" en todos esos lugares a la vez.
-
 ---
 
 ## Sitio público

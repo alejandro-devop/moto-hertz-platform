@@ -4,7 +4,9 @@ import { useEffect, useRef, useState } from 'react';
 import {
   ArrowDown,
   ArrowUp,
+  Check,
   ImagePlus,
+  Images,
   Link2,
   Loader2,
   Star,
@@ -13,18 +15,29 @@ import {
   X,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
 import { Field } from '@/components/admin/form-fields';
 import { StatusPill } from '@/components/admin/status-pill';
 import { Thumb } from '@/components/admin/thumb';
+import { textoBuscable } from '@/lib/format';
 import { ACEPTA_IMAGENES, esImagen, subirImagen } from '@/lib/media-upload';
+import { useMediaQuery } from '@/lib/use-media-library';
 import { cn } from '@/lib/utils';
 
 /**
  * Subida de imágenes del panel, en dos variantes sobre el mismo motor:
  * `ImagePicker` (una sola) y `GaleriaImagenes` (varias, con portada y orden).
  *
- * Tres decisiones que se ven en el código:
+ * Cuatro decisiones que se ven en el código:
  *
  * - **Las fotos se suben de a una, en el orden en que se eligieron.** Una moto
  *   trae 16–18 y llegan numeradas; subirlas en paralelo las desordena y pone a
@@ -33,6 +46,9 @@ import { cn } from '@/lib/utils';
  *   imágenes alojadas fuera y romperlas no es una opción.
  * - **Quitar una foto de aquí solo la desvincula.** El archivo sigue en la
  *   biblioteca (`/medios`); se borra desde allá.
+ * - **También se puede reusar una imagen ya subida**, con `SelectorBiblioteca`
+ *   (mismo `mediaList` que consume la página `/medios`). Evita volver a subir
+ *   la misma foto para varias fichas.
  */
 
 interface EstadoSubida {
@@ -318,6 +334,161 @@ function PegarUrls({
   );
 }
 
+/* --------------------------------------------------- biblioteca (medios) --- */
+
+/**
+ * Elegir entre las imágenes ya subidas a `/medios`, en vez de volver a
+ * subirlas o pegar su URL de memoria. En modo simple, tocar una imagen la
+ * elige y cierra; en modo múltiple, toca varias y confirma con el botón.
+ */
+function SelectorBiblioteca({
+  open,
+  onOpenChange,
+  multiple,
+  excluir = [],
+  onElegir,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  multiple?: boolean;
+  excluir?: string[];
+  onElegir: (urls: string[]) => void;
+}) {
+  const { data, isLoading, isError } = useMediaQuery(false);
+  const [busqueda, setBusqueda] = useState('');
+  const [elegidas, setElegidas] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    if (!open) return;
+    setBusqueda('');
+    setElegidas(new Set());
+  }, [open]);
+
+  const disponibles = (data ?? []).filter((item) => !excluir.includes(item.url));
+  const textoBuscado = textoBuscable(busqueda.trim());
+  const filtradas = textoBuscado
+    ? disponibles.filter((item) => textoBuscable(item.originalName, item.key).includes(textoBuscado))
+    : disponibles;
+
+  function elegir(url: string) {
+    if (!multiple) {
+      onElegir([url]);
+      onOpenChange(false);
+      return;
+    }
+    setElegidas((prev) => {
+      const next = new Set(prev);
+      if (next.has(url)) next.delete(url);
+      else next.add(url);
+      return next;
+    });
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-2xl">
+        <DialogHeader>
+          <DialogTitle>Elegir de la biblioteca</DialogTitle>
+          <DialogDescription>
+            {multiple
+              ? 'Imágenes ya subidas a Medios. Toca las que quieras agregar.'
+              : 'Imágenes ya subidas a Medios.'}
+          </DialogDescription>
+        </DialogHeader>
+
+        <Input
+          type="search"
+          placeholder="Buscar por nombre…"
+          value={busqueda}
+          onChange={(event) => setBusqueda(event.target.value)}
+          className="h-10"
+        />
+
+        {isLoading ? (
+          <div className="grid grid-cols-4 gap-2 sm:grid-cols-5">
+            {Array.from({ length: 10 }).map((_, index) => (
+              <Skeleton key={index} className="aspect-square rounded-lg" />
+            ))}
+          </div>
+        ) : isError ? (
+          <p className="py-8 text-center text-sm text-muted-foreground">
+            No se pudo cargar la biblioteca.
+          </p>
+        ) : filtradas.length === 0 ? (
+          <p className="py-8 text-center text-sm text-muted-foreground">
+            {disponibles.length === 0
+              ? 'Todavía no hay imágenes en la biblioteca. Sube alguna primero.'
+              : 'Ninguna imagen coincide con la búsqueda.'}
+          </p>
+        ) : (
+          <div className="grid max-h-80 grid-cols-4 gap-2 overflow-y-auto sm:grid-cols-5">
+            {filtradas.map((item) => {
+              const activa = elegidas.has(item.url);
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => elegir(item.url)}
+                  title={item.originalName ?? item.key}
+                  className={cn(
+                    'relative aspect-square overflow-hidden rounded-lg border-2 transition-colors',
+                    activa ? 'border-primary' : 'border-transparent hover:border-border'
+                  )}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={item.url}
+                    alt={item.originalName ?? ''}
+                    className="size-full object-cover"
+                  />
+                  {activa ? (
+                    <span className="absolute top-1 right-1 grid size-5 place-items-center rounded-full bg-primary text-primary-foreground">
+                      <Check className="size-3" />
+                    </span>
+                  ) : null}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {multiple ? (
+          <div className="flex justify-end gap-2">
+            <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
+              Cancelar
+            </Button>
+            <Button
+              type="button"
+              disabled={elegidas.size === 0}
+              onClick={() => {
+                onElegir(Array.from(elegidas));
+                onOpenChange(false);
+              }}
+            >
+              {elegidas.size === 0 ? 'Agregar' : `Agregar ${elegidas.size}`}
+            </Button>
+          </div>
+        ) : null}
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+/** El botón que abre `SelectorBiblioteca`, con el mismo estilo que el resto de disparadores. */
+function AbrirBiblioteca({ onClick }: { onClick: () => void }) {
+  return (
+    <Button
+      type="button"
+      variant="ghost"
+      onClick={onClick}
+      className="h-9 self-start text-[13px] text-muted-foreground"
+    >
+      <Images />
+      Elegir de la biblioteca
+    </Button>
+  );
+}
+
 /* ------------------------------------------------------------- galería --- */
 
 export function GaleriaImagenes({
@@ -337,6 +508,7 @@ export function GaleriaImagenes({
   const { subidas, enCurso, agregar, descartar } = useSubidas((url) =>
     onChange([...actuales.current, url])
   );
+  const [bibliotecaAbierta, setBibliotecaAbierta] = useState(false);
 
   function mover(index: number, delta: number) {
     const destino = index + delta;
@@ -430,10 +602,20 @@ export function GaleriaImagenes({
 
       <ZonaSubida multiple onFiles={agregar} ocupada={enCurso > 0} />
 
+      <AbrirBiblioteca onClick={() => setBibliotecaAbierta(true)} />
+
       <PegarUrls
         multiple
         yaPuestas={fotos}
         onAgregar={(urls) => onChange([...fotos, ...urls])}
+      />
+
+      <SelectorBiblioteca
+        open={bibliotecaAbierta}
+        onOpenChange={setBibliotecaAbierta}
+        multiple
+        excluir={fotos}
+        onElegir={(urls) => onChange([...fotos, ...urls])}
       />
 
       <p className="text-xs text-muted-foreground">
@@ -473,6 +655,7 @@ export function ImagePicker({
   alt?: string;
 }) {
   const { subidas, enCurso, agregar, descartar } = useSubidas((url) => onChange(url));
+  const [bibliotecaAbierta, setBibliotecaAbierta] = useState(false);
 
   return (
     <div className="flex flex-col gap-3">
@@ -498,7 +681,16 @@ export function ImagePicker({
 
       <ZonaSubida compacta onFiles={agregar} ocupada={enCurso > 0} />
 
+      <AbrirBiblioteca onClick={() => setBibliotecaAbierta(true)} />
+
       <PegarUrls yaPuestas={value ? [value] : []} onAgregar={(urls) => onChange(urls[0] ?? '')} />
+
+      <SelectorBiblioteca
+        open={bibliotecaAbierta}
+        onOpenChange={setBibliotecaAbierta}
+        excluir={value ? [value] : []}
+        onElegir={(urls) => onChange(urls[0] ?? '')}
+      />
     </div>
   );
 }

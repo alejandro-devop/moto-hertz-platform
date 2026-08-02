@@ -253,11 +253,12 @@ Requiere `../backend` corriendo en `http://localhost:8080` (`npm run docker:up` 
 
 > Construido en la **Fase 1 del plan CMS** (`../docs/cms-plan/phases/01-medios.md`).
 
-**Sí hay subida de imágenes.** Ningún campo de imagen es un `<Input>` de URL: se usa `components/admin/image-picker.tsx`, que trae dos componentes sobre el mismo motor —`ImagePicker` (una imagen) y `GaleriaImagenes` (varias, con portada y orden)—. Los dos hacen arrastrar y soltar, progreso por foto, `accept="image/*"` (en el teléfono ofrece cámara o galería) y **mantienen el campo de pegar URLs externas**, porque el catálogo legacy tiene fotos alojadas fuera.
+**Sí hay subida de imágenes.** Ningún campo de imagen es un `<Input>` de URL: se usa `components/admin/image-picker.tsx`, que trae dos componentes sobre el mismo motor —`ImagePicker` (una imagen) y `GaleriaImagenes` (varias, con portada y orden)—. Los dos hacen arrastrar y soltar, progreso por foto, `accept="image/*"` (en el teléfono ofrece cámara o galería) y **mantienen el campo de pegar URLs externas**, porque el catálogo legacy tiene fotos alojadas fuera. **También se puede reusar una foto ya subida** con el botón «Elegir de la biblioteca» (`SelectorBiblioteca`, mismo archivo): abre un diálogo con grilla y búsqueda sobre `mediaList`, en modo simple (elegir cierra) o múltiple (elegir varias + confirmar). Pedido explícito en `../docs/cms-plan/MEJORAS.md` — "como en WordPress" — y como es el mismo componente en motos, banners, servicios y noticias, se resolvió una sola vez para los cuatro.
 
 | Pieza | Archivo | Qué resuelve |
 | --- | --- | --- |
 | `ImagePicker`, `GaleriaImagenes`, `SubidorMedios` | `components/admin/image-picker.tsx` | Los campos de imagen de toda ficha. |
+| `useMediaQuery`, `MEDIA_KEY` | `lib/use-media-library.ts` | La consulta paginada a `mediaList`, compartida por `/medios` y `SelectorBiblioteca`. |
 | `subirImagen`, `formatBytes`, `formatDimensiones` | `lib/media-upload.ts` | La subida con progreso y los formatos de la biblioteca. |
 | `/api/media/upload` | `app/api/media/upload/route.ts` | Reenvía el multipart al backend con el JWT de la cookie. |
 | Biblioteca | `app/(admin)/medios/` | Listar, buscar, copiar URL, papelera. |
