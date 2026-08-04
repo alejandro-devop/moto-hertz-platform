@@ -408,6 +408,19 @@ porque abstraerlo mal cuesta más que escribirlo dos veces:
       `/motos` en silencio (`tieneBuscador()` en `admin-search.tsx`).
 - [ ] `backend/CLAUDE.md` (tabla de dominios + decisiones) y
       `cms-admin/CLAUDE.md` (decisiones del módulo) actualizados.
+- [ ] **La sección nace con su recorrido guiado.** Desde el plan de tours
+      (`docs/tours-plan/PLAN.md`, Fases 0-4 ya hechas), toda sección nueva del
+      panel se explica sola la primera vez que se entra — no es un extra que se
+      agrega después. En `cms-admin/lib/tours/registry.ts` se llama a
+      `tourDeLista` / `tourDeFicha` con los sustantivos de la sección (si tiene
+      lista y ficha; si no, ver cómo lo resolvieron `paginas.ficha` y
+      `configuracion.ficha`, escritos a mano reusando las mismas anclas), se
+      pasa `tour="<clave>"` al `PageHeader`, y se llama `useTour('<clave>',
+      listo)` en la página. Las anclas compartidas (`lista.crear`,
+      `lista.filtros`, `lista.tabla`, `lista.acciones`, `ficha.secciones`,
+      `ficha.obligatorio`, `ficha.guardar`) ya están puestas en los componentes
+      de §2.2 — lo único que se escribe son los pasos propios de lo que hace
+      distinta a esta sección, en `extra`. Máximo 5 o 6 pasos por recorrido.
 
 ---
 

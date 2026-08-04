@@ -165,7 +165,7 @@ de la gente quiere de verdad; el reinicio es para empezar de cero.
 | 2 | Catálogo | Puntos de atención y Servicios. | ✅ hecha |
 | 3 | Contenido | Noticias, Banners y Medios (incluido el selector de imágenes). | ✅ hecha |
 | 4 | Sistema y ayuda | Páginas, Configuración, y el panel «Ayuda y recorridos» completo. | ✅ hecha |
-| 5 | Móvil, accesibilidad y cierre | El panel en móvil, teclado y foco, QA final. | pendiente |
+| 5 | Móvil, accesibilidad y cierre | El panel en móvil, teclado y foco, QA final. | ✅ hecha |
 
 El orden no es caprichoso: **las Fases 0 y 1 son el 60 % del trabajo**. De la 2
 a la 4, cada sección debería costar poco más que escribir sus textos y colgar
@@ -451,7 +451,46 @@ recorridos (visto, saltado, sin ver), se reinicia uno solo y solo vuelve ese.
 
 ---
 
-### Fase 5 — Móvil, accesibilidad y cierre
+### Fase 5 — Móvil, accesibilidad y cierre ✅
+
+> **Cómo quedó.** Esta fase no encontró un solo bug de producto — encontró que
+> las cuatro fases anteriores ya habían resuelto casi todo por diseño, y lo
+> que faltaba era medirlo con un navegador real de 390×844 en vez de dar por
+> buena la teoría.
+>
+> **El teclado y el foco no se tocaron: ya funcionaban**, sin que nadie lo
+> hubiera pedido a propósito. `disableActiveInteraction: true` —puesto desde
+> la Fase 0 para que nadie interactúe con el elemento señalado mientras el
+> recorrido corre— le agrega `pointer-events: none !important`, y la propia
+> función de `driver.js` que arma la lista de elementos alcanzables con `Tab`
+> descarta cualquier elemento con `pointer-events: none`. El efecto es que el
+> elemento señalado **nunca entra al ciclo de tabulación**: `Tab` nunca se
+> escapa del popover ni activa por accidente un botón real detrás del
+> recorrido. Verificado con seis `Tab` seguidos por CDP sin salir del popover,
+> y un `Esc` que cierra y deja la fila en la base con `status: skipped` — el
+> mismo camino que ya usaba el botón «×».
+>
+> **Verificado a 390×844 de verdad**, no en una ventana angosta de escritorio.
+> El filtrado `solo: 'movil' | 'escritorio'` deja los pasos correctos en cada
+> pantalla (la bienvenida corta a 3 pasos con los de `panel.tabbar`, en vez de
+> los 5 de escritorio), ningún popover midió fuera del viewport en ninguna de
+> las cinco secciones probadas, y la ficha a pantalla completa con un paso
+> `seccion` (los horarios de un punto de atención) abre su pestaña y señala el
+> editor igual que en escritorio — con la salvedad visual, aceptada, de que en
+> un editor tan alto como el de horarios el propio popover tapa el último
+> control (`Copiar a los demás`); el texto del paso sigue siendo legible.
+>
+> **`prefers-reduced-motion` ya se respetaba** (`animate: !prefiereMenosMovimiento()`
+> en `run-tour.ts`, de la Fase 0): con la preferencia activada, el `<body>`
+> pierde la clase `driver-fade` y usa `driver-simple`. Se verificó con
+> `Emulation.setEmulatedMedia` sobre CDP, no hizo falta cambiar código.
+>
+> **Lo único que se escribió en esta fase fue la documentación**: el hallazgo
+> de teclado/foco y la verificación móvil quedaron en
+> [`cms-admin/CLAUDE.md`](../../cms-admin/CLAUDE.md), sección «Recorridos
+> guiados», y la regla de que toda sección nueva nace con su tour quedó en
+> [`PATRON.md`](../cms-plan/PATRON.md), en la lista de comprobación antes de
+> cerrar una sección.
 
 **Objetivo.** Que el tour no sea una cosa de escritorio con una versión rota en
 el teléfono.
