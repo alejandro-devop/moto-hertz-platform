@@ -247,6 +247,17 @@ idempotente desde el primer día, no parchearse en la Fase 5.
 > **El paso de la papelera sí entró en la plantilla**, y fue la decisión más
 > rentable: es la pieza menos evidente del panel entero y ahora las ocho
 > secciones la explican gratis.
+>
+> **Después, revisándolo, el usuario pidió que el recorrido dijera qué es cada
+> opción del menú, no solo que el menú existe** — y tenía razón: la bienvenida
+> presentaba tres grupos sin decir qué se administra en ninguna sección. La
+> bienvenida subió a **versión 3**: un paso por grupo de la barra lateral, con
+> sus secciones y media línea cada una. Esa media línea vive en `navLinks`
+> (`descripcion`), no en el recorrido, así que una sección nueva queda
+> explicada por el solo hecho de declararse — no hay un texto paralelo que se
+> olvide. Para que cupiera sin pasarse del tope de seis pasos, «ver el sitio» y
+> «cambiar el tema» se juntaron en uno: dos controles vecinos y triviales que
+> gastaban dos pasos de un presupuesto que hacía falta para el menú.
 
 **Objetivo.** Escribir de verdad los tres tours que después se copian: el de
 bienvenida y las dos plantillas.

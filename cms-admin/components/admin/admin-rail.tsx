@@ -7,6 +7,7 @@ import { navGroups, navLinks } from '@/app/(admin)/nav-links';
 import { BrandMark } from '@/components/admin/brand-mark';
 import { LogoutButton } from '@/components/admin/logout-button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { anclaDeGrupo } from '@/lib/tours/grupos';
 import { tourAnchor } from '@/lib/tours/anchor';
 import { cn } from '@/lib/utils';
 
@@ -47,7 +48,11 @@ export function AdminRail({
           const links = navLinks.filter((link) => link.group === group);
           if (links.length === 0) return null;
           return (
-            <div key={group} className="flex flex-col gap-0.5">
+            <div
+              key={group}
+              {...tourAnchor(anclaDeGrupo(group))}
+              className="flex flex-col gap-0.5"
+            >
               {collapsed ? (
                 <span className="mx-auto my-2 h-px w-6 bg-rail-border" aria-hidden />
               ) : (

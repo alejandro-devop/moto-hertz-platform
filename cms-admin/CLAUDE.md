@@ -298,6 +298,10 @@ Son **genéricas, sin el nombre de la sección** — `lista.tabla`, no `motos.ta
 
 **Los estilos del popover se reescriben en `globals.css` (`.driver-popover.tour-panel`).** La hoja que trae la librería tiene los colores quemados para fondo blanco; sin ese bloque, el recorrido se ve como una pieza ajena y en tema oscuro queda ilegible.
 
+> **Y ahí mordió otra vez la trampa de especificidad de la sección «Sistema de diseño».** La regla genérica `.tour-panel .driver-popover-navigation-btns button` (0,3,1) le ganaba a `.tour-panel .driver-popover-next-btn` (0,3,0), así que el botón principal del recorrido se veía igual que «Atrás» — desde la Fase 0 hasta que se midió. Por eso el selector del botón de avanzar pasa por `.driver-popover-navigation-btns`, que parece de más y no lo es. Se comprueba con `getComputedStyle(el).backgroundColor`, no leyendo el CSS.
+
+**Lo que hace cada sección se escribe una sola vez, en `nav-links.ts`.** Cada `NavLink` tiene una `descripcion` de media línea, y el recorrido de bienvenida arma con ella la lista de secciones de cada grupo (`secciones()` en `registry.ts`). Una sección nueva queda explicada por el solo hecho de declararse ahí — no hay un texto paralelo en el recorrido que se olvide de actualizar. `driver.js` mete la descripción con `innerHTML`, así que se puede maquetar; lo que va ahí lo escribimos nosotros, nunca datos de nadie, que es la única razón por la que eso es seguro.
+
 ## Dev
 
 ```bash

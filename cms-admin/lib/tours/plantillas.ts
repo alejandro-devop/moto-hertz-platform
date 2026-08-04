@@ -44,18 +44,23 @@ interface OpcionesLista {
   extra?: PasoTour[];
 }
 
-export type PasoListaId = 'crear' | 'filtros' | 'papelera' | 'tabla' | 'acciones';
+export type PasoListaId = 'crear' | 'filtros' | 'papelera' | 'tabla' | 'acciones' | 'ayuda';
 
 /**
- * El recorrido de una lista. Cinco pasos, en el orden en que se usa la
- * pantalla: primero cómo se crea algo, después cómo se encuentra, y al final
- * qué se le puede hacer.
+ * El recorrido de una lista. Seis pasos, en el orden en que se usa la
+ * pantalla: primero cómo se crea algo, después cómo se encuentra, luego qué se
+ * le puede hacer, y al final dónde volver a ver todo esto.
  *
- * **Sin paso de paginación**, aunque el plan de la fase lo listaba. Son cinco
- * pasos y el tope son seis: gastar el que queda en explicar unos botones de
- * «anterior / siguiente» que no ha confundido a nadie, en vez de dejar sitio
- * para lo propio de cada sección, sale caro. Una sección que lo necesite lo
- * agrega en `extra`.
+ * **Sin paso de paginación**, aunque el plan de la fase lo listaba: unos
+ * botones de «anterior / siguiente» que no han confundido a nadie no valen un
+ * paso del presupuesto. Una sección que lo necesite lo agrega en `extra`.
+ *
+ * **Una sección con `extra` se pasa del tope de seis**, y es una excepción
+ * aceptada: el cierre es una frase y se lee como el final, no como material
+ * nuevo. Motos, que es la única con un paso propio, llega a siete — y solo
+ * cuando su franja de papeles por vencer está en pantalla, porque si no, ese
+ * paso se salta solo. Si alguna sección quiere dos pasos propios, ahí sí hay
+ * que recortar de la plantilla, no seguir sumando.
  *
  * El paso de la papelera está aquí y no en cada sección a propósito: es la
  * pieza menos evidente del panel entero —eliminar no borra, y lo borrado se ve
@@ -116,6 +121,24 @@ export function tourDeLista(op: OpcionesLista): DefinicionTour {
       }),
     },
     ...(op.extra ?? []),
+    /**
+     * El cierre va **después de `extra`**: es la despedida del recorrido, así
+     * que tiene que ser el último paso pase lo que pase, incluso en una
+     * sección que agregue pasos propios.
+     *
+     * La bienvenida ya presenta el «?», pero eso se ve una sola vez en la vida
+     * y aquí se dice donde de verdad hace falta: al final de la guía que
+     * acabas de leer, cuando la pregunta natural es «¿y si se me olvida?».
+     */
+    {
+      ancla: 'panel.ayuda',
+      lado: 'bottom',
+      alineacion: 'start',
+      ...texto('ayuda', {
+        titulo: '¿Necesitas verla otra vez?',
+        texto: 'Si necesitas volver a ver esta guía, presiona el icono de ayuda.',
+      }),
+    },
   ];
 
   return {

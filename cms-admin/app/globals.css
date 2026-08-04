@@ -395,11 +395,24 @@
   text-shadow: none;
 }
 
-/* El botón de avanzar es la acción principal: amarillo de placa, como el resto. */
-.driver-popover.tour-panel .driver-popover-next-btn {
+/**
+ * El botón de avanzar es la acción principal: amarillo de placa, como el resto
+ * del panel.
+ *
+ * El selector va por `.driver-popover-navigation-btns` a propósito, aunque
+ * parezca de más: la regla genérica de arriba —que pinta los botones
+ * transparentes— es `.tour-panel .driver-popover-navigation-btns button`, y en
+ * especificidad (0,3,1) le ganaba a un `.tour-panel .driver-popover-next-btn`
+ * (0,3,0). Resultado: el botón principal se veía igual que «Atrás». Es la
+ * misma trampa que ya mordió con `SelectTrigger` (ver «Sistema de diseño» en
+ * `CLAUDE.md`), y se comprueba igual: midiendo `getComputedStyle(el)
+ * .backgroundColor`, no leyendo el CSS.
+ */
+.driver-popover.tour-panel .driver-popover-navigation-btns .driver-popover-next-btn {
   border-color: transparent;
   background: var(--primary);
   color: var(--primary-foreground);
+  font-weight: 600;
 }
 
 .driver-popover.tour-panel .driver-popover-close-btn {
@@ -415,4 +428,43 @@
   .driver-popover.tour-panel .driver-popover-navigation-btns button {
     min-height: 2.25rem;
   }
+}
+
+/**
+ * La lista de secciones que el recorrido de bienvenida usa para explicar el
+ * menú. `driver.js` mete la descripción con `innerHTML`, y el reset de la hoja
+ * de estilos deja los `<ul>` sin viñeta ni sangría — hay que devolvérselas.
+ */
+.driver-popover.tour-panel .tour-secciones {
+  margin-block-start: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.driver-popover.tour-panel .tour-secciones li {
+  padding-inline-start: 0.7rem;
+  position: relative;
+  line-height: 1.45;
+}
+
+.driver-popover.tour-panel .tour-secciones li::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0.52em;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--muted-foreground);
+}
+
+.driver-popover.tour-panel .tour-secciones b {
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+/* Dos listas seguidas (el paso de móvil junta dos grupos) no se pegan. */
+.driver-popover.tour-panel .tour-secciones + .tour-secciones {
+  margin-block-start: 0.55rem;
 }

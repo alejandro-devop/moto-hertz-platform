@@ -29,28 +29,28 @@ export function AdminTopbar() {
 
       <span className="flex-1" />
 
-      <Tooltip>
-        <TooltipTrigger
-          render={
-            <a
-              href={SITIO_PUBLICO}
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Ver el sitio público"
-              {...tourAnchor('panel.sitio')}
-              className="hidden size-8 shrink-0 place-items-center rounded-lg border border-border text-muted-foreground hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none md:grid"
-            >
-              <ExternalLink className="size-4" />
-            </a>
-          }
-        />
-        <TooltipContent>Ver el sitio público</TooltipContent>
-      </Tooltip>
+      {/* Un solo envoltorio para los dos controles: son un solo paso del
+          recorrido («abre el sitio, cambia el tema»), no dos. `ThemeToggle`
+          además solo acepta `className`, así que no podría llevar el ancla. */}
+      <span {...tourAnchor('panel.barra')} className="flex items-center gap-2">
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <a
+                href={SITIO_PUBLICO}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Ver el sitio público"
+                className="hidden size-8 shrink-0 place-items-center rounded-lg border border-border text-muted-foreground hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none md:grid"
+              >
+                <ExternalLink className="size-4" />
+              </a>
+            }
+          />
+          <TooltipContent>Ver el sitio público</TooltipContent>
+        </Tooltip>
 
-      {/* El ancla va en el envoltorio y no en `ThemeToggle`: el componente
-          solo acepta `className`, y el recorrido señala el grupo entero. */}
-      <span {...tourAnchor('panel.tema')} className="hidden md:inline-flex">
-        <ThemeToggle />
+        <ThemeToggle className="hidden md:inline-flex" />
       </span>
     </header>
   );

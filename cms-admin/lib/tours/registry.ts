@@ -1,5 +1,37 @@
+import { navLinks, type NavLink } from '@/app/(admin)/nav-links';
+import { anclaDeGrupo } from './grupos';
 import { tourDeFicha, tourDeLista } from './plantillas';
-import type { DefinicionTour } from './types';
+import type { DefinicionTour, PasoTour } from './types';
+
+/**
+ * El listado de secciones de un grupo, para el recorrido de bienvenida. Sale
+ * de `navLinks`, que es donde ya vive cada `descripcion`: una sección nueva
+ * queda explicada por el solo hecho de declararse ahí, sin un texto paralelo
+ * que se olvide de actualizar.
+ *
+ * `driver.js` mete la descripción con `innerHTML`, así que se puede maquetar.
+ * Lo que va aquí lo escribimos nosotros —nunca datos de nadie—, que es la
+ * única razón por la que eso es seguro.
+ */
+function secciones(grupo: NavLink['group']): string {
+  const items = navLinks
+    .filter((enlace) => enlace.group === grupo)
+    .map((enlace) => `<li><b>${enlace.label}</b> — ${enlace.descripcion}</li>`)
+    .join('');
+  return `<ul class="tour-secciones">${items}</ul>`;
+}
+
+/** Un paso por grupo de la barra lateral: qué es cada opción del menú. */
+function pasoDeGrupo(grupo: NavLink['group'], titulo: string): PasoTour {
+  return {
+    ancla: anclaDeGrupo(grupo),
+    solo: 'escritorio',
+    titulo,
+    texto: secciones(grupo),
+    lado: 'right',
+    alineacion: 'start',
+  };
+}
 
 /**
  * El catálogo de recorridos guiados del panel. Todo lo que existe está aquí:
@@ -14,33 +46,37 @@ import type { DefinicionTour } from './types';
  */
 const DEFINICIONES = {
   /**
-   * **Versión 2.** La Fase 0 lo dejó en 3 pasos —los del armazón que existen
-   * en todas las pantallas— y la Fase 1 le agrega los grupos de la navegación
-   * y dónde está la ayuda de cada sección. Subir la versión hace que vuelva a
-   * salir para quien ya vio el corto, sin borrarle el historial: es
-   * exactamente el caso para el que existe `version`, y el primero de verdad.
+   * **Versión 3.** La Fase 0 lo dejó en 3 pasos, la Fase 1 lo subió a 4 con el
+   * botón de ayuda, y esta versión hace lo que faltaba: **decir qué es cada
+   * opción del menú**, no solo que el menú existe. Un paso por grupo de la
+   * barra lateral, con las secciones de ese grupo y media línea cada una.
+   *
+   * Para que quepa sin pasarse del tope de seis, «ver el sitio» y «cambiar el
+   * tema» pasaron a ser un solo paso: son dos controles vecinos y triviales,
+   * y gastaban dos pasos de un presupuesto que hacía falta para el menú.
    */
   'panel.bienvenida': {
     clave: 'panel.bienvenida',
     nombre: 'Bienvenida al panel',
-    descripcion: 'Dónde está cada cosa en el armazón del panel.',
-    version: 2,
+    descripcion: 'Qué se administra en cada sección, y dónde está cada cosa.',
+    version: 3,
     pasos: [
-      {
-        ancla: 'panel.rail',
-        solo: 'escritorio',
-        titulo: 'Todo el panel está aquí',
-        texto:
-          'Las secciones van en tres grupos: Catálogo es lo que se vende, Contenido es lo que se lee, y Sistema es cómo se comporta el sitio. Se puede colapsar a solo iconos cuando una tabla necesita el ancho.',
-        lado: 'right',
-        alineacion: 'start',
-      },
+      pasoDeGrupo('Catálogo', 'Catálogo — lo que ofreces'),
+      pasoDeGrupo('Contenido', 'Contenido — lo que publicas'),
+      pasoDeGrupo('Sistema', 'Sistema — cómo se comporta el sitio'),
       {
         ancla: 'panel.tabbar',
         solo: 'movil',
         titulo: 'Todo el panel está aquí',
-        texto:
-          'Las secciones que más se visitan, al alcance del pulgar. El resto —y el cambio de tema— está en «Más».',
+        texto: `Las secciones que más se visitan, al alcance del pulgar; el resto —y el cambio de tema— está en «Más».${secciones('Catálogo')}`,
+        lado: 'top',
+        alineacion: 'center',
+      },
+      {
+        ancla: 'panel.tabbar',
+        solo: 'movil',
+        titulo: 'Y lo que publicas',
+        texto: `${secciones('Contenido')}${secciones('Sistema')}`,
         lado: 'top',
         alineacion: 'center',
       },
@@ -53,18 +89,11 @@ const DEFINICIONES = {
         alineacion: 'start',
       },
       {
-        ancla: 'panel.sitio',
+        ancla: 'panel.barra',
         solo: 'escritorio',
-        titulo: 'Ver cómo quedó',
-        texto: 'Abre el sitio público en otra pestaña. Lo que guardas aquí se ve allá.',
-        lado: 'bottom',
-        alineacion: 'end',
-      },
-      {
-        ancla: 'panel.tema',
-        solo: 'escritorio',
-        titulo: 'Claro u oscuro',
-        texto: 'El panel se adapta a lo que uses en tu computador, y aquí lo cambias a mano.',
+        titulo: 'Ver cómo quedó, y con qué luz',
+        texto:
+          'El primer botón abre el sitio público en otra pestaña: lo que guardas aquí se ve allá. Al lado se cambia entre claro y oscuro.',
         lado: 'bottom',
         alineacion: 'end',
       },
@@ -77,9 +106,11 @@ const DEFINICIONES = {
    * paso de los papeles: SOAT y tecnomecánica son los únicos datos del panel
    * que caducan solos, y esa franja de aviso aparece sin que nadie la pida.
    */
+  /* Versión 2: la plantilla ganó el paso de cierre que recuerda dónde está el
+     «?», así que el recorrido vuelve a salir para quien ya vio la versión 1. */
   'motos.lista': tourDeLista({
     clave: 'motos.lista',
-    version: 1,
+    version: 2,
     nombre: 'Motos',
     singular: 'moto',
     plural: 'las motos',
