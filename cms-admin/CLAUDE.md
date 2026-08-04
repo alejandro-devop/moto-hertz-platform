@@ -308,6 +308,10 @@ Son **genéricas, sin el nombre de la sección** — `lista.tabla`, no `motos.ta
 
 **Lo que hace cada sección se escribe una sola vez, en `nav-links.ts`.** Cada `NavLink` tiene una `descripcion` de media línea, y el recorrido de bienvenida arma con ella la lista de secciones de cada grupo (`secciones()` en `registry.ts`). Una sección nueva queda explicada por el solo hecho de declararse ahí — no hay un texto paralelo en el recorrido que se olvide de actualizar. `driver.js` mete la descripción con `innerHTML`, así que se puede maquetar; lo que va ahí lo escribimos nosotros, nunca datos de nadie, que es la única razón por la que eso es seguro.
 
+**No toda sección tiene ficha, y `tourDeLista` no lo necesita.** `medios.lista` es la única sección sin `tourDeFicha` — «Agregar» abre un diálogo de subida, no una hoja lateral — y funciona igual con la plantilla, solo reescribiendo los textos de `crear`, `tabla`, `papelera` y `acciones` en `registry.ts` para una sección donde no hay ficha que abrir. No hizo falta ni una ancla nueva: las seis piezas de la plantilla ya estaban donde hacían falta.
+
+**Un recorrido puede vivir en un componente compartido, no solo en una página.** `panel.imagenes` (Fase 3) explica `SelectorBiblioteca` («Elegir de la biblioteca», dentro de `image-picker.tsx`) y se pide con `useTour('panel.imagenes', open)` **dentro de ese mismo componente**, no desde cada página que lo usa — así se resuelve una sola vez para los cuatro campos de imagen del panel (Motos, Noticias, dos en Banners). Se pide al **abrir el diálogo**, no al abrir la ficha que lo contiene, y esa es la razón por la que nunca compite por la cola con el tour de esa ficha: para cuando alguien llega a abrir el selector, el recorrido de la ficha ya terminó —no se puede interactuar con nada mientras corre, por `disableActiveInteraction`— o ya se vio antes. No hubo que tocar la regla de «un recorrido por visita»; bastó con pedirlo en el momento correcto en vez de en el momento obvio.
+
 ## Dev
 
 ```bash

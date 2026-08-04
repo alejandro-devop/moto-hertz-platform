@@ -8,6 +8,7 @@ import { ListaResponsive, type ColumnaLista } from '@/components/admin/responsiv
 import { EmptyState, ErrorState, InlineSkeleton, TableSkeleton } from '@/components/admin/states';
 import { mensajeDeError, registrarError } from '@/lib/errors';
 import { paginar } from '@/lib/list-params';
+import { useTour } from '@/lib/tours/tour-provider';
 import { useFiltrosUrl } from '@/lib/use-url-filters';
 import { BANNER_SLOT_LABELS, type Banner, type BannerFormInput } from '@/lib/graphql/banners';
 import { aplicarFiltros, escribirFiltros, leerFiltros, type Filtros } from './filters';
@@ -62,6 +63,9 @@ export default function BannersPage() {
      búsqueda, en vez de mover algo que no se ve. */
   const puedeReordenar = !enPapelera && filtros.q.trim() === '';
 
+  useTour('banners.lista', !isLoading && !isError && pagina.total > 0);
+  useTour('banners.ficha', fichaAbierta);
+
   function abrirFicha(banner: Banner | null, seccion?: SeccionId) {
     setEditando(banner);
     setSeccionInicial(seccion);
@@ -100,6 +104,7 @@ export default function BannersPage() {
     <div className="flex flex-col gap-4">
       <PageHeader
         title="Banners"
+        tour="banners.lista"
         summary={resumen}
         action={
           <Button onClick={() => abrirFicha(null)} className="h-11 md:h-9">

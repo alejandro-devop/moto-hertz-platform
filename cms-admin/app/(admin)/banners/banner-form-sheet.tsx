@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { ALTO_CAMPO, Field, Grid, ToggleRow } from '@/components/admin/form-fields';
 import { FormSheet } from '@/components/admin/form-sheet';
 import { ImagePicker } from '@/components/admin/image-picker';
+import { tourAnchor } from '@/lib/tours/anchor';
 import { useFichaState } from '@/lib/use-ficha-state';
 import { cn } from '@/lib/utils';
 import { BANNER_SLOT_LABELS, type Banner, type BannerFormInput, type BannerSlot } from '@/lib/graphql/banners';
@@ -167,12 +168,14 @@ export function BannerFormSheet({
 
       {/* ------------------------------------------- vigencia --- */}
       <TabsContent value="vigencia" className="flex flex-col gap-4">
-        <ToggleRow
-          label="Activo"
-          hint="Con esto apagado, el banner no sale en el sitio aunque esté dentro de la vigencia."
-          checked={form.active}
-          onCheckedChange={(active) => set('active', active)}
-        />
+        <div {...tourAnchor('banners.vigencia')}>
+          <ToggleRow
+            label="Activo"
+            hint="Con esto apagado, el banner no sale en el sitio aunque esté dentro de la vigencia."
+            checked={form.active}
+            onCheckedChange={(active) => set('active', active)}
+          />
+        </div>
 
         <Grid>
           <Field

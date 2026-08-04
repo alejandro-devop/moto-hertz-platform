@@ -30,6 +30,8 @@ import { StatusPill } from '@/components/admin/status-pill';
 import { Thumb } from '@/components/admin/thumb';
 import { textoBuscable } from '@/lib/format';
 import { ACEPTA_IMAGENES, esImagen, subirImagen } from '@/lib/media-upload';
+import { tourAnchor } from '@/lib/tours/anchor';
+import { useTour } from '@/lib/tours/tour-provider';
 import { useMediaQuery } from '@/lib/use-media-library';
 import { cn } from '@/lib/utils';
 
@@ -358,6 +360,11 @@ function SelectorBiblioteca({
   const [busqueda, setBusqueda] = useState('');
   const [elegidas, setElegidas] = useState<Set<string>>(new Set());
 
+  /* Se pide al abrir este diálogo, no al abrir la ficha que lo contiene: así
+     nunca compite por la cola con el recorrido de esa ficha (ver `registry.ts`,
+     `panel.imagenes`). */
+  useTour('panel.imagenes', open);
+
   useEffect(() => {
     if (!open) return;
     setBusqueda('');
@@ -396,13 +403,15 @@ function SelectorBiblioteca({
           </DialogDescription>
         </DialogHeader>
 
-        <Input
-          type="search"
-          placeholder="Buscar por nombre…"
-          value={busqueda}
-          onChange={(event) => setBusqueda(event.target.value)}
-          className="h-10"
-        />
+        <div {...tourAnchor('imagenes.buscar')}>
+          <Input
+            type="search"
+            placeholder="Buscar por nombre…"
+            value={busqueda}
+            onChange={(event) => setBusqueda(event.target.value)}
+            className="h-10"
+          />
+        </div>
 
         {isLoading ? (
           <div className="grid grid-cols-4 gap-2 sm:grid-cols-5">
@@ -421,7 +430,10 @@ function SelectorBiblioteca({
               : 'Ninguna imagen coincide con la búsqueda.'}
           </p>
         ) : (
-          <div className="grid max-h-80 grid-cols-4 gap-2 overflow-y-auto sm:grid-cols-5">
+          <div
+            {...tourAnchor('imagenes.grid')}
+            className="grid max-h-80 grid-cols-4 gap-2 overflow-y-auto sm:grid-cols-5"
+          >
             {filtradas.map((item) => {
               const activa = elegidas.has(item.url);
               return (

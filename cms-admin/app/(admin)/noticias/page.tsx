@@ -8,6 +8,7 @@ import { ListaResponsive, type ColumnaLista } from '@/components/admin/responsiv
 import { EmptyState, ErrorState, InlineSkeleton, TableSkeleton } from '@/components/admin/states';
 import { mensajeDeError, registrarError } from '@/lib/errors';
 import { paginar } from '@/lib/list-params';
+import { useTour } from '@/lib/tours/tour-provider';
 import { useFiltrosUrl } from '@/lib/use-url-filters';
 import type { News, NewsFormInput } from '@/lib/graphql/news';
 import {
@@ -59,6 +60,9 @@ export default function NoticiasPage() {
   const slugsEnUso = useMemo(() => noticias.map((noticia) => noticia.slug), [noticias]);
   const publicadas = noticias.filter((n) => !n.deletedAt && n.publishedAt && new Date(n.publishedAt) <= new Date()).length;
 
+  useTour('noticias.lista', !isLoading && !isError && pagina.total > 0);
+  useTour('noticias.ficha', fichaAbierta);
+
   function abrirFicha(noticia: News | null, seccion?: SeccionId) {
     setEditando(noticia);
     setSeccionInicial(seccion);
@@ -87,6 +91,7 @@ export default function NoticiasPage() {
     <div className="flex flex-col gap-4">
       <PageHeader
         title="Noticias"
+        tour="noticias.lista"
         summary={resumen}
         action={
           <Button onClick={() => abrirFicha(null)} className="h-11 md:h-9">

@@ -18,6 +18,7 @@ import { EmptyState, ErrorState, InlineSkeleton, TableSkeleton } from '@/compone
 import { mensajeDeError, registrarError } from '@/lib/errors';
 import { paginar } from '@/lib/list-params';
 import { formatBytes } from '@/lib/media-upload';
+import { useTour } from '@/lib/tours/tour-provider';
 import { useFiltrosUrl } from '@/lib/use-url-filters';
 import { aplicarFiltros, escribirFiltros, leerFiltros, type Filtros } from './filters';
 import { MediaCard, MediaTableRow } from './media-row';
@@ -59,6 +60,8 @@ export default function MediosPage() {
   const filtradas = useMemo(() => aplicarFiltros(media, filtros), [media, filtros]);
   const pagina = paginar(filtradas, filtros.pagina);
 
+  useTour('medios.lista', !isLoading && !isError && pagina.total > 0);
+
   const pesoTotal = media.reduce((total, item) => total + (item.sizeBytes ?? 0), 0);
   const resumen = isLoading ? (
     <InlineSkeleton />
@@ -74,6 +77,7 @@ export default function MediosPage() {
     <div className="flex flex-col gap-4">
       <PageHeader
         title="Medios"
+        tour="medios.lista"
         summary={resumen}
         action={
           <Button onClick={() => setSubirAbierto(true)} className="h-11 md:h-9">

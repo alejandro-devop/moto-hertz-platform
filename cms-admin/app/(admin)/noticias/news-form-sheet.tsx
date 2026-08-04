@@ -12,6 +12,7 @@ import { RichTextEditor } from '@/components/admin/rich-text-editor';
 import { humanizeDays } from '@/lib/format';
 import { ETIQUETAS_ESTADO_NOTICIA, getNewsStatus, newsStatusTone } from '@/lib/news-status';
 import { StatusPill } from '@/components/admin/status-pill';
+import { tourAnchor } from '@/lib/tours/anchor';
 import { useFichaState } from '@/lib/use-ficha-state';
 import { cn } from '@/lib/utils';
 import type { News, NewsFormInput } from '@/lib/graphql/news';
@@ -208,6 +209,7 @@ export function NewsFormSheet({
           label="Contenido"
           error={errores.content}
           hint="Lo que se lee al abrir el detalle. Negrita, encabezados, listas y enlaces."
+          tour="noticias.editor"
         >
           <RichTextEditor
             value={form.content}
@@ -234,7 +236,10 @@ export function NewsFormSheet({
           />
         </Field>
 
-        <div className="flex items-center gap-2 rounded-lg border border-border bg-muted/40 px-3 py-2.5 text-[13px]">
+        <div
+          {...tourAnchor('noticias.publicacion')}
+          className="flex items-center gap-2 rounded-lg border border-border bg-muted/40 px-3 py-2.5 text-[13px]"
+        >
           <CalendarClock className="size-4 shrink-0 text-muted-foreground" />
           <StatusPill tone={newsStatusTone(estado)}>{ETIQUETAS_ESTADO_NOTICIA[estado]}</StatusPill>
           <span className="text-muted-foreground">

@@ -7,6 +7,7 @@ import { StatusPill } from '@/components/admin/status-pill';
 import { Thumb } from '@/components/admin/thumb';
 import { formatDate } from '@/lib/format';
 import { bannerStatusTone, ETIQUETAS_ESTADO_BANNER, getBannerStatus } from '@/lib/banner-status';
+import { tourAnchor } from '@/lib/tours/anchor';
 import type { Banner } from '@/lib/graphql/banners';
 import type { SeccionId } from './form-sections';
 import { BannerActions } from './banner-actions';
@@ -55,7 +56,7 @@ function BotonesOrden({
   titulo: string;
 }) {
   return (
-    <div className="flex shrink-0 flex-col">
+    <div {...tourAnchor('banners.orden')} className="flex shrink-0 flex-col">
       <Button
         type="button"
         variant="ghost"

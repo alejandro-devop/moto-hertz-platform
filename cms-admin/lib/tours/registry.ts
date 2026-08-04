@@ -252,6 +252,160 @@ const DEFINICIONES = {
       },
     ],
   }),
+
+  /**
+   * Fase 3. Noticias, Banners y Medios son las primeras secciones con
+   * interfaz propia de verdad —un editor enriquecido, un orden manual, una
+   * biblioteca sin ficha— así que a diferencia de la Fase 2, aquí sí hay que
+   * mirar cada una con cuidado y no solo colgar el nombre.
+   */
+  'noticias.lista': tourDeLista({
+    clave: 'noticias.lista',
+    version: 1,
+    nombre: 'Noticias',
+    singular: 'noticia',
+    plural: 'las noticias',
+    articulo: 'una',
+    crear: 'Agregar noticia',
+  }),
+
+  'noticias.ficha': tourDeFicha({
+    clave: 'noticias.ficha',
+    version: 1,
+    nombre: 'Noticias',
+    singular: 'noticia',
+    articulo: 'una',
+    extra: [
+      {
+        ancla: 'noticias.editor',
+        seccion: 'contenido',
+        titulo: 'El contenido es enriquecido, no texto plano',
+        texto:
+          'Negrita, encabezados, listas, cita y enlaces desde esta barra. Se guarda tal como se ve — no hay una vista previa aparte que revisar.',
+        lado: 'top',
+        alineacion: 'center',
+      },
+      {
+        ancla: 'noticias.publicacion',
+        seccion: 'publicacion',
+        titulo: 'Sin fecha, no existe para el sitio',
+        texto:
+          'Sin fecha de publicación la noticia queda en <b>borrador</b>: no se ve en ningún lado. Con una fecha futura queda <b>programada</b> y sale sola ese día — pero el cambio solo se nota cuando alguien recargue el sitio.',
+        lado: 'top',
+        alineacion: 'start',
+      },
+    ],
+  }),
+
+  'banners.lista': tourDeLista({
+    clave: 'banners.lista',
+    version: 1,
+    nombre: 'Banners',
+    singular: 'banner',
+    plural: 'los banners',
+    articulo: 'un',
+    crear: 'Agregar banner',
+    extra: [
+      {
+        ancla: 'banners.orden',
+        titulo: 'Dos carruseles, cada uno con su orden',
+        texto:
+          'El selector «Dónde aparece» elige cuál miras; estas flechas mueven un banner dentro de <b>ese</b> carrusel nada más, y se guardan al toque. Se apagan mientras haya una búsqueda escrita, para no mover algo que no está en pantalla.',
+        lado: 'right',
+        alineacion: 'start',
+      },
+    ],
+  }),
+
+  'banners.ficha': tourDeFicha({
+    clave: 'banners.ficha',
+    version: 1,
+    nombre: 'Banners',
+    singular: 'banner',
+    articulo: 'un',
+    extra: [
+      {
+        ancla: 'banners.vigencia',
+        seccion: 'vigencia',
+        titulo: 'Activo, y dentro de fecha: hacen falta las dos',
+        texto:
+          'Con <b>Activo</b> apagado no sale aunque esté dentro de sus fechas, y con las fechas vencidas tampoco sale aunque esté activo. Las dos condiciones se cumplen a la vez, o el banner no se ve.',
+        lado: 'top',
+        alineacion: 'start',
+      },
+    ],
+  }),
+
+  /**
+   * Medios no tiene ficha: es la única sección que es solo lista. «Agregar»
+   * abre un diálogo de subida en vez de una ficha, y el menú de fila hace
+   * cosas que ningún otro módulo hace (copiar la URL) o hace distinto
+   * (eliminar manda a la papelera, pero la imagen sigue sirviendo su URL
+   * mientras esté ahí) — por eso lleva más texto propio que ninguna otra
+   * sección de la Fase 3, y ni una ancla nueva: las seis piezas de la
+   * plantilla ya estaban donde hacían falta.
+   */
+  'medios.lista': tourDeLista({
+    clave: 'medios.lista',
+    version: 1,
+    nombre: 'Medios',
+    singular: 'imagen',
+    plural: 'las imágenes',
+    articulo: 'una',
+    crear: 'Subir imágenes',
+    textos: {
+      crear: {
+        titulo: 'Subir imágenes',
+        texto:
+          'Se guardan en WebP y con el lado mayor reducido a 1600 px. Esta es la biblioteca completa del panel: la misma foto se reusa desde cualquier ficha con «Elegir de la biblioteca», sin volver a subirla.',
+      },
+      papelera: {
+        texto:
+          'Eliminar manda a la papelera, no borra de una vez. Mientras esté ahí, la imagen <b>sigue respondiendo su URL</b> en cualquier ficha que la use — recién al eliminar definitivamente se borra el archivo del servidor.',
+      },
+      tabla: {
+        titulo: 'La biblioteca, no el sitio',
+        texto:
+          'En el computador es una tabla; en el teléfono, tarjetas. No hay ficha que abrir aquí: tocar la imagen la abre en una pestaña nueva.',
+      },
+      acciones: {
+        texto:
+          'Copiar la URL es lo que más se usa día a día. Eliminar es lo único que va a la papelera en vez de borrar directo, para poder arrepentirse.',
+      },
+    },
+  }),
+
+  /**
+   * El único recorrido que no vive en una pantalla, sino en un componente
+   * compartido: `SelectorBiblioteca`, dentro de `image-picker.tsx`. Se pide
+   * al abrir ese diálogo —«Elegir de la biblioteca»—, no al abrir la ficha
+   * que lo contiene, y por eso nunca compite con el tour de esa ficha por la
+   * cola: para cuando el usuario llega a abrirlo, el de la ficha ya terminó
+   * o ya se vio. Es la funcionalidad que más se parece a WordPress sin serlo.
+   */
+  'panel.imagenes': {
+    clave: 'panel.imagenes',
+    nombre: 'Elegir de la biblioteca',
+    descripcion: 'Cómo reusar una foto ya subida en vez de volver a subirla.',
+    version: 1,
+    pasos: [
+      {
+        ancla: 'imagenes.buscar',
+        titulo: 'Busca por nombre',
+        texto: 'Si la biblioteca ya tiene muchas fotos, escribe parte del nombre del archivo para encontrarla más rápido.',
+        lado: 'bottom',
+        alineacion: 'start',
+      },
+      {
+        ancla: 'imagenes.grid',
+        titulo: 'Las fotos que ya subiste, a un clic',
+        texto:
+          'Toca la que quieras usar aquí: si el campo acepta una sola, elegirla cierra el diálogo; si acepta varias, marca las que quieras y confirma abajo. Es la misma biblioteca que ves en <b>Medios</b>.',
+        lado: 'top',
+        alineacion: 'center',
+      },
+    ],
+  },
 } satisfies Record<string, DefinicionTour>;
 
 export type ClaveTour = keyof typeof DEFINICIONES;

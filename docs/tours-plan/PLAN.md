@@ -163,7 +163,7 @@ de la gente quiere de verdad; el reinicio es para empezar de cero.
 | 0 | Cimientos | Tabla, dominio GraphQL, provider, envoltorio de `driver.js`, botón de reinicio. Un tour de humo. | ✅ hecha |
 | 1 | Recorridos plantilla | Bienvenida del panel + las plantillas `lista` y `ficha`, probadas en Motos. | ✅ hecha |
 | 2 | Catálogo | Puntos de atención y Servicios. | ✅ hecha |
-| 3 | Contenido | Noticias, Banners y Medios (incluido el selector de imágenes). | pendiente |
+| 3 | Contenido | Noticias, Banners y Medios (incluido el selector de imágenes). | ✅ hecha |
 | 4 | Sistema y ayuda | Páginas, Configuración, y el panel «Ayuda y recorridos» completo. | pendiente |
 | 5 | Móvil, accesibilidad y cierre | El panel en móvil, teclado y foco, QA final. | pendiente |
 
@@ -332,7 +332,52 @@ Fase 1 no cambió** salvo para admitir pasos extra. Cada tour se ve una vez.
 
 ---
 
-### Fase 3 — Contenido
+### Fase 3 — Contenido ✅
+
+> **Cómo quedó.** Las tres secciones necesitaron mirarse una por una, no solo
+> colgar el nombre — era el objetivo declarado de la fase, a diferencia de la
+> 2 — pero ninguna tocó las plantillas.
+>
+> **Noticias** ganó dos pasos propios en la ficha (`seccion: 'contenido'` para
+> el editor enriquecido, `seccion: 'publicacion'` para la diferencia entre
+> borrador y publicada), reusando exactamente el mecanismo de «un paso abre su
+> pestaña» que estrenó la Fase 2.
+>
+> **Banners** resultó la más rara de las tres: **su paso propio de lista es
+> el primero que no vive en un `<Field>`.** El reordenar (subir/bajar) no es
+> un campo de formulario, así que el `data-tour` fue directo sobre el `<div>`
+> que ya envolvía esos botones en `banner-row.tsx` — ninguna ancla nueva que
+> crear, solo marcar la que ya existía. Con dos carruseles (`HOME` /
+> `SECUNDARIO`) y un tope de seis pasos, **el selector «Dónde aparece» se
+> quedó sin su propio paso**: se explica en la misma frase que las flechas de
+> orden, porque un recorrido de ocho globos no lo termina nadie. En la ficha,
+> un solo paso propio (`vigencia`) dice lo que no se lee mirando los campos
+> por separado: que `Activo` y las fechas son dos condiciones que se cumplen
+> **a la vez**, no una u otra.
+>
+> **Medios resultó la prueba más dura de la plantilla, y la pasó sin agregar
+> una sola ancla nueva.** Es la única sección sin ficha —«Agregar» abre un
+> diálogo de subida, no una hoja lateral— así que se apoya solo en
+> `tourDeLista`, con los textos de `crear`, `tabla`, `papelera` y `acciones`
+> reescritos para una sección donde no hay «ficha» que abrir y donde eliminar
+> sí importa distinto: una imagen en la papelera **sigue sirviendo su URL**
+> en cualquier ficha que la use, hasta que se elimina definitivamente. El
+> `tourDeFicha` de Medios directamente no existe — no hace falta fingir una
+> ficha para tener algo que explicar.
+>
+> **Y el selector de imágenes (`panel.imagenes`) fue la pieza nueva de
+> verdad: el primer recorrido que no vive en una pantalla, sino en un
+> componente compartido.** Se pide dentro de `SelectorBiblioteca`
+> (`image-picker.tsx`) al abrir ese diálogo —«Elegir de la biblioteca»—, no al
+> abrir la ficha que lo contiene. Esa es la razón por la que nunca compite por
+> la cola con el tour de esa ficha, que era la preocupación que el documento
+> de la fase adelantaba («la cola del provider se gana su sueldo aquí»): para
+> cuando alguien llega a abrir el selector, el recorrido de la ficha ya
+> terminó (el usuario no puede hacer clic en nada mientras corre, por
+> `disableActiveInteraction`) o ya se vio antes. No hizo falta tocar la cola
+> en absoluto — bastó con pedir el tour en el momento correcto en vez de en el
+> momento obvio. Verificado en los dos modos que usa `image-picker.tsx`: uno
+> solo (`ImagePicker`, en Noticias) y múltiple (`GaleriaImagenes`, en Motos).
 
 **Objetivo.** Las secciones con interfaz propia de verdad.
 
