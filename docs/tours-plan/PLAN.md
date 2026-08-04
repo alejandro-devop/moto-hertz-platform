@@ -162,7 +162,7 @@ de la gente quiere de verdad; el reinicio es para empezar de cero.
 |---|------|----------------------|--------|
 | 0 | Cimientos | Tabla, dominio GraphQL, provider, envoltorio de `driver.js`, botón de reinicio. Un tour de humo. | ✅ hecha |
 | 1 | Recorridos plantilla | Bienvenida del panel + las plantillas `lista` y `ficha`, probadas en Motos. | ✅ hecha |
-| 2 | Catálogo | Puntos de atención y Servicios. | pendiente |
+| 2 | Catálogo | Puntos de atención y Servicios. | ✅ hecha |
 | 3 | Contenido | Noticias, Banners y Medios (incluido el selector de imágenes). | pendiente |
 | 4 | Sistema y ayuda | Páginas, Configuración, y el panel «Ayuda y recorridos» completo. | pendiente |
 | 5 | Móvil, accesibilidad y cierre | El panel en móvil, teclado y foco, QA final. | pendiente |
@@ -291,7 +291,30 @@ parecían tanto y conviene saberlo ahora y no en la Fase 3.
 
 ---
 
-### Fase 2 — Catálogo
+### Fase 2 — Catálogo ✅
+
+> **Cómo quedó.** Las plantillas aguantaron: los cuatro recorridos nuevos son
+> los sustantivos de cada sección más sus pasos propios, y `tourDeLista` /
+> `tourDeFicha` **no cambiaron**. Era la prueba de la Fase 1 y la pasó.
+>
+> **Lo que sí hubo que agregar: que un paso pueda abrir su pestaña.** Casi todo
+> lo que vale la pena explicar de una ficha vive detrás de una pestaña que no es
+> la que abre por defecto —los horarios de un punto, el enlace de Maps, las tres
+> modalidades de precio—, así que esos pasos se saltaban siempre y la ficha se
+> quedaba explicando solo lo genérico. Un paso ahora declara `seccion` y el
+> recorrido abre esa pestaña antes de mostrarlo, devolviendo la ficha a la
+> pestaña original al terminar. Es la única vez que este sistema le maneja la
+> interfaz al usuario, y se acota a eso.
+>
+> **Y ahí apareció una trampa de `driver.js` que costó encontrar.** El primer
+> intento puso el cambio de pestaña dentro del resolutor del ancla, que parecía
+> el sitio natural. Pero `driver.js` resuelve el elemento del paso **siguiente**
+> mientras dibuja el actual, para decidir si el botón dice «Siguiente» o
+> «Listo»: la ficha saltaba de pestaña un paso antes de tiempo y el paso que se
+> estaba leyendo señalaba algo que ya no estaba en pantalla. La sonda lo destapó
+> mostrando en qué pestaña estaba la ficha en cada paso. El cambio lo dispara
+> ahora la navegación, y los pasos con sección llevan `skipMissingElement: false`
+> para que no se descarten mientras su pestaña está cerrada.
 
 **Objetivo.** Validar que la plantilla aguanta dos secciones más sin tocarla.
 

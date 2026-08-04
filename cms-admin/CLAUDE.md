@@ -252,6 +252,7 @@ Cada sección del panel se explica sola la primera vez que se entra. El progreso
 | `TOURS`, `ClaveTour` | `lib/tours/registry.ts` | El catálogo de recorridos: claves, versiones, pasos y textos. Todo lo que existe está aquí. |
 | `tourDeLista`, `tourDeFicha` | `lib/tours/plantillas.ts` | Los pasos comunes de cualquier lista y de cualquier ficha, parametrizados por los sustantivos de la sección. |
 | `BotonAyudaTour` | `components/admin/tour-help-button.tsx` | El «?» del encabezado, que relanza el recorrido de la sección sin tocar la base. |
+| `registrarControlDeFicha` | `lib/tours/control-ficha.ts` | El puente que deja a un paso abrir la pestaña de ficha donde vive lo que explica. |
 | `tourAnchor`, `selectorTour`, `anclaVisible` | `lib/tours/anchor.ts` | El anclaje `data-tour`, en una sola forma de escribirlo y de buscarlo. |
 | `runTour` | `lib/tours/run-tour.ts` | El envoltorio de `driver.js`: filtra pasos, decide terminado vs. saltado, aplica el tema. |
 | `TourProvider`, `useTour`, `useTourContext` | `lib/tours/tour-provider.tsx` | Quién decide si un recorrido se muestra. Va en `AdminShell`. |
@@ -272,6 +273,7 @@ Son **genéricas, sin el nombre de la sección** — `lista.tabla`, no `motos.ta
 | `lista.acciones` | Los dos disparadores del menú de fila | `row-actions.tsx` |
 | `ficha.secciones` | Las pestañas de la ficha | `form-sheet.tsx` |
 | `ficha.obligatorio` | Todo campo con `required` | `form-fields.tsx` |
+| (la que se le pase) | Un campo concreto, con el prop `tour` de `Field` | cada ficha |
 | `ficha.guardar` | La barra de guardado | `form-sheet.tsx` |
 
 **Varios elementos pueden compartir ancla a propósito.** Media interfaz del panel está duplicada —tabla y tarjetas, menú de fila y hoja inferior— y las dos copias están siempre en el DOM: lo que cambia es cuál tiene `display: none`. Por eso `elementoDeAncla` devuelve la primera **visible** y no la primera a secas, y `run-tour.ts` le pasa a `driver.js` una **función** en vez de un selector: con un `querySelector` a secas, `lista.tabla` en un teléfono señalaría la tabla de escritorio, que está ahí pero no se ve. En `/motos` con 25 filas hay 100 elementos con `lista.acciones` y solo 25 visibles.
@@ -289,6 +291,10 @@ Son **genéricas, sin el nombre de la sección** — `lista.tabla`, no `motos.ta
 **Cancelar no es decidir.** Cerrar el recorrido (botón, Esc, clic fuera) lo marca visto con estado `skipped`; que la pantalla desaparezca debajo —cambiar de ruta, cerrar la ficha— lo cierra **sin marcar nada**, para que vuelva a salir. `runTour` distingue los dos casos porque `driver.js` solo dispara `onDestroyStarted` en los cierres que vienen del usuario, no en el `destroy()` que llamamos nosotros. El segundo argumento de `useTour` es lo que lo comunica: cuando pasa a `false`, se cancela.
 
 **Marcar visto es optimista y silencioso**; reiniciar sí avisa. Si falla marcar, el peor caso es que el recorrido salga una vez más — no hay razón para interrumpir a nadie con un error por eso.
+
+**Un paso puede declarar en qué pestaña de la ficha vive** (`seccion` en `PasoTour`), y el recorrido la abre antes de mostrarlo — devolviendo la ficha a la pestaña original al terminar. Sin esto, los horarios de un punto, el enlace de Maps o las modalidades de precio se saltarían siempre, porque no están en la pestaña que abre por defecto: la ficha se quedaría explicando solo lo genérico, que es lo que menos falta hace. **Es la única vez que este sistema le maneja la interfaz al usuario**, y se acota a cambiar de sección dentro de una ficha que ya abrió.
+
+> **Y ahí hay una trampa de `driver.js` que costó encontrar.** Abrir la pestaña dentro del resolutor del ancla —el sitio natural— está mal: `driver.js` resuelve el elemento del paso **siguiente** mientras dibuja el actual, para decidir si el botón dice «Siguiente» o «Listo». Con el efecto ahí, la ficha saltaba de pestaña un paso antes de tiempo y el paso que se estaba leyendo señalaba algo que ya no estaba en pantalla. Por eso el cambio lo dispara la navegación (`onNextClick`/`onPrevClick` propios, que obligan a mover el recorrido a mano) y los pasos con `seccion` llevan `skipMissingElement: false`, para que no se descarten mientras su pestaña está cerrada. Se detecta leyendo en qué pestaña está la ficha en cada paso, no mirando el recorrido correr.
 
 **Un recorrido por visita: terminar uno vacía la cola.** Sin esto, el primer ingreso al panel eran los 4 pasos de la bienvenida y, sin pausa, los 6 de la sección — diez globos de corrido, que es exactamente la pared que el tope de seis pasos existe para evitar, saltada por la puerta de atrás. Lo que queda en la cola no se pierde: sale la próxima vez que se entre a esa pantalla, porque `useTour` vuelve a pedir en cada cambio de ruta.
 

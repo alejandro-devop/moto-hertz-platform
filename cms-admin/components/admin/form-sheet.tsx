@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,6 +16,7 @@ import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { erroresPorSeccion, type SeccionFicha } from '@/lib/form-sections';
 import { tourAnchor } from '@/lib/tours/anchor';
+import { registrarControlDeFicha } from '@/lib/tours/control-ficha';
 import { cn } from '@/lib/utils';
 
 interface Props<Id extends string> {
@@ -65,6 +66,34 @@ export function FormSheet<Id extends string>({
   className,
 }: Props<Id>) {
   const [confirmarSalida, setConfirmarSalida] = useState(false);
+
+  /**
+   * Mientras la ficha está abierta, el recorrido guiado puede pedirle que abra
+   * una sección: es lo que permite explicar los horarios de un punto o las
+   * modalidades de precio de un servicio, que viven detrás de una pestaña.
+   * Se registra aquí, en el armazón, para que ninguna sección tenga que
+   * acordarse — y por lo mismo se registra una sola vez, que es todo lo que
+   * hace falta: solo hay una ficha abierta a la vez.
+   *
+   * Los valores se leen de refs y no de las props directamente para que el
+   * registro no dependa de identidades que cambian en cada render.
+   */
+  const seccionRef = useRef(seccion);
+  seccionRef.current = seccion;
+  const cambiarSeccionRef = useRef(onSeccionChange);
+  cambiarSeccionRef.current = onSeccionChange;
+
+  useEffect(() => {
+    if (!open) return;
+    registrarControlDeFicha({
+      seccionActual: () => seccionRef.current,
+      abrirSeccion: (id) => {
+        if (seccionRef.current === id) return;
+        cambiarSeccionRef.current(id as Id);
+      },
+    });
+    return () => registrarControlDeFicha(null);
+  }, [open]);
 
   /* Si la sección abierta deja de existir (una moto nueva no tiene papeles). */
   useEffect(() => {

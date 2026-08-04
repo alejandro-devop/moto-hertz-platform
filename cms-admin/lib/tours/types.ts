@@ -15,6 +15,12 @@ export interface PasoTour {
    * propósito y aparece en el `grep`.
    */
   ancla?: string;
+  /**
+   * La sección de la ficha en la que vive el ancla. Con esto, el recorrido
+   * abre esa pestaña antes de mostrar el paso — sin esto, todo lo que no esté
+   * en la pestaña por defecto se saltaría siempre. Ver `control-ficha.ts`.
+   */
+  seccion?: string;
   titulo: string;
   texto: string;
   lado?: 'top' | 'right' | 'bottom' | 'left';

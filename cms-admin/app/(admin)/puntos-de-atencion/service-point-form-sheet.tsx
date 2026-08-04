@@ -249,6 +249,7 @@ export function ServicePointFormSheet({
         </Grid>
 
         <Field
+          tour="puntos.mapa"
           label="Enlace de Google Maps"
           htmlFor="mapsUrl"
           error={errores.mapsUrl}

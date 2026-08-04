@@ -145,6 +145,113 @@ const DEFINICIONES = {
       },
     },
   }),
+
+  /**
+   * Fase 2. Puntos de atención y Servicios son calcadas de Motos, así que las
+   * plantillas entraron sin tocarlas: lo único que se escribió fue el nombre de
+   * las cosas y los pasos propios de cada una.
+   *
+   * Y son las primeras fichas con pasos que declaran `seccion`: lo que de
+   * verdad hay que explicar de un punto o de un servicio vive detrás de una
+   * pestaña, y sin eso se saltaría siempre. Ver `control-ficha.ts`.
+   */
+  'puntos.lista': tourDeLista({
+    clave: 'puntos.lista',
+    version: 1,
+    nombre: 'Puntos de atención',
+    singular: 'punto',
+    plural: 'los puntos de atención',
+    articulo: 'un',
+    crear: 'Agregar punto',
+    textos: {
+      tabla: {
+        texto:
+          'Cada fila resume el punto como lo ve quien lo busca: dirección, tipo y si tiene horario cargado. Tocarla abre su ficha.',
+      },
+    },
+    extra: [
+      {
+        ancla: 'puntos.sin-horario',
+        titulo: 'Un punto sin horario es un reclamo',
+        texto:
+          'Si a algún punto le falta el horario, el sitio no puede decir cuándo abre — y la gente llega y está cerrado. Esta franja aparece sola mientras quede alguno así.',
+        lado: 'bottom',
+        alineacion: 'start',
+      },
+    ],
+  }),
+
+  'puntos.ficha': tourDeFicha({
+    clave: 'puntos.ficha',
+    version: 1,
+    nombre: 'Puntos de atención',
+    singular: 'punto',
+    articulo: 'un',
+    extra: [
+      {
+        ancla: 'puntos.horarios',
+        seccion: 'horarios',
+        titulo: 'Los horarios, día por día',
+        texto:
+          'Un día apagado está <b>cerrado</b>: no hay que escribir nada más. Y si abre lo mismo casi toda la semana, llena un día y usa «Copiar a los demás».',
+        lado: 'top',
+        alineacion: 'center',
+      },
+      {
+        ancla: 'puntos.mapa',
+        seccion: 'ubicacion',
+        titulo: 'La ubicación se pega, no se escribe',
+        texto:
+          'Busca el punto en Google Maps, dale a Compartir → Copiar vínculo y pégalo aquí. <b>Ojo con los enlaces cortos</b> (<code>maps.app.goo.gl</code>): no traen las coordenadas, y el sitio se queda sin mapa. El campo te avisa apenas lo pegas.',
+        lado: 'top',
+        alineacion: 'start',
+      },
+    ],
+  }),
+
+  'servicios.lista': tourDeLista({
+    clave: 'servicios.lista',
+    version: 1,
+    nombre: 'Servicios',
+    singular: 'servicio',
+    plural: 'los servicios',
+    articulo: 'un',
+    crear: 'Agregar servicio',
+    textos: {
+      crear: {
+        texto:
+          'Esta sección arranca vacía a propósito: los servicios que ofreces los escribes tú, no vienen de plantilla. «Agregar servicio» abre la ficha en blanco.',
+      },
+    },
+  }),
+
+  'servicios.ficha': tourDeFicha({
+    clave: 'servicios.ficha',
+    version: 1,
+    nombre: 'Servicios',
+    singular: 'servicio',
+    articulo: 'un',
+    extra: [
+      {
+        ancla: 'servicios.icono',
+        seccion: 'identidad',
+        titulo: 'El icono se elige, no se escribe',
+        texto:
+          'Se abre una rejilla con vista previa y nombres de taller («Frenos», no «Disco»). Es lo que identifica al servicio en la lista y en el sitio.',
+        lado: 'top',
+        alineacion: 'start',
+      },
+      {
+        ancla: 'servicios.precio',
+        seccion: 'precio',
+        titulo: 'Tres formas de cobrar',
+        texto:
+          '<b>Desde</b> un monto, <b>precio fijo</b>, o <b>a convenir</b>. Con «a convenir» el campo del monto se apaga en vez de esconderse —para que no parezca que se perdió— y lo que quede escrito no se guarda.',
+        lado: 'bottom',
+        alineacion: 'start',
+      },
+    ],
+  }),
 } satisfies Record<string, DefinicionTour>;
 
 export type ClaveTour = keyof typeof DEFINICIONES;

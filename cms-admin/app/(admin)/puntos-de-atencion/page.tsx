@@ -8,6 +8,8 @@ import { ListaResponsive, type ColumnaLista } from '@/components/admin/responsiv
 import { EmptyState, ErrorState, InlineSkeleton, TableSkeleton } from '@/components/admin/states';
 import { mensajeDeError, registrarError } from '@/lib/errors';
 import { paginar } from '@/lib/list-params';
+import { tourAnchor } from '@/lib/tours/anchor';
+import { useTour } from '@/lib/tours/tour-provider';
 import { useFiltrosUrl } from '@/lib/use-url-filters';
 import type { ServicePoint, ServicePointFormInput } from '@/lib/graphql/service-points';
 import {
@@ -56,6 +58,11 @@ export default function PuntosDeAtencionPage() {
   const puntos = data?.servicePoints.servicePoints ?? [];
   const filtrados = useMemo(() => aplicarFiltros(puntos, filtros), [puntos, filtros]);
   const pagina = paginar(filtrados, filtros.pagina);
+  /* Ver `motos/page.tsx`: el de la lista espera a que haya filas, el de la
+     ficha se dispara al abrirla. */
+  useTour('puntos.lista', !isLoading && !isError && pagina.total > 0);
+  useTour('puntos.ficha', fichaAbierta);
+
   const sinHorario = useMemo(() => contarSinHorario(puntos), [puntos]);
   const slugsEnUso = useMemo(() => puntos.map((punto) => punto.slug), [puntos]);
 
@@ -88,6 +95,7 @@ export default function PuntosDeAtencionPage() {
     <div className="flex flex-col gap-4">
       <PageHeader
         title="Puntos de atención"
+        tour="puntos.lista"
         summary={resumen}
         action={
           <Button onClick={() => abrirFicha(null)} className="h-11 md:h-9">
@@ -99,7 +107,10 @@ export default function PuntosDeAtencionPage() {
 
       {/* Un punto sin horario es el reclamo más común: llegan y está cerrado. */}
       {!enPapelera && sinHorario > 0 && puntos.length > 0 ? (
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border border-warning/30 border-l-[3px] border-l-warning bg-warning-surface px-3 py-2.5 text-[13px]">
+        <div
+          {...tourAnchor('puntos.sin-horario')}
+          className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border border-warning/30 border-l-[3px] border-l-warning bg-warning-surface px-3 py-2.5 text-[13px]"
+        >
           <Clock className="size-4 shrink-0 text-warning" />
           <span className="min-w-0">
             <strong className="font-semibold">

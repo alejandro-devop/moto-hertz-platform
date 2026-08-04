@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { DIAS, ETIQUETAS_DIA, formatTramo, type Dia } from '@/lib/service-point-hours';
+import { tourAnchor } from '@/lib/tours/anchor';
 import { cn } from '@/lib/utils';
 import type { DiaForm } from './service-point-form-state';
 
@@ -43,7 +44,7 @@ export function HoursEditor({
   const abiertos = DIAS.filter((dia) => hours[dia].abierto).length;
 
   return (
-    <div className="flex flex-col gap-2">
+    <div {...tourAnchor('puntos.horarios')} className="flex flex-col gap-2">
       {error ? (
         <p role="alert" className="text-xs font-medium text-destructive">
           {error}

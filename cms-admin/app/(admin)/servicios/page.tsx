@@ -8,6 +8,7 @@ import { ListaResponsive, type ColumnaLista } from '@/components/admin/responsiv
 import { EmptyState, ErrorState, InlineSkeleton, TableSkeleton } from '@/components/admin/states';
 import { mensajeDeError, registrarError } from '@/lib/errors';
 import { paginar } from '@/lib/list-params';
+import { useTour } from '@/lib/tours/tour-provider';
 import { useFiltrosUrl } from '@/lib/use-url-filters';
 import type { Service, ServiceFormInput } from '@/lib/graphql/services';
 import {
@@ -56,6 +57,11 @@ export default function ServiciosPage() {
   const servicios = useMemo(() => data?.services.services ?? [], [data]);
   const filtrados = useMemo(() => aplicarFiltros(servicios, filtros), [servicios, filtros]);
   const pagina = paginar(filtrados, filtros.pagina);
+  /* Ver `motos/page.tsx`: el de la lista espera a que haya filas, el de la
+     ficha se dispara al abrirla. */
+  useTour('servicios.lista', !isLoading && !isError && pagina.total > 0);
+  useTour('servicios.ficha', fichaAbierta);
+
   const categorias = useMemo(() => categoriasDe(servicios), [servicios]);
   const sinDescripcion = useMemo(() => contarSinDescripcion(servicios), [servicios]);
   const slugsEnUso = useMemo(() => servicios.map((servicio) => servicio.slug), [servicios]);
@@ -89,6 +95,7 @@ export default function ServiciosPage() {
     <div className="flex flex-col gap-4">
       <PageHeader
         title="Servicios"
+        tour="servicios.lista"
         summary={resumen}
         action={
           <Button onClick={() => abrirFicha(null)} className="h-11 md:h-9">

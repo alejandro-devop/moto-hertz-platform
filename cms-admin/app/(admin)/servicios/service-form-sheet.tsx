@@ -164,7 +164,11 @@ export function ServiceFormSheet({
           </datalist>
         </Field>
 
-        <Field label="Icono" hint="Es lo que identifica el servicio en la lista y en el sitio.">
+        <Field
+          tour="servicios.icono"
+          label="Icono"
+          hint="Es lo que identifica el servicio en la lista y en el sitio."
+        >
           <IconPicker value={form.icon} onChange={(icon) => set('icon', icon)} />
         </Field>
 
@@ -249,6 +253,7 @@ export function ServiceFormSheet({
       {/* ------------------------------------ precio y duración --- */}
       <TabsContent value="precio" className="flex flex-col gap-4">
         <Field
+          tour="servicios.precio"
           label="Modalidad"
           hint="«A convenir» es lo correcto cuando el precio depende de revisar la moto."
         >

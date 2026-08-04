@@ -1,6 +1,7 @@
 import { driver, type DriveStep } from 'driver.js';
 import 'driver.js/dist/driver.css';
 import { anclaVisible, elementoDeAncla } from './anchor';
+import { controlDeFicha } from './control-ficha';
 import type { DefinicionTour, PasoTour, TourStatus } from './types';
 
 /**
@@ -42,15 +43,56 @@ function pasoAplica(paso: PasoTour, movil: boolean): boolean {
   if (paso.solo === 'movil' && !movil) return false;
   if (paso.solo === 'escritorio' && movil) return false;
   /* Sin ancla es un cartel centrado: siempre se puede mostrar. */
-  return !paso.ancla || anclaVisible(paso.ancla);
+  if (!paso.ancla) return true;
+  /* Un paso que vive en otra pestaña de la ficha todavía no está en el DOM;
+     no se puede juzgar por su ancla. Lo que decide si aplica es que haya una
+     ficha abierta a la que pedirle esa sección. */
+  if (paso.seccion) return controlDeFicha() !== null;
+  return anclaVisible(paso.ancla);
 }
 
-function aDriveStep(paso: PasoTour): DriveStep {
+/**
+ * Cuánto se le da a la ficha para pintar una pestaña recién abierta antes de
+ * dar el paso por perdido. `driver.js` no espera este tiempo completo: reacciona
+ * al primer cambio del DOM que haga aparecer el ancla, y esto es solo el tope.
+ */
+const ESPERA_DE_SECCION = 1200;
+
+/**
+ * Abrir la pestaña que necesita un paso es un efecto, y por eso **no puede
+ * vivir en el resolutor del ancla**, aunque sea el sitio más obvio. `driver.js`
+ * resuelve el elemento del paso *siguiente* mientras dibuja el actual, para
+ * saber si el botón dice «Siguiente» o «Listo»: con el efecto ahí, la ficha
+ * saltaba de pestaña un paso antes de tiempo y el paso que se estaba leyendo se
+ * quedaba señalando algo que ya no estaba en pantalla.
+ *
+ * Así que el cambio lo dispara la navegación —el clic en Siguiente o en Atrás—,
+ * y `objetivo` dice a qué paso vamos. El resolutor solo insiste sobre esa misma
+ * sección, para el caso de que React todavía no haya repintado.
+ */
+function aDriveStep(paso: PasoTour, objetivo: () => string | null): DriveStep {
   const ancla = paso.ancla;
   return {
-    /* Función y no cadena: se resuelve en el momento de mostrar el paso, y
-       devuelve la copia visible del elemento (ver `elementoDeAncla`). */
-    element: ancla ? () => elementoDeAncla(ancla) as Element : undefined,
+    /* Función y no cadena: devuelve la copia **visible** del elemento, que es
+       lo que permite que la misma clave sirva en las dos pantallas. */
+    element: ancla
+      ? () => {
+          if (paso.seccion && objetivo() === paso.seccion) {
+            controlDeFicha()?.abrirSeccion(paso.seccion);
+          }
+          return elementoDeAncla(ancla) as Element;
+        }
+      : undefined,
+    /* Lo que tarde la ficha en pintar la pestaña recién abierta. */
+    waitForElement: paso.seccion ? ESPERA_DE_SECCION : undefined,
+    /**
+     * Y por lo mismo de arriba: mientras su pestaña está cerrada, el ancla de
+     * un paso con sección no existe. Si se dejara que `driver.js` lo diera por
+     * ausente, lo descartaría del recorrido y el paso anterior mostraría
+     * «Listo» en vez de «Siguiente». Estos pasos no se saltan: se espera a que
+     * su pestaña se abra.
+     */
+    skipMissingElement: paso.seccion ? false : undefined,
     popover: {
       title: paso.titulo,
       description: paso.texto,
@@ -83,8 +125,41 @@ export function runTour(tour: DefinicionTour, { onFinish }: Opciones): (() => vo
    */
   let resultado: TourStatus | null = null;
 
+  /* Para devolver la ficha a donde estaba: el recorrido la mueve de pestaña,
+     pero quien la abrió no pidió que se la movieran. */
+  const seccionInicial = pasos.some((paso) => paso.seccion)
+    ? controlDeFicha()?.seccionActual()
+    : undefined;
+
+  /** A qué paso vamos: lo pone la navegación, lo consulta el resolutor. */
+  let objetivo: string | null = pasos[0]?.seccion ?? null;
+  if (objetivo) controlDeFicha()?.abrirSeccion(objetivo);
+
+  /**
+   * Prepara el salto a un paso: si vive en otra pestaña de la ficha, la abre
+   * **antes** de movernos, para que `driver.js` ya encuentre el ancla (y si no
+   * la encuentra al instante, la espere con `waitForElement`).
+   */
+  function irA(indice: number, mover: () => void) {
+    objetivo = pasos[indice]?.seccion ?? null;
+    if (objetivo) controlDeFicha()?.abrirSeccion(objetivo);
+    mover();
+  }
+
   const recorrido = driver({
-    steps: pasos.map(aDriveStep),
+    steps: pasos.map((paso, indice) => {
+      const step = aDriveStep(paso, () => objetivo);
+      return {
+        ...step,
+        popover: {
+          ...step.popover,
+          /* Al pisar estos manejadores hay que mover el recorrido a mano:
+             `driver.js` solo navega solo cuando no se los reemplazas. */
+          onNextClick: () => irA(indice + 1, () => recorrido.moveNext()),
+          onPrevClick: () => irA(indice - 1, () => recorrido.movePrevious()),
+        },
+      };
+    }),
     popoverClass: 'tour-panel',
     animate: !prefiereMenosMovimiento(),
     smoothScroll: true,
@@ -105,6 +180,7 @@ export function runTour(tour: DefinicionTour, { onFinish }: Opciones): (() => vo
       recorrido.destroy();
     },
     onDestroyed: () => {
+      if (seccionInicial) controlDeFicha()?.abrirSeccion(seccionInicial);
       const decidido = resultado;
       resultado = null;
       if (decidido) onFinish(decidido);

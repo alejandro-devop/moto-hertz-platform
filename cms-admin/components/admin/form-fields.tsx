@@ -18,6 +18,7 @@ export function Field({
   hint,
   error,
   required,
+  tour,
   className,
   children,
 }: {
@@ -26,6 +27,8 @@ export function Field({
   hint?: React.ReactNode;
   error?: string;
   required?: boolean;
+  /** Ancla de recorrido guiado para este campo en concreto. */
+  tour?: string;
   className?: string;
   children: React.ReactNode;
 }) {
@@ -33,7 +36,7 @@ export function Field({
     /* Todo campo obligatorio lleva el ancla; el recorrido de la ficha señala
        el primero que esté visible en la sección abierta. */
     <div
-      {...(required ? tourAnchor('ficha.obligatorio') : {})}
+      {...(tour ? tourAnchor(tour) : required ? tourAnchor('ficha.obligatorio') : {})}
       className={cn('flex flex-col gap-1.5', className)}
     >
       <Label htmlFor={htmlFor} className="text-[13px] font-semibold text-muted-foreground">
