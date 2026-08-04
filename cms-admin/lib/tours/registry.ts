@@ -406,6 +406,81 @@ const DEFINICIONES = {
       },
     ],
   },
+
+  /**
+   * Fase 4. Páginas y Configuración no tienen lista delante — cada una entra
+   * directo a su ficha, así que no hay `tourDeLista` que llamar y `tourDeFicha`
+   * tampoco encaja del todo (sus textos asumen un registro entre muchos, y acá
+   * cada uno es el único que existe). Se escriben a mano, pero **reusan las
+   * mismas anclas genéricas** (`ficha.secciones`, `ficha.obligatorio`,
+   * `ficha.guardar`) — no hay dos fichas abiertas a la vez en el panel, así
+   * que reusarlas aquí es tan seguro como en cualquier `<x>-form-sheet.tsx`.
+   */
+  'paginas.ficha': {
+    clave: 'paginas.ficha',
+    nombre: 'Páginas',
+    descripcion: 'El texto suelto de cada página del sitio, y dónde aterriza.',
+    version: 1,
+    pasos: [
+      {
+        titulo: 'Texto suelto, no un catálogo',
+        texto:
+          'Esto no es una lista de páginas: es el encabezado y la bajada de una página puntual del sitio (hoy, <b>Motos</b>). La próxima página con texto editable aparece aquí como otro bloque, no como una fila nueva.',
+        lado: 'bottom',
+        alineacion: 'center',
+      },
+      {
+        ancla: 'paginas.campos',
+        titulo: 'Vacío no es vacío',
+        texto:
+          'Si dejas un campo en blanco, el sitio sigue mostrando el texto que ya tenía — no se pone vacío de verdad. Esto se ve arriba del catálogo, en la página pública.',
+        lado: 'top',
+        alineacion: 'start',
+      },
+      {
+        ancla: 'ficha.guardar',
+        titulo: 'Guardar, sin ficha que cerrar',
+        texto:
+          'Este botón siempre está disponible. A diferencia de una ficha con hoja lateral, aquí no hay aviso si cambias de sección con algo sin guardar — confirma antes de salir.',
+        lado: 'top',
+        alineacion: 'end',
+      },
+    ],
+  },
+
+  'configuracion.ficha': {
+    clave: 'configuracion.ficha',
+    nombre: 'Configuración del sitio',
+    descripcion: 'Cómo se edita este registro único, y qué hacer si algo falta.',
+    version: 1,
+    pasos: [
+      {
+        ancla: 'ficha.secciones',
+        titulo: 'Cuatro secciones, un solo registro',
+        texto:
+          'Contacto, redes, SEO y textos. No es una lista: es un único registro de todo el sitio — se edita, no se crea ni se elimina.',
+        lado: 'bottom',
+        alineacion: 'start',
+      },
+      {
+        ancla: 'ficha.obligatorio',
+        seccion: 'textos',
+        titulo: 'Lo único obligatorio es el nombre del sitio',
+        texto:
+          'Sale en el pie de página, en la pestaña del navegador y como autor de una noticia sin firma. Todo lo demás puede quedar vacío.',
+        lado: 'right',
+        alineacion: 'start',
+      },
+      {
+        ancla: 'ficha.guardar',
+        titulo: 'Guardar, sin «cerrar»',
+        texto:
+          'No hay a dónde volver, así que tampoco hay un aviso de «¿descartar los cambios?» al salir: si no guardas, el formulario se queda con lo escrito, sin más.',
+        lado: 'top',
+        alineacion: 'end',
+      },
+    ],
+  },
 } satisfies Record<string, DefinicionTour>;
 
 export type ClaveTour = keyof typeof DEFINICIONES;

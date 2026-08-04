@@ -164,7 +164,7 @@ de la gente quiere de verdad; el reinicio es para empezar de cero.
 | 1 | Recorridos plantilla | Bienvenida del panel + las plantillas `lista` y `ficha`, probadas en Motos. | ✅ hecha |
 | 2 | Catálogo | Puntos de atención y Servicios. | ✅ hecha |
 | 3 | Contenido | Noticias, Banners y Medios (incluido el selector de imágenes). | ✅ hecha |
-| 4 | Sistema y ayuda | Páginas, Configuración, y el panel «Ayuda y recorridos» completo. | pendiente |
+| 4 | Sistema y ayuda | Páginas, Configuración, y el panel «Ayuda y recorridos» completo. | ✅ hecha |
 | 5 | Móvil, accesibilidad y cierre | El panel en móvil, teclado y foco, QA final. | pendiente |
 
 El orden no es caprichoso: **las Fases 0 y 1 son el 60 % del trabajo**. De la 2
@@ -398,7 +398,41 @@ sueldo aquí).
 
 ---
 
-### Fase 4 — Sistema y panel de ayuda
+### Fase 4 — Sistema y panel de ayuda ✅
+
+> **Cómo quedó.** Páginas y Configuración resultaron el mismo problema dos
+> veces: ninguna de las dos tiene una lista delante, así que no hay
+> `tourDeLista` que llamar, y `tourDeFicha` tampoco encajaba del todo —sus
+> textos («Ficha de una moto») asumen un registro entre muchos, y acá cada uno
+> es el único que existe—. Se escribieron a mano, pero **reusando las mismas
+> anclas genéricas** (`ficha.secciones`, `ficha.obligatorio`, `ficha.guardar`):
+> nunca hay dos fichas abiertas a la vez en el panel, así que reusarlas fuera
+> de un `FormSheet` es tan seguro como dentro de uno.
+>
+> **Y ahí apareció el motivo real por el que `SiteSettingsForm` no reutiliza
+> `FormSheet`.** El campo obligatorio de Configuración (`siteName`) vive en la
+> pestaña «Textos», la última, no en «Contacto», la que abre por defecto —
+> exactamente el caso que el paso `seccion` del sistema de tours existe para
+> resolver. Pero `seccion` depende del puente `ControlDeFicha` que hoy solo
+> registra `form-sheet.tsx`, y `SiteSettingsForm` nunca pasa por ahí. La
+> primera pasada del recorrido lo confirmó: el paso del campo obligatorio se
+> saltaba siempre, en silencio, porque su ancla nunca estaba en la pestaña que
+> ya estaba abierta. La solución fue que `SiteSettingsForm` se registre como
+> `ControlDeFicha` por su cuenta —las mismas tres líneas que ya tenía
+> `form-sheet.tsx`, sin `open` del que depender porque esta ficha nunca se
+> desmonta mientras la página existe—. `PaginasPage` no necesitó lo mismo: no
+> tiene pestañas, así que no hay a dónde saltar.
+>
+> **El panel «Ayuda y recorridos» no tocó el provider.** `reiniciar(clave)` ya
+> existía desde la Fase 0 —el botón de ayuda de cada sección ya demostraba que
+> reiniciar uno solo funcionaba—; lo que faltaba era la lista. Cada fila
+> compara `version` guardada contra `TOURS[clave].version` (la misma cuenta
+> que hace el provider para decidir si relanza) y muestra **visto / saltado /
+> sin ver** — sin botón de reiniciar en «sin ver», porque no hay nada que
+> reiniciar. El reinicio individual no lleva diálogo de confirmación, a
+> diferencia del global: el global borra todo de una vez y por eso avisa; uno
+> solo es exactamente lo que pidió el usuario al tocarlo, con el mismo costo
+> que pulsar el «?» de una sección.
 
 **Objetivo.** Cerrar las secciones que faltan y dejar terminado el control de
 los tours.

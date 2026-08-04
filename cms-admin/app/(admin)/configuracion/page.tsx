@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { PageHeader } from '@/components/admin/page-header';
 import { ErrorState, TableSkeleton } from '@/components/admin/states';
 import { registrarError } from '@/lib/errors';
+import { useTour } from '@/lib/tours/tour-provider';
 import type { SiteSettings, SiteSettingsFormInput } from '@/lib/graphql/site-settings';
 import { AyudaYRecorridos } from './ayuda-y-recorridos';
 import { SiteSettingsForm } from './site-settings-form';
@@ -36,6 +37,8 @@ export default function ConfiguracionPage() {
     if (isError) registrarError('configuracion', error);
   }, [isError, error]);
 
+  useTour('configuracion.ficha', !isLoading && !isError && registro !== null);
+
   async function guardar(input: SiteSettingsFormInput) {
     const resultado = await edit.mutateAsync(input);
     setRegistro(resultado.siteSettingsEdit);
@@ -45,6 +48,7 @@ export default function ConfiguracionPage() {
     <div className="flex flex-col gap-4">
       <PageHeader
         title="Configuración del sitio"
+        tour="configuracion.ficha"
         summary="Contacto, redes sociales, SEO y el nombre del sitio. Es un solo registro: se edita, no se crea ni se elimina."
       />
 

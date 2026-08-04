@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import { ImagePicker } from '@/components/admin/image-picker';
 import { ALTO_CAMPO, Field, Grid } from '@/components/admin/form-fields';
 import { ListaEditable } from '@/components/admin/list-editor';
@@ -7,6 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { erroresPorSeccion } from '@/lib/form-sections';
+import { tourAnchor } from '@/lib/tours/anchor';
+import { registrarControlDeFicha } from '@/lib/tours/control-ficha';
 import { useFichaState } from '@/lib/use-ficha-state';
 import type { SiteSettings, SiteSettingsFormInput } from '@/lib/graphql/site-settings';
 import { SECCIONES, seccionDeCampo, type SeccionId } from './form-sections';
@@ -49,10 +52,30 @@ export function SiteSettingsForm({ config, onSubmit, submitting }: Props) {
 
   const conteos = erroresPorSeccion(SECCIONES, errores);
 
+  /* Sin `FormSheet` de por medio, nadie más registra el puente que usa el
+     recorrido guiado para abrir una pestaña que no es la de por defecto (el
+     paso del campo obligatorio vive en «Textos», no en «Contacto») — así que
+     esta ficha se registra sola, tal como lo hace `form-sheet.tsx`. Como la
+     página nunca desmonta esta ficha mientras existe, no hay un `open` del
+     que depender: se registra al montar y se olvida al desmontar. */
+  const seccionRef = useRef(seccion);
+  seccionRef.current = seccion;
+  useEffect(() => {
+    registrarControlDeFicha({
+      seccionActual: () => seccionRef.current,
+      abrirSeccion: (id) => {
+        if (seccionRef.current === id) return;
+        setSeccion(id as SeccionId);
+      },
+    });
+    return () => registrarControlDeFicha(null);
+  }, [setSeccion]);
+
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <Tabs value={seccion} onValueChange={(value) => setSeccion(value as SeccionId)} className="gap-0">
         <TabsList
+          {...tourAnchor('ficha.secciones')}
           variant="line"
           className="scroll-x h-auto w-full justify-start gap-1 border-b border-border px-0 py-2"
         >
@@ -286,7 +309,10 @@ export function SiteSettingsForm({ config, onSubmit, submitting }: Props) {
         </div>
       </Tabs>
 
-      <div className="sticky bottom-0 -mx-4 flex items-center gap-2 border-t border-border bg-card px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:mx-0 sm:rounded-lg sm:border">
+      <div
+        {...tourAnchor('ficha.guardar')}
+        className="sticky bottom-0 -mx-4 flex items-center gap-2 border-t border-border bg-card px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:mx-0 sm:rounded-lg sm:border"
+      >
         <span className="flex-1 font-mono text-[11px] text-muted-foreground">
           {submitting ? 'Guardando…' : sucio ? 'Sin guardar' : 'Todo guardado'}
         </span>

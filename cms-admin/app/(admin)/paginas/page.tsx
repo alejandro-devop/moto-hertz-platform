@@ -7,6 +7,8 @@ import { ErrorState, TableSkeleton } from '@/components/admin/states';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { registrarError } from '@/lib/errors';
+import { tourAnchor } from '@/lib/tours/anchor';
+import { useTour } from '@/lib/tours/tour-provider';
 import { PAGE_FIELDS, PAGE_LABELS } from './page-fields';
 import { usePageContentMutations, usePageContentQuery } from './use-page-content';
 
@@ -45,6 +47,8 @@ export default function PaginasPage() {
     setCargado(true);
   }, [data, cargado, fields]);
 
+  useTour('paginas.ficha', !isLoading && !isError && cargado);
+
   async function guardar() {
     await setMany.mutateAsync(
       fields.map((campo) => ({ field: campo.key, value: form[campo.key] ?? '' }))
@@ -55,6 +59,7 @@ export default function PaginasPage() {
     <div className="flex flex-col gap-4">
       <PageHeader
         title="Páginas"
+        tour="paginas.ficha"
         summary="El encabezado y la bajada de cada página del sitio. Un campo vacío no se guarda vacío de verdad: usa el mismo texto que hoy trae el sitio hasta que lo cambies."
       />
 
@@ -70,31 +75,36 @@ export default function PaginasPage() {
         <div className="flex flex-col gap-4">
           <h2 className="text-sm font-semibold text-muted-foreground">{PAGE_LABELS[PAGE]}</h2>
 
-          {fields.map((campo) => (
-            <Field key={campo.key} label={campo.label} htmlFor={campo.key} hint={campo.hint}>
-              {campo.multiline ? (
-                <textarea
-                  id={campo.key}
-                  value={form[campo.key] ?? ''}
-                  onChange={(event) =>
-                    setForm((prev) => ({ ...prev, [campo.key]: event.target.value }))
-                  }
-                  rows={3}
-                  className="min-h-20 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-                />
-              ) : (
-                <Input
-                  id={campo.key}
-                  value={form[campo.key] ?? ''}
-                  onChange={(event) =>
-                    setForm((prev) => ({ ...prev, [campo.key]: event.target.value }))
-                  }
-                />
-              )}
-            </Field>
-          ))}
+          <div {...tourAnchor('paginas.campos')} className="flex flex-col gap-4">
+            {fields.map((campo) => (
+              <Field key={campo.key} label={campo.label} htmlFor={campo.key} hint={campo.hint}>
+                {campo.multiline ? (
+                  <textarea
+                    id={campo.key}
+                    value={form[campo.key] ?? ''}
+                    onChange={(event) =>
+                      setForm((prev) => ({ ...prev, [campo.key]: event.target.value }))
+                    }
+                    rows={3}
+                    className="min-h-20 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+                  />
+                ) : (
+                  <Input
+                    id={campo.key}
+                    value={form[campo.key] ?? ''}
+                    onChange={(event) =>
+                      setForm((prev) => ({ ...prev, [campo.key]: event.target.value }))
+                    }
+                  />
+                )}
+              </Field>
+            ))}
+          </div>
 
-          <div className="sticky bottom-0 -mx-4 flex items-center gap-2 border-t border-border bg-card px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:mx-0 sm:rounded-lg sm:border">
+          <div
+            {...tourAnchor('ficha.guardar')}
+            className="sticky bottom-0 -mx-4 flex items-center gap-2 border-t border-border bg-card px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:mx-0 sm:rounded-lg sm:border"
+          >
             <span className="flex-1 font-mono text-[11px] text-muted-foreground">
               {setMany.isPending ? 'Guardando…' : `Editando ${PAGE_LABELS[PAGE]}`}
             </span>
