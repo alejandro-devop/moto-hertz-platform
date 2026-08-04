@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { erroresPorSeccion, type SeccionFicha } from '@/lib/form-sections';
+import { tourAnchor } from '@/lib/tours/anchor';
 import { cn } from '@/lib/utils';
 
 interface Props<Id extends string> {
@@ -113,6 +114,7 @@ export function FormSheet<Id extends string>({
             >
               <TabsList
                 variant="line"
+                {...tourAnchor('ficha.secciones')}
                 className="scroll-x h-auto w-full shrink-0 justify-start gap-1 border-b border-border px-3 py-2"
               >
                 {secciones.map((item) => {
@@ -146,7 +148,10 @@ export function FormSheet<Id extends string>({
             </Tabs>
 
             {/* La barra de guardado no se mueve: siempre al alcance del pulgar. */}
-            <footer className="flex shrink-0 items-center gap-2 border-t border-border bg-card px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+            <footer
+              {...tourAnchor('ficha.guardar')}
+              className="flex shrink-0 items-center gap-2 border-t border-border bg-card px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
+            >
               <span className="flex-1 font-mono text-[11px] text-muted-foreground">
                 {submitting ? 'Guardando…' : sucio ? 'Sin guardar' : 'Todo guardado'}
               </span>

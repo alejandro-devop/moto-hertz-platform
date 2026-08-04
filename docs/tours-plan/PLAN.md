@@ -161,7 +161,7 @@ de la gente quiere de verdad; el reinicio es para empezar de cero.
 | # | Fase | Qué deja funcionando | Estado |
 |---|------|----------------------|--------|
 | 0 | Cimientos | Tabla, dominio GraphQL, provider, envoltorio de `driver.js`, botón de reinicio. Un tour de humo. | ✅ hecha |
-| 1 | Recorridos plantilla | Bienvenida del panel + las plantillas `lista` y `ficha`, probadas en Motos. | pendiente |
+| 1 | Recorridos plantilla | Bienvenida del panel + las plantillas `lista` y `ficha`, probadas en Motos. | ✅ hecha |
 | 2 | Catálogo | Puntos de atención y Servicios. | pendiente |
 | 3 | Contenido | Noticias, Banners y Medios (incluido el selector de imágenes). | pendiente |
 | 4 | Sistema y ayuda | Páginas, Configuración, y el panel «Ayuda y recorridos» completo. | pendiente |
@@ -217,7 +217,36 @@ idempotente desde el primer día, no parchearse en la Fase 5.
 
 ---
 
-### Fase 1 — Recorridos plantilla (y Motos como referencia)
+### Fase 1 — Recorridos plantilla (y Motos como referencia) ✅
+
+> **Cómo quedó, y en qué se apartó de lo escrito abajo.**
+>
+> **Las anclas terminaron siendo genéricas, no por sección.** `lista.tabla`, no
+> `motos.tabla`. Solo hay una lista en pantalla y una ficha abierta a la vez,
+> así que no hay ambigüedad — y a cambio los componentes compartidos llevan su
+> `data-tour` **una sola vez** y toda sección nueva los hereda sin tocar nada.
+> Esto es lo que hace que las fases 2 a 4 sean baratas de verdad.
+>
+> **Un recorrido por visita: terminar uno ya no encadena con el siguiente.** Lo
+> encontró la prueba automatizada del primer ingreso: bienvenida (4 pasos) y
+> acto seguido, sin pausa, motos.lista (6) — diez globos de corrido, que es
+> justo la pared que el tope de seis pasos existe para evitar. Ahora terminar
+> un recorrido vacía la cola; lo que quedó sale la próxima vez que se entre a
+> esa pantalla, y el «?» lo tiene a un clic mientras tanto.
+>
+> **El paso del buscador de la bienvenida no existe**: el panel no tiene
+> buscador global — se probó y se quitó hace fases, cada lista tiene el suyo.
+> Su hueco lo ocupa el paso que enseña el «?».
+>
+> **Sin paso de paginación en la plantilla de lista** (son 5 pasos y el tope es
+> 6: el que queda vale más para lo propio de cada sección que para explicar
+> «anterior / siguiente») y **sin paso de imágenes en la de ficha** (vive tras
+> una pestaña que no es la que abre por defecto, así que se saltaría siempre;
+> la Fase 3 ya le tiene recorrido propio).
+>
+> **El paso de la papelera sí entró en la plantilla**, y fue la decisión más
+> rentable: es la pieza menos evidente del panel entero y ahora las ocho
+> secciones la explican gratis.
 
 **Objetivo.** Escribir de verdad los tres tours que después se copian: el de
 bienvenida y las dos plantillas.

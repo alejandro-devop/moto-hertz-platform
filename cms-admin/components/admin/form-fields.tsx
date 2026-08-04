@@ -2,6 +2,7 @@
 
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import { tourAnchor } from '@/lib/tours/anchor';
 import { cn } from '@/lib/utils';
 
 /** 44 px en móvil, 36 en escritorio: el objetivo mínimo del pulgar. */
@@ -29,7 +30,12 @@ export function Field({
   children: React.ReactNode;
 }) {
   return (
-    <div className={cn('flex flex-col gap-1.5', className)}>
+    /* Todo campo obligatorio lleva el ancla; el recorrido de la ficha señala
+       el primero que esté visible en la sección abierta. */
+    <div
+      {...(required ? tourAnchor('ficha.obligatorio') : {})}
+      className={cn('flex flex-col gap-1.5', className)}
+    >
       <Label htmlFor={htmlFor} className="text-[13px] font-semibold text-muted-foreground">
         {label}
         {required ? (

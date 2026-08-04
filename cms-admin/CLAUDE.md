@@ -250,13 +250,31 @@ Cada sección del panel se explica sola la primera vez que se entra. El progreso
 | Pieza | Archivo | Qué resuelve |
 | --- | --- | --- |
 | `TOURS`, `ClaveTour` | `lib/tours/registry.ts` | El catálogo de recorridos: claves, versiones, pasos y textos. Todo lo que existe está aquí. |
+| `tourDeLista`, `tourDeFicha` | `lib/tours/plantillas.ts` | Los pasos comunes de cualquier lista y de cualquier ficha, parametrizados por los sustantivos de la sección. |
+| `BotonAyudaTour` | `components/admin/tour-help-button.tsx` | El «?» del encabezado, que relanza el recorrido de la sección sin tocar la base. |
 | `tourAnchor`, `selectorTour`, `anclaVisible` | `lib/tours/anchor.ts` | El anclaje `data-tour`, en una sola forma de escribirlo y de buscarlo. |
 | `runTour` | `lib/tours/run-tour.ts` | El envoltorio de `driver.js`: filtra pasos, decide terminado vs. saltado, aplica el tema. |
 | `TourProvider`, `useTour`, `useTourContext` | `lib/tours/tour-provider.tsx` | Quién decide si un recorrido se muestra. Va en `AdminShell`. |
 | `useTourProgressQuery`, `useTourMutations` | `lib/tours/use-tour-progress.ts` | La consulta (una vez por sesión) y las mutaciones. |
 | `AyudaYRecorridos` | `app/(admin)/configuracion/ayuda-y-recorridos.tsx` | El reinicio, fuera del formulario de configuración. |
 
-**Agregar un recorrido a una sección** son tres cosas: definirlo en `registry.ts`, colgar los `data-tour` con `tourAnchor()` en los elementos que señala, y llamar `useTour('clave', listo)` en la página. El provider hace el resto.
+**Agregar un recorrido a una sección** son tres cosas: llamar a `tourDeLista` / `tourDeFicha` en `registry.ts` con los sustantivos de la sección, pasar `tour="<clave>"` a su `PageHeader`, y llamar `useTour('clave', listo)` en la página. Los pasos comunes y sus anclas ya están; solo se escriben los pasos propios de la sección, en `extra`.
+
+### Las anclas compartidas
+
+Son **genéricas, sin el nombre de la sección** — `lista.tabla`, no `motos.tabla` — porque solo hay una lista en pantalla y una ficha abierta a la vez. Los componentes compartidos las llevan una sola vez y toda sección nueva las hereda:
+
+| Ancla | Dónde vive | La pone |
+| --- | --- | --- |
+| `lista.crear` | La acción principal del encabezado | `page-header.tsx` |
+| `lista.filtros` | La barra de filtros y el buscador | `filter-bar.tsx` |
+| `lista.tabla` | La tabla **y** la lista de tarjetas | `responsive-list.tsx` |
+| `lista.acciones` | Los dos disparadores del menú de fila | `row-actions.tsx` |
+| `ficha.secciones` | Las pestañas de la ficha | `form-sheet.tsx` |
+| `ficha.obligatorio` | Todo campo con `required` | `form-fields.tsx` |
+| `ficha.guardar` | La barra de guardado | `form-sheet.tsx` |
+
+**Varios elementos pueden compartir ancla a propósito.** Media interfaz del panel está duplicada —tabla y tarjetas, menú de fila y hoja inferior— y las dos copias están siempre en el DOM: lo que cambia es cuál tiene `display: none`. Por eso `elementoDeAncla` devuelve la primera **visible** y no la primera a secas, y `run-tour.ts` le pasa a `driver.js` una **función** en vez de un selector: con un `querySelector` a secas, `lista.tabla` en un teléfono señalaría la tabla de escritorio, que está ahí pero no se ve. En `/motos` con 25 filas hay 100 elementos con `lista.acciones` y solo 25 visibles.
 
 **Las reglas que ya están resueltas y no hay que volver a resolver por sección.**
 
@@ -268,9 +286,11 @@ Cada sección del panel se explica sola la primera vez que se entra. El progreso
 
 **Uno a la vez, y una vez por sesión de navegador.** Lo que llega mientras hay un recorrido corriendo espera en la cola; `lanzados` (un `Set` en el provider) evita que volver a la misma pantalla —o el doble montaje de React en desarrollo— relance lo ya mostrado.
 
-**Cambiar de ruta cancela sin marcar visto**, para que el recorrido pueda volver a salir. Cancelar no es decidir: `runTour` distingue el cierre del usuario (`onDestroyStarted`, que `driver.js` solo dispara en botón/Esc/clic fuera) del `destroy()` programático nuestro, y solo el primero marca.
+**Cancelar no es decidir.** Cerrar el recorrido (botón, Esc, clic fuera) lo marca visto con estado `skipped`; que la pantalla desaparezca debajo —cambiar de ruta, cerrar la ficha— lo cierra **sin marcar nada**, para que vuelva a salir. `runTour` distingue los dos casos porque `driver.js` solo dispara `onDestroyStarted` en los cierres que vienen del usuario, no en el `destroy()` que llamamos nosotros. El segundo argumento de `useTour` es lo que lo comunica: cuando pasa a `false`, se cancela.
 
 **Marcar visto es optimista y silencioso**; reiniciar sí avisa. Si falla marcar, el peor caso es que el recorrido salga una vez más — no hay razón para interrumpir a nadie con un error por eso.
+
+**Un recorrido por visita: terminar uno vacía la cola.** Sin esto, el primer ingreso al panel eran los 4 pasos de la bienvenida y, sin pausa, los 6 de la sección — diez globos de corrido, que es exactamente la pared que el tope de seis pasos existe para evitar, saltada por la puerta de atrás. Lo que queda en la cola no se pierde: sale la próxima vez que se entre a esa pantalla, porque `useTour` vuelve a pedir en cada cambio de ruta.
 
 **Máximo 5 o 6 pasos por recorrido.** Es una regla, no una sugerencia: uno largo lo salta todo el mundo, y saltar también cuenta como visto, con lo cual el usuario se queda sin la ayuda para siempre. Lo que no cabe en 6 pasos son dos recorridos.
 

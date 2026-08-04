@@ -23,16 +23,28 @@ export function selectorTour(clave: string): string {
 }
 
 /**
- * ¿Está el ancla en el DOM y visible? De aquí sale la regla dura del sistema:
- * un paso cuya ancla no existe se salta en silencio. Una lista vacía no tiene
- * filas, y el recorrido de una lista vacía no puede reventar.
+ * El elemento que hay que señalar, o `null` si no hay ninguno **visible**.
  *
- * Se comprueba también que ocupe espacio: en el panel, «no existe en esta
- * pantalla» casi siempre se escribe como `hidden md:flex`, y un elemento con
- * `display: none` está en el DOM pero no se puede señalar.
+ * Que devuelva el primero *visible* y no simplemente el primero es lo que
+ * permite que la misma clave sirva en las dos pantallas. Media interfaz del
+ * panel está duplicada a propósito —la tabla y las tarjetas, el menú de fila y
+ * la hoja inferior, la paginación de escritorio y la de móvil— y las dos
+ * copias están siempre en el DOM: lo que cambia es cuál tiene `display: none`.
+ * Con un `querySelector` a secas, `lista.tabla` en un teléfono devolvería la
+ * tabla de escritorio, que está ahí pero no se ve.
+ *
+ * De aquí sale también la regla dura del sistema: un paso sin elemento visible
+ * se salta en silencio. El recorrido de una lista vacía no puede reventar.
  */
+export function elementoDeAncla(clave: string): HTMLElement | null {
+  const candidatos = document.querySelectorAll(selectorTour(clave));
+  for (const candidato of candidatos) {
+    if (!(candidato instanceof HTMLElement)) continue;
+    if (candidato.offsetWidth > 0 || candidato.offsetHeight > 0) return candidato;
+  }
+  return null;
+}
+
 export function anclaVisible(clave: string): boolean {
-  const elemento = document.querySelector(selectorTour(clave));
-  if (!(elemento instanceof HTMLElement)) return false;
-  return elemento.offsetWidth > 0 || elemento.offsetHeight > 0;
+  return elementoDeAncla(clave) !== null;
 }

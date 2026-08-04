@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { tourAnchor } from '@/lib/tours/anchor';
 import { cn } from '@/lib/utils';
 
 /** Un filtro puesto o quitado de un toque, sin abrir nada. */
@@ -199,7 +200,7 @@ export function BarraFiltros({ controles, chips, orden, activos, onLimpiar, busq
   const [hojaAbierta, setHojaAbierta] = useState(false);
 
   return (
-    <div className="flex flex-col gap-2">
+    <div {...tourAnchor('lista.filtros')} className="flex flex-col gap-2">
       {/* El buscador va primero y a la vista en las dos pantallas: es lo que
           más se usa y no puede depender de la lupa de la navbar para saber
           que existe. */}

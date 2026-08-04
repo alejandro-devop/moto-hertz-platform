@@ -2,6 +2,7 @@
 
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Paginacion } from '@/components/admin/pagination';
+import { tourAnchor } from '@/lib/tours/anchor';
 import type { Pagina } from '@/lib/list-params';
 
 export interface ColumnaLista {
@@ -42,7 +43,10 @@ export function ListaResponsive<T>({
   return (
     <>
       {/* Escritorio: tabla. */}
-      <div className="hidden rounded-xl border border-border bg-card md:block">
+      <div
+        {...tourAnchor('lista.tabla')}
+        className="hidden rounded-xl border border-border bg-card md:block"
+      >
         <Table>
           <TableHeader>
             <TableRow>
@@ -63,7 +67,9 @@ export function ListaResponsive<T>({
       </div>
 
       {/* Móvil: tarjetas. */}
-      <ul className="flex flex-col gap-2 md:hidden">
+      {/* Misma ancla que la tabla: solo una de las dos está visible, y
+          `elementoDeAncla` devuelve la que se ve. */}
+      <ul {...tourAnchor('lista.tabla')} className="flex flex-col gap-2 md:hidden">
         {pagina.items.map((item) => tarjeta(item))}
       </ul>
       <div className="md:hidden">{paginacion}</div>

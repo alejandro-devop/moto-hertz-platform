@@ -42,4 +42,11 @@ export interface DefinicionTour {
    * son dos recorridos.
    */
   pasos: PasoTour[];
+  /**
+   * Milisegundos de espera antes de medir las anclas. Solo hace falta cuando
+   * el recorrido arranca sobre algo que entra animado —la ficha es una hoja
+   * que se desliza— y medirlo a mitad del deslizamiento deja el globo
+   * apuntando a donde el elemento estaba, no a donde quedó.
+   */
+  retraso?: number;
 }

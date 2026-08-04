@@ -40,6 +40,8 @@ interface Contexto {
   progreso: Map<string, TourProgress>;
   /** «Tengo este recorrido y estoy lista». No garantiza que se muestre. */
   pedir: (clave: ClaveTour) => void;
+  /** «Ya no estoy lista» — se cerró la ficha, se fue de la pantalla. Cierra sin marcar. */
+  cancelar: (clave: ClaveTour) => void;
   /** Mostrarlo ahora aunque ya se haya visto (el botón de ayuda). */
   relanzar: (clave: ClaveTour) => void;
   /** Borra el progreso para que vuelvan a salir. Sin clave, todos. */
@@ -93,6 +95,18 @@ export function TourProvider({ children }: { children: React.ReactNode }) {
     );
   }, []);
 
+  /**
+   * Lo contrario de `pedir`. Se olvida de que se lanzó, para que la próxima
+   * vez que la pantalla esté lista vuelva a salir: cerrar la ficha a mitad del
+   * recorrido no es haberlo visto.
+   */
+  const cancelar = useCallback((clave: ClaveTour) => {
+    setCola((actual) => actual.filter((item) => item.clave !== clave));
+    if (enCursoRef.current !== clave) return;
+    lanzados.current.delete(clave);
+    setEnCurso(null);
+  }, []);
+
   const relanzar = useCallback((clave: ClaveTour) => {
     lanzados.current.delete(clave);
     setEnCurso(null);
@@ -113,15 +127,24 @@ export function TourProvider({ children }: { children: React.ReactNode }) {
     [reiniciarMutation]
   );
 
-  /* Cambiar de sección cierra lo que esté corriendo, sin marcarlo visto. */
+  /**
+   * Cambiar de sección cierra lo que esté corriendo, sin marcarlo visto: un
+   * recorrido a medias apunta a elementos que ya no están.
+   *
+   * **No se vacía la cola.** Los efectos de los hijos corren antes que los del
+   * padre, así que lo que ya pidió la pantalla nueva estaría en la cola cuando
+   * este efecto se ejecuta, y vaciarla se lo comería. Lo que sobre de la
+   * pantalla vieja se cae solo: sus anclas ya no existen, `runTour` devuelve
+   * `null` y el recorrido queda otra vez pendiente.
+   */
   const rutaPrevia = useRef(pathname);
   useEffect(() => {
     if (rutaPrevia.current === pathname) return;
     rutaPrevia.current = pathname;
     const actual = enCursoRef.current;
-    if (actual) lanzados.current.delete(actual);
+    if (!actual) return;
+    lanzados.current.delete(actual);
     setEnCurso(null);
-    setCola([]);
   }, [pathname]);
 
   /* Saca de la cola lo que toque mostrar. */
@@ -146,27 +169,58 @@ export function TourProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!enCurso) return;
     const tour = TOURS[enCurso];
-    let cancelar: (() => void) | null = null;
+    let cerrar: (() => void) | null = null;
+    let abortado = false;
+    let cuadro = 0;
 
-    /* Un cuadro de espera para que el navegador termine de pintar: si se
-       midieran las anclas en el mismo commit, una hoja recién abierta o una
-       tabla recién cargada podrían no estar todavía en su sitio. */
-    const cuadro = requestAnimationFrame(() => {
-      cancelar = runTour(tour, {
-        onFinish: (estado) => {
-          marcarVistoRef.current.mutate({
-            key: tour.clave,
-            version: tour.version,
-            status: estado,
+    /* Una espera antes de medir las anclas: un cuadro para que el navegador
+       termine de pintar, y lo que pida el recorrido si además arranca sobre
+       algo que entra animado (la ficha es una hoja que se desliza). */
+    const temporizador = window.setTimeout(
+      () =>
+        (cuadro = requestAnimationFrame(() => {
+          if (abortado) return;
+          cerrar = runTour(tour, {
+            onFinish: (estado) => {
+              marcarVistoRef.current.mutate({
+                key: tour.clave,
+                version: tour.version,
+                status: estado,
+              });
+              /**
+               * **Un recorrido por visita.** Terminar uno vacía la cola en vez
+               * de encadenar con el siguiente. Sin esto, el primer ingreso al
+               * panel son los 4 pasos de la bienvenida y, sin pausa ninguna,
+               * los 6 de la sección: diez globos seguidos, que es justo la
+               * pared que el tope de seis pasos por recorrido existe para
+               * evitar — encadenar la saltaba por la puerta de atrás.
+               *
+               * Lo que quedó en la cola no se pierde: sale la próxima vez que
+               * se entre a esa pantalla (`useTour` vuelve a pedir en cada
+               * cambio de ruta), y mientras tanto el «?» de la sección lo tiene
+               * a un clic.
+               */
+              setCola([]);
+              setEnCurso(null);
+            },
           });
-          setEnCurso(null);
-        },
-      });
-    });
+
+          /* No arrancó porque ningún paso tenía dónde anclarse. No se dio por
+             mostrado: se olvida el lanzamiento para que vuelva a intentarse
+             cuando la pantalla sí pueda explicarse. */
+          if (!cerrar) {
+            lanzados.current.delete(tour.clave);
+            setEnCurso(null);
+          }
+        })),
+      tour.retraso ?? 0
+    );
 
     return () => {
+      abortado = true;
+      window.clearTimeout(temporizador);
       cancelAnimationFrame(cuadro);
-      cancelar?.();
+      cerrar?.();
     };
   }, [enCurso]);
 
@@ -175,12 +229,22 @@ export function TourProvider({ children }: { children: React.ReactNode }) {
       listo: isSuccess,
       progreso,
       pedir,
+      cancelar,
       relanzar,
       reiniciar,
       reiniciando: reiniciarMutation.isPending,
       generacion,
     }),
-    [isSuccess, progreso, pedir, relanzar, reiniciar, reiniciarMutation.isPending, generacion]
+    [
+      isSuccess,
+      progreso,
+      pedir,
+      cancelar,
+      relanzar,
+      reiniciar,
+      reiniciarMutation.isPending,
+      generacion,
+    ]
   );
 
   return <TourContext.Provider value={valor}>{children}</TourContext.Provider>;
@@ -197,20 +261,30 @@ export function useTourContext(): Contexto | null {
 
 /**
  * Lo que declara una pantalla: «tengo este recorrido». `listo` es la condición
- * de que la pantalla ya se pueda explicar — normalmente `!isLoading && !isError`.
- * Nunca se arranca un recorrido sobre un esqueleto de carga.
+ * de que la pantalla ya se pueda explicar — normalmente `!isLoading && !isError`
+ * en una lista, o «la ficha está abierta» en una ficha. Nunca se arranca un
+ * recorrido sobre un esqueleto de carga, y cuando `listo` vuelve a `false` el
+ * recorrido se cierra sin marcarse visto.
+ *
+ * Se vuelve a pedir en cada cambio de ruta. Hace falta para el caso más
+ * tonto y más frecuente de todos: entrar a `/`, que redirige a `/motos` — sin
+ * esto, el recorrido de bienvenida se cancelaría con la redirección y no
+ * volvería a pedirse, porque el armazón no se vuelve a montar. Pedir de más es
+ * gratis: el provider ignora lo que ya lanzó.
  *
  * Devuelve `relanzar` para el botón de ayuda de la sección.
  */
 export function useTour(clave: ClaveTour, listo: boolean = true) {
   const ctx = useTourContext();
+  const pathname = usePathname();
   const pedir = ctx?.pedir;
+  const cancelar = ctx?.cancelar;
   const generacion = ctx?.generacion ?? 0;
 
   useEffect(() => {
-    if (!listo || !pedir) return;
-    pedir(clave);
-  }, [clave, listo, pedir, generacion]);
+    if (listo) pedir?.(clave);
+    else cancelar?.(clave);
+  }, [clave, listo, pedir, cancelar, generacion, pathname]);
 
   return {
     relanzar: useCallback(() => ctx?.relanzar(clave), [ctx, clave]),

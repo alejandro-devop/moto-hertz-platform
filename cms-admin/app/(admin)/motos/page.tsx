@@ -9,6 +9,8 @@ import { EmptyState, ErrorState, InlineSkeleton, TableSkeleton } from '@/compone
 import { mensajeDeError, registrarError } from '@/lib/errors';
 import { paginar } from '@/lib/list-params';
 import { countNeedingAttention } from '@/lib/motorcycle-status';
+import { tourAnchor } from '@/lib/tours/anchor';
+import { useTour } from '@/lib/tours/tour-provider';
 import { useFiltrosUrl } from '@/lib/use-url-filters';
 import type { Motorcycle, MotorcycleFormInput } from '@/lib/graphql/motorcycles';
 import { aplicarFiltros, escribirFiltros, leerFiltros, type Filtros } from './filters';
@@ -69,6 +71,13 @@ export default function MotosPage() {
     setFichaAbierta(false);
   }
 
+  /* El recorrido de la lista espera a que haya filas: sin ellas no se pueden
+     señalar la tabla ni el menú de acciones, y el estado vacío ya explica por
+     su cuenta qué hacer. El de la ficha se dispara al abrirla, no desde el de
+     la lista — encadenarlos obligaría al recorrido a abrir la hoja solo. */
+  useTour('motos.lista', !isLoading && !isError && pagina.total > 0);
+  useTour('motos.ficha', fichaAbierta);
+
   const disponibles = motos.filter((moto) => moto.available).length;
   const resumen = isLoading ? (
     <InlineSkeleton />
@@ -84,6 +93,7 @@ export default function MotosPage() {
     <div className="flex flex-col gap-4">
       <PageHeader
         title="Motos"
+        tour="motos.lista"
         summary={resumen}
         action={
           <Button onClick={() => abrirFicha(null)} className="h-11 md:h-9">
@@ -95,7 +105,10 @@ export default function MotosPage() {
 
       {/* Lo único que caduca solo en el catálogo va arriba de todo. */}
       {porVencer > 0 && filtros.papeles !== 'atencion' && !enPapelera ? (
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border border-warning/30 border-l-[3px] border-l-warning bg-warning-surface px-3 py-2.5 text-[13px]">
+        <div
+          {...tourAnchor('motos.papeles')}
+          className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border border-warning/30 border-l-[3px] border-l-warning bg-warning-surface px-3 py-2.5 text-[13px]"
+        >
           <TriangleAlert className="size-4 shrink-0 text-warning" />
           <span className="min-w-0">
             <strong className="font-semibold">

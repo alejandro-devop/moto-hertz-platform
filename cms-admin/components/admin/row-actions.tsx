@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
+import { tourAnchor } from '@/lib/tours/anchor';
 import { cn } from '@/lib/utils';
 
 export interface AccionFila {
@@ -62,6 +63,7 @@ export function RowActions({ acciones, etiqueta, encabezado }: Props) {
               variant="ghost"
               size="icon-sm"
               aria-label={etiqueta}
+              {...tourAnchor('lista.acciones')}
               className="hidden md:inline-flex"
             />
           }
@@ -104,6 +106,7 @@ export function RowActions({ acciones, etiqueta, encabezado }: Props) {
         aria-label={etiqueta}
         aria-haspopup="dialog"
         onClick={() => setHoja(true)}
+        {...tourAnchor('lista.acciones')}
         className="size-9 md:hidden"
       >
         <MoreVertical />
