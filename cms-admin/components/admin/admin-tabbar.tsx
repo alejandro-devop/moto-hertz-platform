@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { MoreHorizontal } from 'lucide-react';
 import { navLinks } from '@/app/(admin)/nav-links';
 import { MoreSheet } from '@/components/admin/more-sheet';
+import { tourAnchor } from '@/lib/tours/anchor';
 import { cn } from '@/lib/utils';
 
 const ITEM =
@@ -34,6 +35,7 @@ export function AdminTabBar() {
     <>
       <nav
         aria-label="Secciones del panel"
+        {...tourAnchor('panel.tabbar')}
         className="fixed inset-x-0 bottom-0 z-30 flex items-stretch gap-0.5 border-t border-border bg-card px-1 pt-1 pb-[max(0.375rem,env(safe-area-inset-bottom))] md:hidden"
       >
         {destinos.map((link) => {

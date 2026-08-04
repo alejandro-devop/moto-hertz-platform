@@ -2,6 +2,7 @@ import {
   pgTable,
   uuid,
   integer,
+  smallint,
   varchar,
   decimal,
   boolean,
@@ -26,6 +27,7 @@ import type {
   ServicePointType,
 } from '../../types/services/service-point.types';
 import type { ServicePricing } from '../../types/services/service.types';
+import type { TourStatus } from '../../types/services/tour.types';
 
 // ============================================
 // MOTORCYCLES — catálogo de motos
@@ -298,4 +300,35 @@ export const pageContent = pgTable('page_content', {
   field: varchar('field', { length: 100 }).notNull(),
   value: text('value'),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
+});
+
+// ============================================
+// TOUR_PROGRESS — qué recorrido guiado vio ya cada usuario del panel
+// ============================================
+/**
+ * Fase 0 del plan de tours (`docs/tours-plan/PLAN.md`). Una fila = «este
+ * usuario ya vio este tour»; sin fila, no lo ha visto. Reiniciar un recorrido
+ * desde Configuración es literalmente borrar filas: no hay campo «reiniciado»
+ * porque la ausencia de fila ya significa eso.
+ *
+ * `userId` guarda el `sub` del JWT como texto y **sin llave foránea**: el
+ * panel todavía no tiene tabla de usuarios (el admin vive en variables de
+ * entorno, ver `auth.service.ts`). Cuando exista, la FK entra sin migrar datos.
+ *
+ * `version` es la que mantiene esto vivo con el tiempo: si una sección cambia
+ * de interfaz, se sube la versión del tour en el código del panel y el
+ * recorrido vuelve a salir, sin borrarle el historial a nadie.
+ *
+ * `(user_id, tour_key)` es único — ver migración `015`.
+ */
+export const tourProgress = pgTable('tour_progress', {
+  id: uuid('id')
+    .primaryKey()
+    .$defaultFn(() => generateUuidV7()),
+  userId: varchar('user_id', { length: 64 }).notNull(),
+  tourKey: varchar('tour_key', { length: 100 }).notNull(),
+  version: smallint('version').notNull().default(1),
+  /** `CHECK` en la base: solo 'completed' o 'skipped'. Los dos cuentan como visto. */
+  status: varchar('status', { length: 20 }).$type<TourStatus>().notNull().default('completed'),
+  seenAt: timestamp('seen_at').notNull().defaultNow(),
 });

@@ -5,6 +5,7 @@ import { PageHeader } from '@/components/admin/page-header';
 import { ErrorState, TableSkeleton } from '@/components/admin/states';
 import { registrarError } from '@/lib/errors';
 import type { SiteSettings, SiteSettingsFormInput } from '@/lib/graphql/site-settings';
+import { AyudaYRecorridos } from './ayuda-y-recorridos';
 import { SiteSettingsForm } from './site-settings-form';
 import { useSiteSettingsMutations, useSiteSettingsQuery } from './use-site-settings';
 
@@ -58,6 +59,10 @@ export default function ConfiguracionPage() {
       ) : (
         <SiteSettingsForm config={registro} onSubmit={guardar} submitting={edit.isPending} />
       )}
+
+      {/* Fuera del formulario: es una acción que se ejecuta al pulsarla, no un
+          campo que se guarda con «Guardar cambios». */}
+      <AyudaYRecorridos />
     </div>
   );
 }

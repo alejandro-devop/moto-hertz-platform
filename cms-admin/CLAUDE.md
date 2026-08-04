@@ -241,6 +241,43 @@ un dígito de milisegundos; el límite sigue siendo el mismo que ya advertía
 `motos`: si algún catálogo llega a los miles, hay que mover búsqueda, orden y
 paginación a la query en esa sección.
 
+## Recorridos guiados (tours)
+
+> Cimientos construidos en la **Fase 0 del plan de tours** (`../docs/tours-plan/PLAN.md`). Librería: **driver.js** (~5 kB, sin dependencias, agnóstica del framework).
+
+Cada sección del panel se explica sola la primera vez que se entra. El progreso vive en la base (`tour_progress`, ver `../backend/CLAUDE.md`), no en `localStorage`: sobrevive al navegador y al equipo. Se reinician desde **Configuración → Ayuda y recorridos**.
+
+| Pieza | Archivo | Qué resuelve |
+| --- | --- | --- |
+| `TOURS`, `ClaveTour` | `lib/tours/registry.ts` | El catálogo de recorridos: claves, versiones, pasos y textos. Todo lo que existe está aquí. |
+| `tourAnchor`, `selectorTour`, `anclaVisible` | `lib/tours/anchor.ts` | El anclaje `data-tour`, en una sola forma de escribirlo y de buscarlo. |
+| `runTour` | `lib/tours/run-tour.ts` | El envoltorio de `driver.js`: filtra pasos, decide terminado vs. saltado, aplica el tema. |
+| `TourProvider`, `useTour`, `useTourContext` | `lib/tours/tour-provider.tsx` | Quién decide si un recorrido se muestra. Va en `AdminShell`. |
+| `useTourProgressQuery`, `useTourMutations` | `lib/tours/use-tour-progress.ts` | La consulta (una vez por sesión) y las mutaciones. |
+| `AyudaYRecorridos` | `app/(admin)/configuracion/ayuda-y-recorridos.tsx` | El reinicio, fuera del formulario de configuración. |
+
+**Agregar un recorrido a una sección** son tres cosas: definirlo en `registry.ts`, colgar los `data-tour` con `tourAnchor()` en los elementos que señala, y llamar `useTour('clave', listo)` en la página. El provider hace el resto.
+
+**Las reglas que ya están resueltas y no hay que volver a resolver por sección.**
+
+**Las anclas son `data-tour`, nunca clases de Tailwind.** Una clase cambia con cualquier retoque visual y nadie se entera de que rompió un recorrido; un `data-tour` está ahí a propósito y sale en el `grep`.
+
+**Un paso cuya ancla no está en el DOM se salta en silencio** (`anclaVisible`, más `skipMissingElement` como red). El recorrido de una lista vacía no puede reventar. Se filtra **antes** de arrancar para que el contador diga «2 de 4» de verdad, y `anclaVisible` mide tamaño además de existencia porque en este panel «no existe en esta pantalla» casi siempre se escribe `hidden md:flex`.
+
+**Nunca se arranca sobre un esqueleto de carga.** El segundo argumento de `useTour` es la condición de que la pantalla ya se pueda explicar (`!isLoading && !isError`).
+
+**Uno a la vez, y una vez por sesión de navegador.** Lo que llega mientras hay un recorrido corriendo espera en la cola; `lanzados` (un `Set` en el provider) evita que volver a la misma pantalla —o el doble montaje de React en desarrollo— relance lo ya mostrado.
+
+**Cambiar de ruta cancela sin marcar visto**, para que el recorrido pueda volver a salir. Cancelar no es decidir: `runTour` distingue el cierre del usuario (`onDestroyStarted`, que `driver.js` solo dispara en botón/Esc/clic fuera) del `destroy()` programático nuestro, y solo el primero marca.
+
+**Marcar visto es optimista y silencioso**; reiniciar sí avisa. Si falla marcar, el peor caso es que el recorrido salga una vez más — no hay razón para interrumpir a nadie con un error por eso.
+
+**Máximo 5 o 6 pasos por recorrido.** Es una regla, no una sugerencia: uno largo lo salta todo el mundo, y saltar también cuenta como visto, con lo cual el usuario se queda sin la ayuda para siempre. Lo que no cabe en 6 pasos son dos recorridos.
+
+**Actualizar un recorrido = subir su `version` en `registry.ts`**, no borrar filas: vuelve a salir para todos sin borrarle el historial a nadie.
+
+**Los estilos del popover se reescriben en `globals.css` (`.driver-popover.tour-panel`).** La hoja que trae la librería tiene los colores quemados para fondo blanco; sin ese bloque, el recorrido se ve como una pieza ajena y en tema oscuro queda ilegible.
+
 ## Dev
 
 ```bash

@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { BrandMark } from '@/components/admin/brand-mark';
 import { ThemeToggle } from '@/components/admin/theme-toggle';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { tourAnchor } from '@/lib/tours/anchor';
 import { SITIO_PUBLICO } from '@/lib/site';
 
 /**
@@ -36,6 +37,7 @@ export function AdminTopbar() {
               target="_blank"
               rel="noreferrer"
               aria-label="Ver el sitio público"
+              {...tourAnchor('panel.sitio')}
               className="hidden size-8 shrink-0 place-items-center rounded-lg border border-border text-muted-foreground hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none md:grid"
             >
               <ExternalLink className="size-4" />
@@ -45,7 +47,11 @@ export function AdminTopbar() {
         <TooltipContent>Ver el sitio público</TooltipContent>
       </Tooltip>
 
-      <ThemeToggle className="hidden md:inline-flex" />
+      {/* El ancla va en el envoltorio y no en `ThemeToggle`: el componente
+          solo acepta `className`, y el recorrido señala el grupo entero. */}
+      <span {...tourAnchor('panel.tema')} className="hidden md:inline-flex">
+        <ThemeToggle />
+      </span>
     </header>
   );
 }

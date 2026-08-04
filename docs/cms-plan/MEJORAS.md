@@ -74,35 +74,35 @@ cuál cae cada error, que es la mitad del trabajo.
 Detalles a definir: si se puede saltar pasos, si el último paso es un resumen
 antes de guardar, y qué pasa si el usuario cierra a mitad del asistente.
 
-### Guías interactivas por módulo
+### Guías interactivas por módulo — ya no es una idea suelta, tiene plan propio
 
-Cada sección del panel tiene decisiones que no son obvias a la primera: que un
-día sin encender está cerrado, que la portada de una moto es la primera foto de
-la lista, que la papelera vive dentro del filtro de estado, que el enlace corto
-de Google Maps no trae coordenadas. Hoy eso solo lo sabe quien lo construyó o
-quien lea los `CLAUDE.md`.
+Se pasó a **[`docs/tours-plan/PLAN.md`](../tours-plan/PLAN.md)**, con seis fases.
+Las dos preguntas que este pendiente dejaba abiertas quedaron resueltas ahí:
 
-Un recorrido guiado por módulo —lanzable desde un botón de ayuda, y ofrecido
-solo la primera vez— resuelve eso sin llenar la interfaz de textos.
+- **Dónde se guarda «ya vi el recorrido»**: en la base, tabla `tour_progress`
+  (migración `015`), no en `localStorage` — lo pidió el usuario para que
+  sobreviva al navegador y al equipo. La clave por usuario es el `sub` del JWT.
+- **Cómo se actualiza un recorrido cuando cambia el módulo**: a mano, subiendo
+  el número de `version` del tour en el código; el recorrido vuelve a salir
+  solo para todo el mundo, sin borrarle el historial a nadie.
 
-**Sobre la librería.** Verifica la compatibilidad con React 19 y Next 15 en el
-momento de implementarlo; este ecosistema se mueve y esta nota puede estar
-vieja:
+La librería elegida fue **driver.js**, la recomendación que estaba aquí.
+Cuando el plan termine, esta entrada se borra.
 
-| Opción | A favor | En contra |
-|---|---|---|
-| **driver.js** | Diminuta, sin dependencias, agnóstica del framework — no se rompe cuando React saca una versión mayor | El estado del recorrido lo manejas tú |
-| **react-joyride** | La más conocida del mundo React, muchos ejemplos | Históricamente lenta en soportar versiones nuevas de React; comprobar antes de casarse |
-| **@reactour/tour** | API de React limpia, mantenida | Comunidad más pequeña |
-| **intro.js** | Muy completa | **Licencia comercial de pago** para uso empresarial — descartarla salvo que se compre |
+---
 
-Recomendación de partida: **driver.js**, precisamente porque no se acopla a la
-versión de React. El panel ya tiene dónde colgar el botón de ayuda
-(`components/admin/admin-topbar.tsx`).
+### El id de usuario del contexto GraphQL pasa por `Number()`
 
-Lo que hay que decidir: dónde se guarda "este usuario ya vio el recorrido de
-motos" (hoy no hay tabla de usuarios; `localStorage` alcanza), y si el recorrido
-se actualiza solo cuando el módulo cambia o hay que reescribirlo a mano.
+`getGraphQLContext` (`backend/src/graphql/server.ts`) hace
+`Number(payload.sub)` para armar `context.user.id`. Hoy funciona porque el
+admin único emite `sub: '1'`; el día que exista una tabla de usuarios con ids
+UUID, ese `Number()` devuelve `NaN` **en silencio** y todo lo que dependa del
+usuario de la sesión se rompe sin un error que lo diga.
+
+Lo que ya lo esquiva: `tour.resolvers.ts` vuelve el id a texto con `String()`
+antes de tocar `tour_progress`, cuya columna `user_id` es `VARCHAR` justamente
+por esto. Arreglarlo de raíz es cambiar el tipo de `context.user.id` a `string`
+y revisar los usos (`error-handler.ts`, `validation.ts`).
 
 ---
 

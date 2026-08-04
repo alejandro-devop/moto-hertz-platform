@@ -4,8 +4,19 @@ import { useEffect, useState } from 'react';
 import { AdminRail } from '@/components/admin/admin-rail';
 import { AdminTabBar } from '@/components/admin/admin-tabbar';
 import { AdminTopbar } from '@/components/admin/admin-topbar';
+import { TourProvider, useTour } from '@/lib/tours/tour-provider';
 
 const CLAVE_COLAPSO = 'admin:rail-colapsado';
+
+/**
+ * El único recorrido que no pertenece a una sección: explica el armazón, así
+ * que lo pide el armazón. No pinta nada — `useTour` solo avisa al provider de
+ * que este recorrido existe y que la pantalla ya está lista.
+ */
+function TourBienvenida() {
+  useTour('panel.bienvenida');
+  return null;
+}
 
 /**
  * Estructura del panel. Escritorio: barra lateral colapsable + barra superior.
@@ -29,15 +40,20 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex min-h-dvh">
-      <AdminRail collapsed={collapsed} onToggle={toggle} />
-      <div className="flex min-w-0 flex-1 flex-col">
-        <AdminTopbar />
-        <main className="flex-1 px-4 pt-4 pb-[calc(4.5rem+env(safe-area-inset-bottom))] md:px-6 md:pt-6 md:pb-8">
-          {children}
-        </main>
+    /* Los recorridos guiados envuelven todo el panel: uno solo a la vez, y su
+       progreso se pide una sola vez por sesión. Ver `lib/tours/`. */
+    <TourProvider>
+      <div className="flex min-h-dvh">
+        <AdminRail collapsed={collapsed} onToggle={toggle} />
+        <div className="flex min-w-0 flex-1 flex-col">
+          <AdminTopbar />
+          <main className="flex-1 px-4 pt-4 pb-[calc(4.5rem+env(safe-area-inset-bottom))] md:px-6 md:pt-6 md:pb-8">
+            {children}
+          </main>
+        </div>
+        <AdminTabBar />
       </div>
-      <AdminTabBar />
-    </div>
+      <TourBienvenida />
+    </TourProvider>
   );
 }

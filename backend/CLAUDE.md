@@ -118,6 +118,20 @@ Segundo dominio del proyecto (después de `news`) donde **la lectura pública y 
 
 Hoy solo existe la página `motos` (`heading`, `caption`), consumida por `web/src/app/motos/page.tsx`.
 
+### `tour` (Fase 0 del plan de tours, ver `docs/tours-plan/PLAN.md`)
+
+**El único dominio cuya query NO es pública.** Todos los demás exponen lectura sin sesión porque `web` las consume; `tourProgress` devuelve el progreso de recorridos guiados **del usuario de la sesión**, el sitio no lo consume, y por eso lleva `requireAuth` igual que las mutaciones. Es la excepción declarada al patrón — está escrita en el SDL para que nadie la "corrija" sin querer.
+
+**El `userId` no viaja nunca desde el cliente.** Ni en los argumentos ni en el input: lo pone el resolver desde el JWT (`usuarioDeLaSesion()`). No existe una operación que lea ni borre el progreso de otra persona.
+
+**`user_id` es `VARCHAR(64)` sin llave foránea**, a la espera de una tabla de usuarios que hoy no existe (ver «Autenticación» abajo): guarda el `sub` del JWT tal cual, que con el admin único es `'1'`. Cuando exista `users`, entra la FK sin migrar un solo dato. Ojo con `Number(payload.sub)` en `getGraphQLContext` — anotado en `MEJORAS.md`.
+
+**`version` es lo que mantiene los recorridos vivos con el tiempo.** No es un dato del usuario: es la versión que tiene el tour **en el código del panel**. Si una sección cambia de interfaz, se sube ahí y el recorrido vuelve a salir para todos, sin borrarle el historial a nadie. La comparación (`fila.version < TOUR.version`) la hace `cms-admin`, no el backend — el backend solo guarda lo que le digan.
+
+**`tourSeen` es un upsert idempotente** sobre el índice único `(user_id, tour_key)`: marcarlo dos veces actualiza, no duplica. Sin `onConflictDoUpdate`, mismo criterio explícito que `page-content`.
+
+**`tourReset(key)` borra de verdad**, y devuelve **cuántas filas borró**. La ausencia de fila ya significa «no lo ha visto», así que no hay campo «reiniciado»; el contador es para que el panel pueda decir «no había nada que reiniciar» en vez de un «listo» que no hizo nada. Sin `key`, reinicia todos los del usuario.
+
 ## Autenticación
 
 Un solo rol admin (sin tabla de usuarios ni roles diferenciados, decisión de Fase 3): las credenciales viven en `ADMIN_EMAIL` / `ADMIN_PASSWORD_HASH` (bcrypt) por variable de entorno. La mutation `login(email, password)` (`src/graphql/modules/auth/`) verifica contra esas variables y devuelve un JWT (`src/shared/auth/jwt.ts`, secreto en `JWT_SECRET`). `getGraphQLContext` (`src/graphql/server.ts`) valida el header `Authorization: Bearer <token>` en cada request y expone `context.user` si es válido. Las queries de catálogo siguen siendo públicas; las mutaciones de escritura llaman a `requireAuth(context, operationName)` (`src/graphql/utils/error-handler.ts`) para exigir sesión — ver `motorcycle.resolvers.ts` como referencia a replicar en los demás dominios.

@@ -7,6 +7,7 @@ import { navGroups, navLinks } from '@/app/(admin)/nav-links';
 import { BrandMark } from '@/components/admin/brand-mark';
 import { LogoutButton } from '@/components/admin/logout-button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { tourAnchor } from '@/lib/tours/anchor';
 import { cn } from '@/lib/utils';
 
 /**
@@ -25,6 +26,7 @@ export function AdminRail({
   return (
     <aside
       data-collapsed={collapsed}
+      {...tourAnchor('panel.rail')}
       className={cn(
         'hidden shrink-0 flex-col gap-1 bg-rail p-3 text-rail-foreground transition-[width] duration-200 md:flex',
         collapsed ? 'w-16' : 'w-56'
