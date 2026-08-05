@@ -1,12 +1,25 @@
 @use "../../styles/abstracts" as *;
 
+// Vidrio navy en vez de negro plano: mismo lenguaje que el nav/los botones,
+// blur alto para que se note incluso sobre un fondo claro.
 .backdrop {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
+  // El blur solo se nota donde hay algo con detalle detrás (una foto): sobre
+  // una sección de fondo plano (blanco/off-white, la mayoría del sitio),
+  // blurear un color uniforme no cambia nada a la vista. Por eso el tinte
+  // sube de opacidad acá — así se nota siempre, y el blur igual ayuda cuando
+  // el drawer se abre sobre el hero.
+  background-color: rgba(10, 23, 48, 0.55);
+  // El prefijo va antes que la propiedad estándar: Turbopack/lightningcss
+  // trata ambas como el mismo alias y se queda con la última declarada. En
+  // el orden contrario, Chrome moderno (que ya no reconoce el prefijo)
+  // terminaba sin blur — el bug real detrás de "no se ve el blur".
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  backdrop-filter: blur(40px) saturate(180%);
   z-index: 1000;
   opacity: 0;
   visibility: hidden;
@@ -18,17 +31,23 @@
   }
 }
 
+// Mismo vidrio que el nav: blanco + alfa + blur, no blanco sólido. El alfa
+// se queda alto (0.82) porque acá el texto es la lista de navegación —
+// necesita más contraste garantizado que un botón o una franja decorativa.
 .drawer {
   position: fixed;
   top: 0;
   left: 0;
   width: 280px;
   height: 100vh;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.82);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  backdrop-filter: blur(22px) saturate(180%);
+  border-right: 1px solid rgba(255, 255, 255, 0.5);
   z-index: 1001;
   transform: translateX(-100%);
   transition: transform 0.3s ease-in-out;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 0 24px rgba(12, 30, 63, 0.12);
 
   &.open {
     transform: translateX(0);
