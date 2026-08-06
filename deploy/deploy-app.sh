@@ -140,9 +140,35 @@ ok "migraciones aplicadas"
 # --- PM2 ----------------------------------------------------------------
 log "PM2 (backend, web, cms-admin)"
 cd "$REPO_DIR"
+# 'pm2 start' sobre apps que ya existen por nombre las reinicia con la
+# definición vieja en memoria de PM2, sin releer cambios de 'script'/'args'
+# del ecosystem.config.js — hay que borrar y recrear en cada deploy.
+pm2 delete ecosystem.config.js >/dev/null 2>&1 || true
 pm2 start ecosystem.config.js
 pm2 save
 ok "PM2 corriendo y guardado (pm2 startup aparte, una sola vez por servidor)"
+
+# --- Health check ---------------------------------------------------------
+log "Verificando que los 3 procesos respondan (5s de margen para arrancar)"
+sleep 5
+HEALTH_FAIL=0
+check_port() {
+  local name=$1 url=$2
+  shift 2
+  local code
+  code=$(curl -s -o /dev/null -w '%{http_code}' "$url" "$@" 2>/dev/null || echo "000")
+  if [[ "$code" == "200" ]]; then
+    ok "$name responde (HTTP $code)"
+  else
+    echo "  AVISO: $name respondió HTTP $code — revisar 'pm2 logs $name'." >&2
+    HEALTH_FAIL=1
+  fi
+}
+check_port backend "http://localhost:8080/graphql" \
+  -X POST -H "Content-Type: application/json" -d '{"query":"{__typename}"}'
+check_port web "http://localhost:3000/"
+check_port cms-admin "http://localhost:3001/login"
+[[ $HEALTH_FAIL -eq 1 ]] && echo "  Al menos un proceso no respondió — no se marca como falla dura, pero revisar antes de tocar nginx." >&2
 
 # --- Resumen -----------------------------------------------------------
 log "Resumen"
