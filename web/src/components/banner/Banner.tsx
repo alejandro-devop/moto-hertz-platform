@@ -11,9 +11,9 @@ import type { Banner as BannerItem } from "@/types/banner";
 // ningún banner activo y vigente (carrusel recién estrenado, o todos
 // desactivados). Ver `banner.service.ts` del backend.
 const bannerImages = [
-  "https://images.unsplash.com/photo-1558980664-769d59546b3d?w=1600",
-  "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600",
-  "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=1600",
+  "/assets/placeholder-banner.svg",
+  "/assets/placeholder-banner.svg",
+  "/assets/placeholder-banner.svg",
 ];
 
 interface BannerProps {

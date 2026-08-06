@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e4e7eb"/>
+      <stop offset="100%" stop-color="#c7ccd1"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <g fill="none" stroke="#8a9099" stroke-width="6">
+    <rect x="640" y="330" width="320" height="240" rx="14"/>
+    <circle cx="730" cy="410" r="26"/>
+    <path d="M660 550 L780 440 L860 500 L940 420 L940 550 Z" fill="#8a9099" stroke="none"/>
+  </g>
+  <text x="800" y="640" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#8a9099">Imagen próximamente</text>
+</svg>

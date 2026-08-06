@@ -31,8 +31,7 @@ const DEFAULT_SECOND_BANNER = {
     "Planes de crédito flexibles para que estrenes tu moto sin complicaciones.",
   ctaLabel: "Conocer planes",
   ctaUrl: "/motos",
-  backgroundImage:
-    "https://images.unsplash.com/photo-1558980664-769d59546b3d?w=1600",
+  backgroundImage: "/assets/placeholder-banner.svg",
 };
 
 /**
