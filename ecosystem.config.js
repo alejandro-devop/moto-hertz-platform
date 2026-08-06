@@ -47,9 +47,12 @@ module.exports = {
       },
     },
     {
+      // node_modules/.bin/next es un shim de shell de pnpm, no JS — PM2 lo
+      // corre con `node` en modo fork y revienta con SyntaxError. Se apunta
+      // al CLI real de Next.js, que sí es un script de Node.
       name: 'web',
       cwd: path.join(__dirname, 'web'),
-      script: 'node_modules/.bin/next',
+      script: 'node_modules/next/dist/bin/next',
       args: 'start',
       env: {
         NODE_ENV: 'production',
@@ -59,7 +62,7 @@ module.exports = {
     {
       name: 'cms-admin',
       cwd: path.join(__dirname, 'cms-admin'),
-      script: 'node_modules/.bin/next',
+      script: 'node_modules/next/dist/bin/next',
       args: 'start',
       env: {
         NODE_ENV: 'production',
