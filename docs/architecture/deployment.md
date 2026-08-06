@@ -53,10 +53,10 @@ Todo lo de abajo está confirmado con `deploy/check-server.sh` (solo lectura) co
 3. [x] Contenedor `motoshertz-postgres` (`postgres:17-alpine`, volumen `motoshertz_pgdata`, `127.0.0.1:5432`), `.env.production` con credenciales reales, 15 migraciones aplicadas.
 4. [x] `ecosystem.config.js` con los 3 procesos, `pm2 start` (con `pm2 delete` antes — si no, PM2 reinicia apps existentes con la definición vieja en vez de releer el `script` nuevo). Los 3 verificados con `curl`, HTTP 200.
 5. [x] `pm2 save`. Falta `pm2 startup` (una sola vez, para que sobrevivan a un reinicio del droplet).
-6. [ ] Agregar bloques `server` en nginx para `motoshertz.com`, `www.motoshertz.com`, `admin.motoshertz.com`, `api.motoshertz.com`, cada uno con `proxy_pass` a su puerto (`3000`/`3001`/`8080`) y `ssl_certificate`/`ssl_certificate_key` apuntando a `/etc/ssl/cloudflare/motoshertz.com.{pem,key}` — sin tocar los bloques existentes de `motoshotwheels.com`.
+6. [x] Bloques `server` en nginx (`deploy/nginx-motoshertz.conf`, instalado en `/etc/nginx/sites-available/`), `proxy_pass` a cada puerto (`3000`/`3001`/`8080`), cert de Origin CA — `nginx -t` OK, reload aplicado, `motoshotwheels.com` verificado sin cambios. Los 4 subdominios probados con `curl --resolve` directo contra el origen: `web`/`www` HTTP 200, `admin` HTTP 307 (redirige a `/login`, correcto sin sesión), `api/graphql` responde de verdad.
 7. [x] DNS de `motoshertz.com` (y subdominios) apuntando al droplet — vía Cloudflare.
-8. [ ] Poner Cloudflare en modo **Full (strict)** (SSL/TLS → Overview). No hay paso de certbot para este dominio — el certificado ya está generado (Origin CA), ver «Requisitos del droplet».
-9. [ ] Smoke test: `web` carga el catálogo real, `cms-admin` permite login y un cambio ahí se refleja en `web` tras refrescar, y `motoshotwheels.com` sigue respondiendo sin cambios.
+8. [ ] Poner Cloudflare en modo **Full (strict)** (SSL/TLS → Overview) — pendiente, lo hace el usuario en el dashboard. No hay paso de certbot para este dominio — el certificado ya está generado (Origin CA), ver «Requisitos del droplet».
+9. [ ] Smoke test contra los dominios reales una vez el modo Full (strict) esté activo.
 
 ## Redeploys posteriores
 

@@ -82,10 +82,10 @@ Verificación: `./deploy/check-server.sh` (solo lectura, confirma todo lo de arr
 3. [x] Contenedor de Postgres con credenciales reales (`motoshertz-postgres`, volumen `motoshertz_pgdata`), `.env.production` con secrets reales, 15 migraciones aplicadas.
 4. [x] `ecosystem.config.js` (PM2) con los 3 procesos — en el repo, sin secrets (los carga de `.env.production`, gitignored, solo en el servidor).
 5. [x] `pm2 start ecosystem.config.js` + `pm2 save` — los 3 procesos `online`, verificados con `curl` (HTTP 200 en los 3 puertos). Falta `pm2 startup` (una sola vez, para sobrevivir a un reinicio del droplet).
-6. [ ] Agregar bloques `server` en nginx para `motoshertz.com` / `www.motoshertz.com` / `admin.motoshertz.com` / `api.motoshertz.com`, reverse proxy a `localhost:3000`/`3001`/`8080`, usando el certificado ya generado (`/etc/ssl/cloudflare/motoshertz.com.pem` + `.key`) — sin tocar los bloques existentes de `motoshotwheels.com`.
+6. [x] Bloques `server` en nginx (`deploy/nginx-motoshertz.conf`) para `motoshertz.com` / `www` / `admin` / `api`, reverse proxy a `localhost:3000`/`3001`/`8080` con el certificado de Origin CA — instalados, `nginx -t` OK, reload sin afectar `motoshotwheels.com` (verificado, sigue en HTTP 200). Los 4 probados directo contra el origen con `curl --resolve` — todos responden como se espera.
 7. [x] DNS de `motoshertz.com` (y subdominios) apuntando al droplet — vía Cloudflare, ver «Dominio».
-8. [ ] Poner Cloudflare en modo **Full (strict)** (SSL/TLS → Overview) — recién ahí el tráfico real empieza a fluir por el certificado de origen. (Ya no aplica `certbot` para este dominio, ver «Decisión de arquitectura».)
-9. [ ] Smoke test end-to-end (incluyendo que `motoshotwheels.com` siga respondiendo sin cambios).
+8. [ ] Poner Cloudflare en modo **Full (strict)** (SSL/TLS → Overview) — recién ahí el tráfico real (a través de Cloudflare, no solo contra el origen) empieza a fluir. Pendiente de que el usuario lo haga en el dashboard. (Ya no aplica `certbot` para este dominio, ver «Decisión de arquitectura».)
+9. [ ] Smoke test end-to-end contra los dominios reales (una vez el modo Full strict esté activo).
 
 Los pasos del plan anterior ("crear `Dockerfile` de producción para `web`/`cms-admin`", "crear `docker-compose.prod.yml`", "crear `Caddyfile`") ya no aplican a este flujo — esos artefactos quedan en el repo sin usarse en producción, ver «Riesgos / notas».
 
