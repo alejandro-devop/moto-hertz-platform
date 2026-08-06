@@ -58,7 +58,7 @@ export default function Menu() {
                   Cards/NewsSection/SecondBanner. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={settings.logo || "/assets/logos/yamaha.svg"}
+                src={settings.logo || "/assets/logos/placeholder-logo.svg"}
                 alt={settings.siteName}
                 className={styles.logo}
               />

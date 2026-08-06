@@ -52,7 +52,7 @@ export async function generateMetadata(): Promise<Metadata> {
     description,
     keywords: settings.seoKeywords.length > 0 ? settings.seoKeywords : undefined,
     icons: {
-      icon: "/assets/logos/favicon.ico",
+      icon: "/assets/logos/placeholder-favicon.ico",
     },
     manifest: "/manifest.json",
     openGraph: {
