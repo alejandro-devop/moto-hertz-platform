@@ -77,11 +77,11 @@ Verificación: `./deploy/check-server.sh` (solo lectura, confirma todo lo de arr
 
 ## Pasos detallados
 
-1. [x] Instalar los requisitos del droplet: nvm + Node 20, pnpm, PM2, Docker + imagen `postgres:17-alpine`, Redis (repo oficial) — `deploy/install-server.sh`, corrido 2026-08-05.
-2. [ ] Clonar el repo en el droplet, `pnpm install`, `pnpm build` (compila `backend`, `web`, `cms-admin`).
-3. [ ] Crear el contenedor de Postgres con datos/credenciales reales (`docker run ... postgres:17-alpine`), completar el `.env` de `backend`, correr `npm run migrate` dentro de `backend/`.
-4. [ ] Crear `ecosystem.config.js` (PM2) con los 3 procesos y sus variables de entorno de producción.
-5. [ ] `pm2 start ecosystem.config.js` + `pm2 save` + `pm2 startup`.
+1. [x] Instalar los requisitos del droplet: nvm + Node 20, pnpm, PM2, Docker + imagen `postgres:17-alpine`, Redis (repo oficial), swap de 2GB — `deploy/install-server.sh`, corrido 2026-08-05.
+2. [x] Clonar el repo, `pnpm install`, build **secuencial** de `backend`/`web`/`cms-admin` — `deploy/deploy-app.sh`, corrido 2026-08-06. (Builds en paralelo mataban `cms-admin` por OOM en este droplet — ver nota en «Riesgos».)
+3. [x] Contenedor de Postgres con credenciales reales (`motoshertz-postgres`, volumen `motoshertz_pgdata`), `.env.production` con secrets reales, 15 migraciones aplicadas.
+4. [x] `ecosystem.config.js` (PM2) con los 3 procesos — en el repo, sin secrets (los carga de `.env.production`, gitignored, solo en el servidor).
+5. [x] `pm2 start ecosystem.config.js` + `pm2 save` — los 3 procesos `online`, verificados con `curl` (HTTP 200 en los 3 puertos). Falta `pm2 startup` (una sola vez, para sobrevivir a un reinicio del droplet).
 6. [ ] Agregar bloques `server` en nginx para `motoshertz.com` / `www.motoshertz.com` / `admin.motoshertz.com` / `api.motoshertz.com`, reverse proxy a `localhost:3000`/`3001`/`8080`, usando el certificado ya generado (`/etc/ssl/cloudflare/motoshertz.com.pem` + `.key`) — sin tocar los bloques existentes de `motoshotwheels.com`.
 7. [x] DNS de `motoshertz.com` (y subdominios) apuntando al droplet — vía Cloudflare, ver «Dominio».
 8. [ ] Poner Cloudflare en modo **Full (strict)** (SSL/TLS → Overview) — recién ahí el tráfico real empieza a fluir por el certificado de origen. (Ya no aplica `certbot` para este dominio, ver «Decisión de arquitectura».)
@@ -109,3 +109,6 @@ Los pasos del plan anterior ("crear `Dockerfile` de producción para `web`/`cms-
 - **Artefactos Docker de producción obsoletos para este plan**: `docker-compose.prod.yml`, `Caddyfile`, `backend/Dockerfile`, `web/Dockerfile`, `cms-admin/Dockerfile` (los dos últimos con `output: "standalone"`) y `.env.prod.example` (todavía con el dominio del template, `yamahaoriente.com`) siguen en el repo pero no se usan en este flujo. `backend/Dockerfile.dev` sí sigue vigente (desarrollo local).
 - Backups de Postgres: con Postgres nativo (no contenedor) hay que definir el mecanismo — antes lo resolvía el servicio `postgres-backup` de Docker Compose. Pendiente: `pg_dump` por cron + rotación, o similar.
 - Un solo droplet sigue siendo punto único de falla para los 3 servicios nuevos y para Postgres/Redis nuevos, igual que ya lo era para `motoshotwheels.com` — sin cambios respecto al riesgo ya conocido.
+- **El droplet es de 1 core / ~2GB RAM.** `pnpm -r build` (los 3 paquetes en paralelo) mató `cms-admin` por OOM la primera vez — arreglado con swap de 2GB (`install-server.sh`) y build secuencial (`deploy-app.sh`). Cualquier cambio futuro al proceso de build debe mantener el build secuencial o el droplet necesita más RAM.
+- **`pm2 start ecosystem.config.js` no relee `script`/`args` de apps que ya existen por nombre** — reinicia con la definición vieja en memoria de PM2. `deploy-app.sh` hace `pm2 delete` antes de cada `pm2 start` por esto; si se edita el script de deploy a mano, no saltarse ese paso.
+- El disco del droplet llegó a estar 100% lleno por `/root/backups/` (22GB de backups abandonados de `motoshotwheels.com`, no del proyecto nuevo) — podado a 15GB libres el 2026-08-06. Si vuelve a llenarse, revisar ahí y en `/var/www/html/backups/` (3.8GB, dumps de 2023, no expuestos por HTTP pero tampoco deberían estar en el document root) antes de asumir que es cosa de `moto-hertz-platform`.

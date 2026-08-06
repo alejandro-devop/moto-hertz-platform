@@ -48,11 +48,11 @@ Todo lo de abajo está confirmado con `deploy/check-server.sh` (solo lectura) co
 
 ## Primer deploy (manual)
 
-1. [x] En el droplet: instalar los requisitos (`deploy/install-server.sh`, ya corrido).
-2. [ ] Clonar el repo, `pnpm install && pnpm build` (compila los 3 paquetes: `backend` con `tsc`, `web`/`cms-admin` con `next build`).
-3. [ ] `docker run` del contenedor de Postgres (`postgres:17-alpine`, volumen nombrado, puerto `127.0.0.1:5432`, credenciales reales), completar el `.env` de `backend`, correr `npm run migrate` dentro de `backend/`.
-4. [ ] Completar `ecosystem.config.js` con las variables de producción (`JWT_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD_HASH`, URL del GraphQL, `REDIS_PORT=6380`, etc.) y `pm2 start ecosystem.config.js`.
-5. [ ] `pm2 save` + `pm2 startup` para que los 3 procesos sobrevivan a un reinicio del droplet.
+1. [x] En el droplet: instalar los requisitos (`deploy/install-server.sh`, ya corrido — incluye swap de 2GB).
+2. [x] Clonar el repo, `pnpm install`, build **secuencial** de los 3 paquetes (`deploy/deploy-app.sh` — nunca `pnpm -r build` en paralelo, mata `cms-admin` por OOM en este droplet de 1 core/~2GB).
+3. [x] Contenedor `motoshertz-postgres` (`postgres:17-alpine`, volumen `motoshertz_pgdata`, `127.0.0.1:5432`), `.env.production` con credenciales reales, 15 migraciones aplicadas.
+4. [x] `ecosystem.config.js` con los 3 procesos, `pm2 start` (con `pm2 delete` antes — si no, PM2 reinicia apps existentes con la definición vieja en vez de releer el `script` nuevo). Los 3 verificados con `curl`, HTTP 200.
+5. [x] `pm2 save`. Falta `pm2 startup` (una sola vez, para que sobrevivan a un reinicio del droplet).
 6. [ ] Agregar bloques `server` en nginx para `motoshertz.com`, `www.motoshertz.com`, `admin.motoshertz.com`, `api.motoshertz.com`, cada uno con `proxy_pass` a su puerto (`3000`/`3001`/`8080`) y `ssl_certificate`/`ssl_certificate_key` apuntando a `/etc/ssl/cloudflare/motoshertz.com.{pem,key}` — sin tocar los bloques existentes de `motoshotwheels.com`.
 7. [x] DNS de `motoshertz.com` (y subdominios) apuntando al droplet — vía Cloudflare.
 8. [ ] Poner Cloudflare en modo **Full (strict)** (SSL/TLS → Overview). No hay paso de certbot para este dominio — el certificado ya está generado (Origin CA), ver «Requisitos del droplet».
