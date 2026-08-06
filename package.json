@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "scripts": {
     "dev": "pnpm run docker:up && concurrently -n web,cms-admin -c blue,magenta \"pnpm --filter ./web dev\" \"pnpm --filter ./cms-admin dev\"",

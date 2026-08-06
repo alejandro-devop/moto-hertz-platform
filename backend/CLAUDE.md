@@ -8,7 +8,7 @@ API GraphQL de Yamaha Oriente, consumida por `../web` (catálogo público) y, m�
 
 ## Stack
 
-Node.js ≥18 · TypeScript 5 · Express 4 (legado, solo health check) · Apollo Server 5 · PostgreSQL 17 · Drizzle ORM · Redis · Zod · Jest · Docker
+Node.js ≥20 · TypeScript 5 · Express 4 (legado, solo health check) · Apollo Server 5 · PostgreSQL 17 · Drizzle ORM · Redis · Zod · Jest · Docker
 
 ## Regla #1 — GraphQL primero
 

@@ -6,7 +6,7 @@ Ver [`CLAUDE.md`](CLAUDE.md) para patrones de desarrollo, estado de cada dominio
 
 ## Stack
 
-Node ≥18 · TypeScript · Express (legado, solo health) · Apollo Server (GraphQL) · PostgreSQL 17 + Drizzle ORM · Redis · Zod · Jest · Docker
+Node ≥20 · TypeScript · Express (legado, solo health) · Apollo Server (GraphQL) · PostgreSQL 17 + Drizzle ORM · Redis · Zod · Jest · Docker
 
 ## Desarrollo local
 

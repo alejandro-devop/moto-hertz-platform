@@ -3,12 +3,12 @@
 Monorepo (pnpm workspaces) de la plataforma Yamaha Oriente, compuesto por tres paquetes:
 
 - **`web/`** (puerto `3000`) — sitio público. Next.js 15 + React 19 + TypeScript + Tailwind 4 + Sass + TanStack Query + Biome + PWA. Migrado desde `yamaha-motohertz`.
-- **`backend/`** (puerto `8080`) — API GraphQL. Node ≥18 + TypeScript + Express 4 + Apollo Server 5 + PostgreSQL 17 + Drizzle + Redis + Zod + Jest. Migrado desde `xavi-platform-node`. Despliegue en Cloud Run.
+- **`backend/`** (puerto `8080`) — API GraphQL. Node ≥20 + TypeScript + Express 4 + Apollo Server 5 + PostgreSQL 17 + Drizzle + Redis + Zod + Jest. Migrado desde `xavi-platform-node`. Despliegue en Cloud Run.
 - **`cms-admin/`** (puerto `3001`) — panel de administración headless en Next.js 15 + shadcn/ui, consume el GraphQL del `backend` (ver `docs/architecture/cms-admin.md`).
 
 ## Requisitos
 
-- Node.js ≥ 18
+- Node.js ≥ 20
 - pnpm ≥ 9
 - Docker Desktop (para `backend` + PostgreSQL + Redis + Adminer)
 
