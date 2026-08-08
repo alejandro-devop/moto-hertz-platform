@@ -15,7 +15,14 @@
   transition: background-color 0.35s ease, border-color 0.35s ease,
     box-shadow 0.35s ease;
   height: 70px;
-  overflow-x: hidden; // Prevent horizontal overflow
+  // Sin overflow-x:hidden acá a propósito: "overflow-x: hidden" +
+  // "overflow-y: visible" en el MISMO elemento no funciona — la spec de
+  // CSS obliga a que si un eje queda oculto, el otro se recalcule como
+  // "auto" (que igual recorta), sin importar que se declare "visible" a
+  // mano. El logo tiene que poder colgar por debajo de este mismo
+  // elemento, así que la protección de overflow horizontal queda en
+  // `html, body, #__next` (ver `globals.scss`), que ya la cubre a nivel
+  // de página completa.
   width: 100%; // Changed back to 100% to avoid viewport issues
   max-width: 100%; // Never exceed viewport width
   box-sizing: border-box; // Include padding and border in width calculations
@@ -34,7 +41,8 @@
   height: 100%;
   width: 100%;
   box-sizing: border-box; // Include padding in width calculations
-  overflow: hidden; // Prevent any internal overflow
+  // Sin overflow-x acá tampoco (ver el comentario en .navbar): el logo
+  // necesita poder colgar verticalmente por debajo de este contenedor.
 
   @include sm {
     padding: 0 0.75rem; // Reduced padding
@@ -54,29 +62,39 @@
   justify-content: space-between;
   align-items: center;
   height: 100%;
-  overflow: hidden; // Prevent overflow of nav content
   width: 100%; // Ensure full width usage
 }
 
 // Logo styles
+//
+// El logo del cliente (motoshotwheels) es un escudo de 440×299 — a los
+// 186px de ancho que pidió, quedan 126px de alto, casi el doble de los
+// 70px del nav. En vez de deformarlo o encogerlo, el nav se queda tal
+// cual está (fijo arriba, 70px) y el logo vive en su propia placa de
+// vidrio (mismo material que el nav) alineada arriba, colgando hacia
+// abajo sobre el hero. `align-self: flex-start` es lo que la saca del
+// centrado vertical del resto de `.navContent` para que cuelgue solo
+// hacia abajo, nunca hacia arriba.
 .logoContainer {
   flex-shrink: 0;
-  height: 40px;
-  overflow: hidden; // Prevent any overflow from logo
-  display: flex;
-  align-items: center;
-
-  @include sm {
-    height: 45px;
-  }
+  align-self: flex-start;
+  display: block;
+  width: 186px;
+  padding: 20px 22px 26px;
+  background-color: rgba(255, 255, 255, 0.75);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-top: none;
+  border-radius: 0 0 14px 14px;
+  box-shadow: 0 12px 24px rgba(12, 30, 63, 0.22);
 }
 
 .logo {
-  height: 100%;
-  width: auto;
+  display: block;
+  width: 100%;
+  height: auto;
   cursor: pointer;
-  max-height: 100%; // Ensure logo doesn't exceed container height
-  object-fit: contain; // Maintain aspect ratio without overflow
 }
 
 // Desktop menu styles
